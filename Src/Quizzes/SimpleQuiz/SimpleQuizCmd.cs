@@ -25,7 +25,7 @@ namespace QuizGameEngine.Quizzes
         {
             get
             {
-                return new SimpleQuizStart(null, null, Questions);
+                return new SimpleQuizStart(null, null, null, Questions);
             }
         }
 

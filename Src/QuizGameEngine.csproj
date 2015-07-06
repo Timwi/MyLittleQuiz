@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CmdLine.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="Mainform.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -58,7 +59,7 @@
     <Compile Include="QuizWebSocket.cs" />
     <Compile Include="Quizzes\SimpleQuiz\SimpleQuizCmd.cs" />
     <Compile Include="Quizzes\SimpleQuiz\SimpleQuizStart.cs" />
-    <Compile Include="TransitionPrompt.cs" />
+    <Compile Include="Transition.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

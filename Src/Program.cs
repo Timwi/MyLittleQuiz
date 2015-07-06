@@ -54,7 +54,12 @@ namespace QuizGameEngine
 
             while (true)
             {
-                ConsoleUtil.WriteLine(new string('═', Console.BufferWidth - 1).Color(ConsoleColor.White));
+                Console.Clear();
+                if (QuizState.UndoLine != null)
+                    ConsoleUtil.WriteLine("← Undo: {0/Gray}".Color(ConsoleColor.Magenta).Fmt(QuizState.UndoLine));
+                if (Redo.Count > 0 && Redo.Peek().UndoLine != null)
+                    ConsoleUtil.WriteLine("→ Redo: {0/Gray}".Color(ConsoleColor.Green).Fmt(Redo.Peek().UndoLine));
+                Console.WriteLine();
                 ConsoleUtil.WriteLine(QuizState.Describe);
                 foreach (var t in QuizState.Transitions)
                     ConsoleUtil.WriteLine("{0/White}: {1/Cyan}".Color(null).Fmt(t.Key, t.Name));

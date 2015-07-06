@@ -17,8 +17,8 @@ namespace QuizGameEngine.Quizzes.SimpleQuiz
         [ClassifyNotNull, ClassifyIgnoreIfDefault, ClassifyIgnoreIfEmpty]
         public Tuple<string, string>[] Questions = new Tuple<string, string>[0];
 
-        public SimpleQuizStart(QuizStateBase prevState, ConsoleKey? prevTransitionKey, Tuple<string, string>[] questions, string[] contestants = null)
-            : base(prevState, prevTransitionKey)
+        public SimpleQuizStart(QuizStateBase prevState, ConsoleKey? prevTransitionKey, string undoLine, Tuple<string, string>[] questions, string[] contestants = null)
+            : base(prevState, prevTransitionKey, undoLine)
         {
             if (questions == null)
                 throw new ArgumentNullException("questions");
@@ -28,12 +28,14 @@ namespace QuizGameEngine.Quizzes.SimpleQuiz
 
         private SimpleQuizStart() { }   // for Classify
 
-        public override TransitionPrompt[] Transitions
+        public override Transition[] Transitions
         {
             get
             {
                 return Ut.NewArray(
-                    new TransitionPrompt(ConsoleKey.N, "New contestant", "Contestant name: ", name => new SimpleQuizStart(this, ConsoleKey.N, Questions, ContestantNames.Concat(name).ToArray()), true));
+                    Transition.String(ConsoleKey.N, "New contestant", "Contestant name: ", name => new SimpleQuizStart(this, ConsoleKey.N, "Create contestant: {0}".Fmt(name), Questions, ContestantNames.Concat(name).ToArray()), true),
+                    Transition.Select(ConsoleKey.D, "Delete contestant", ContestantNames, index => new SimpleQuizStart(this, ConsoleKey.D, "Delete contestant: {0}".Fmt(ContestantNames[index]), Questions, ContestantNames.RemoveIndex(index)))
+                );
             }
         }
 
