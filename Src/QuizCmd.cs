@@ -10,6 +10,6 @@ namespace QuizGameEngine
     [CommandGroup]
     public abstract class StartQuizCmd
     {
-        public abstract QuizStateBase StartState { get; }
+        public abstract QuizBase StartState { get; }
     }
 }

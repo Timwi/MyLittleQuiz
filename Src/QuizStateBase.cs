@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using RT.Servers;
 using RT.TagSoup;
 using RT.Util.Consoles;
+using RT.Util.Json;
 using RT.Util.Serialization;
 
 namespace QuizGameEngine
@@ -13,19 +14,13 @@ namespace QuizGameEngine
     public abstract class QuizStateBase
     {
         [ClassifyIgnoreIfDefault]
-        public QuizStateBase PreviousState;
-        [ClassifyIgnoreIfDefault]
-        public ConsoleKey? PreviousTransitionKey;
-        [ClassifyIgnoreIfDefault]
         public string UndoLine;
 
         public abstract Transition[] Transitions { get; }
         public abstract ConsoleColoredString Describe { get; }
 
-        public QuizStateBase(QuizStateBase prevState, ConsoleKey? prevTransitionKey, string undoLine)
+        public QuizStateBase(string undoLine)
         {
-            PreviousState = prevState;
-            PreviousTransitionKey = prevTransitionKey;
             UndoLine = undoLine;
         }
 

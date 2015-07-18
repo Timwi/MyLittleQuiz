@@ -11,6 +11,9 @@ namespace QuizGameEngine
     [DocumentationRhoML("Quiz engine.")]
     sealed class CommandLine
     {
+        [Option("-r"), DocumentationRhoML("Specifies the path containing the resource files. Without this option, the resources embedded in the executable are used.")]
+        public string ResourcePath;
+
         [IsMandatory, IsPositional]
         public QuizCmd QuizCmd;
 
@@ -27,8 +30,8 @@ namespace QuizGameEngine
     {
         [IsMandatory, IsPositional, DocumentationRhoML("Path and filename where to save the new quiz.")]
         public string OutputFile;
-        [IsMandatory, IsPositional]
-        public StartQuizCmd Cmd;
+        [IsMandatory, IsPositional, DocumentationRhoML("Specifies the type of quiz to start.")]
+        public StartQuizCmd Quiz;
     }
     [CommandName("load"), DocumentationRhoML("Load a quiz state from a file.")]
     sealed class QuizCmdLoad : QuizCmd

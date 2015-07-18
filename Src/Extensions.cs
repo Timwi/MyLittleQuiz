@@ -21,5 +21,22 @@ namespace QuizGameEngine
                 Array.Copy(array, index + 1, newArray, index, array.Length - index - 1);
             return newArray;
         }
+
+        public static T[] ReplaceIndex<T>(this T[] array, int index, T element)
+        {
+            if (array == null)
+                throw new ArgumentNullException("array");
+            if (index < 0 || index >= array.Length)
+                throw new ArgumentException("Index out of bounds.", "index");
+            var newArray = new T[array.Length];
+            Array.Copy(array, 0, newArray, 0, array.Length);
+            newArray[index] = element;
+            return newArray;
+        }
+
+        public static TransitionResult With(this QuizStateBase state, string jsMethod, object jsParams = null)
+        {
+            return new TransitionResult(state, jsMethod, jsParams);
+        }
     }
 }
