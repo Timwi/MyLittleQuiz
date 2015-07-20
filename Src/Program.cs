@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 using RT.Servers;
 using RT.TagSoup;
 using RT.Util;
@@ -45,8 +46,7 @@ namespace QuizGameEngine
             var start = cmd.QuizCmd as QuizCmdStart;
             if (start != null)
             {
-                Quiz = start.Quiz.StartState;
-                ClassifyJson.SerializeToFile(Quiz, start.OutputFile);
+                ClassifyJson.SerializeToFile(start.Quiz.StartState, start.OutputFile);
                 ConsoleUtil.WriteLine("File saved.");
                 return 0;
             }

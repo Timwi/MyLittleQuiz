@@ -8,7 +8,7 @@ using RT.Util.Serialization;
 
 namespace QuizGameEngine.Quizzes.SimpleQuiz
 {
-    public sealed class StateGame : StateBase
+    public sealed class StateGame : StateBase, IHasJsTransition
     {
         [ClassifyIgnoreIfDefault]
         public int? SelectedContestant { get; private set; }
@@ -36,5 +36,8 @@ namespace QuizGameEngine.Quizzes.SimpleQuiz
         }
 
         public override ConsoleColoredString Describe { get { return DescribeSel(SelectedContestant); } }
+
+        public string JsMethod { get { return "start"; } }
+        public object JsParameters { get { return new { contestants = Contestants }; } }
     }
 }

@@ -38,5 +38,10 @@ namespace QuizGameEngine
         {
             return new TransitionResult(state, jsMethod, jsParams);
         }
+
+        public static TransitionResult With<T>(this T state) where T : QuizStateBase, IHasJsTransition
+        {
+            return new TransitionResult(state, state.JsMethod, state.JsParameters);
+        }
     }
 }

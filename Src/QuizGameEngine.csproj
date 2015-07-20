@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="ClassifySubst.cs" />
     <Compile Include="CmdLine.cs" />
+    <Compile Include="IHasJsTransition.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -39,7 +39,7 @@ namespace QuizGameEngine.Quizzes.SimpleQuiz
                         Console.ReadKey();
                     }),
                     Transition.Simple(ConsoleKey.W, "Show welcome", "welcome"),
-                    Transition.Simple(ConsoleKey.S, "Start game", () => new StateGame("Start game", Questions, Contestants).With("start", new { contestants = Contestants }))
+                    Transition.Simple(ConsoleKey.S, "Start game", () => new StateGame("Start game", Questions, Contestants).With())
                 );
             }
         }

@@ -25,12 +25,11 @@ namespace QuizGameEngine.Quizzes.SimpleQuiz
             {
                 return Ut.NewArray(
                     Transition.Simple(ConsoleKey.C, "Continue", () =>
-                        Correct
+                        (Correct
                             ? QuestionState.Game.Contestants.ReplaceIndex(QuestionState.Game.SelectedContestant.Value, QuestionState.Game.Contestants[QuestionState.Game.SelectedContestant.Value].IncScore())
                                 .Apply(newContestants =>
-                                    new StateGame("Go back to game", QuestionState.Game.Questions.RemoveIndex(QuestionState.QuestionIndex), newContestants)
-                                        .With("start", new { contestants = newContestants }))
-                            : QuestionState.Game.With("start", new { contestants = QuestionState.Game.Contestants }))
+                                    new StateGame("Go back to game", QuestionState.Game.Questions.RemoveIndex(QuestionState.QuestionIndex), newContestants))
+                            : QuestionState.Game).With())
                 );
             }
         }
