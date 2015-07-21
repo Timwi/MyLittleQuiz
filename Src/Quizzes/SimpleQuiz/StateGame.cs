@@ -28,7 +28,7 @@ namespace QuizGameEngine.Quizzes.SimpleQuiz
                 return Ut.NewArray<Transition>(
                     Transition.Select(ConsoleKey.S, "Select contestant", Contestants, i => new StateGame("Selected contestant: " + Contestants[i], Questions, Contestants, i).With("select", new { index = i })),
                     SelectedContestant.NullOr(i => Transition.Simple(ConsoleKey.U, "Unselect contestant", () => new StateGame("Unselected contestant: " + Contestants[i], Questions, Contestants, null).With("unselect"))),
-                    SelectedContestant.NullOr(i => Transition.Simple(ConsoleKey.A, "Ask a question", () => Rnd.Next(Questions.Length).Apply(qi => new StateQuestion(this, qi).With("showQuestion", new { question = Questions[qi].Item1 }))))
+                    SelectedContestant.NullOr(i => Transition.Simple(ConsoleKey.A, "Ask a question", () => Rnd.Next(Questions.Length).Apply(qi => new StateQuestion(this, qi).With("showQuestion", new { question = Questions[qi].Item1, answer = Questions[qi].Item2 }))))
                 )
                     .Where(t => t != null)
                     .ToArray();
@@ -37,7 +37,7 @@ namespace QuizGameEngine.Quizzes.SimpleQuiz
 
         public override ConsoleColoredString Describe { get { return DescribeSel(SelectedContestant); } }
 
-        public string JsMethod { get { return "start"; } }
+        public string JsMethod { get { return "showContestants"; } }
         public object JsParameters { get { return new { contestants = Contestants }; } }
     }
 }

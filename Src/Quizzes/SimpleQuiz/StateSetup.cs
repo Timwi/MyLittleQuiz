@@ -33,7 +33,7 @@ namespace QuizGameEngine.Quizzes.SimpleQuiz
                         foreach (var q in Questions)
                         {
                             ConsoleUtil.WriteParagraphs(q.Item1.Color(ConsoleColor.Green));
-                            ConsoleUtil.WriteParagraphs(("    " + q.Item2).Color(ConsoleColor.Red), 4);
+                            ConsoleUtil.WriteParagraphs(("    " + q.Item2).Color(ConsoleColor.Red));
                             Console.WriteLine();
                         }
                         Console.ReadKey();

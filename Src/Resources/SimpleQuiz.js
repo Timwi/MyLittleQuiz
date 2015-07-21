@@ -7,27 +7,46 @@ $(function ()
     {
         var t = this;
         window.setTimeout(function () { t.addClass(cls); }, delay);
+        return t;
     };
 
-    function findBestFontSize(obj, curValue, maxSize, getSize, setSize)
+    function findBestValue(startingValue, evaluator, threshold, preferHigh)
     {
-        var low = 0;
-        while (getSize() < maxSize)
+        startingValue = +startingValue;
+        threshold = threshold || .1;
+        preferHigh = !!preferHigh;
+
+        var negative = startingValue < 0;
+        var low = negative ? startingValue : 0;
+        var high = startingValue == 0 ? 1 : (negative ? 0 : startingValue);
+        if (negative)
         {
-            low = curValue;
-            setSize(curValue *= 2);
+            while (evaluator(low) > 0)
+            {
+                high = low;
+                low *= 2;
+            }
         }
-        high = curValue;
-        while (high - low > .1)
+        else
+        {
+            while (evaluator(high) < 0)
+            {
+                low = high;
+                high *= 2;
+            }
+        }
+
+        while (high - low > threshold)
         {
             var mid = (high + low) / 2;
-            setSize(mid);
-            if (getSize() < maxSize)
+            if (evaluator(mid) < 0)
                 low = mid;
             else
                 high = mid;
         }
-        setSize(low);
+        var finalValue = preferHigh ? high : low;
+        evaluator(finalValue);
+        return finalValue;
     }
 
     function alignContestants()
@@ -56,9 +75,9 @@ $(function ()
                 .addClassDelay('in', 100);
         },
 
-        start: function (p)
+        showContestants: function (p)
         {
-            $('.welcome, .question').addClass('out').removeClass('in');
+            $('.welcome, .qa .q-or-a').addClass('out').removeClass('in');
             $('.contestant').remove();
             for (var i = 0; i < p.contestants.length; i++)
                 $('<div class="contestant">')
@@ -74,12 +93,28 @@ $(function ()
 
         showQuestion: function (p)
         {
-            $('.question').remove();
+            $('.welcome, .qa').remove();
             $('.contestant').removeClass('in');
-            $('<div class="question">')
-                .append($('<span class="inner">').text(p.question))
-                .appendTo(content)
-                .addClassDelay('in', 100);
-        }
+
+            var qa = $('<div class="qa">')
+                .append($('<div class="q-or-a question">')
+                    .addClassDelay('in', 100)
+                    .append($('<span class="inner">').text(p.question)))
+                .append($('<div class="q-or-a answer">')
+                    .append($('<span class="inner">').text(p.answer)))
+                .appendTo(content);
+
+            if (qa.outerHeight() > $(window).height() * .9)
+            {
+                findBestValue(parseInt(qa.css('font-size')), function (val)
+                {
+                    qa.css('font-size', val + 'px');
+                    return (qa.outerHeight() > $(window).height() * .9) ? 1 : -1;
+                });
+            }
+        },
+
+        correct: function () { $('.qa .q-or-a.answer').addClass('in correct'); },
+        wrong: function () { $('.qa .q-or-a.answer').addClass('in wrong'); }
     };
 });
