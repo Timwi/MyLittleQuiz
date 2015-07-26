@@ -23,6 +23,12 @@ namespace QuizGameEngine
         public static HttpServer Server;
         public static HashSet<QuizWebSocket> Sockets = new HashSet<QuizWebSocket>();
 
+        public static ConsoleKeyInfo ReadKey()
+        {
+            ConsoleUtil.Write("<press a key>".Color(ConsoleColor.DarkYellow));
+            return Console.ReadKey(true);
+        }
+
         [STAThread]
         static int Main(string[] args)
         {
@@ -87,6 +93,7 @@ namespace QuizGameEngine
                 Console.WriteLine();
                 foreach (var t in Quiz.CurrentState.Transitions)
                     ConsoleUtil.WriteLine("{0/White}: {1/Cyan}".Color(null).Fmt(t.Key, t.Name));
+
                 again:
                 var keyInfo = Console.ReadKey(true);
 
@@ -107,16 +114,17 @@ namespace QuizGameEngine
                         if (transition == null)
                             goto again;
 
+                        Console.WriteLine();    // In case the transition outputs something and then waits for a key
                         var transitionResult = transition.Execute();
                         if (transitionResult == null)
-                            continue;
+                            break;
 
                         if (transitionResult.JsMethod != null)
                             foreach (var socket in Sockets)
                                 socket.SendMessage(new JsonDict { { "method", transitionResult.JsMethod }, { "params", transitionResult.JsParameters } });
 
                         if (transitionResult.State == null)
-                            continue;
+                            break;
 
                         Quiz.Transition(transitionResult.State);
                         break;

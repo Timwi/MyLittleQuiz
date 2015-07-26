@@ -83,6 +83,26 @@ namespace QuizGameEngine {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] MyLittleQuizCss {
+            get {
+                object obj = ResourceManager.GetObject("MyLittleQuizCss", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] MyLittleQuizJs {
+            get {
+                object obj = ResourceManager.GetObject("MyLittleQuizJs", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] SimpleQuizCss {
             get {
                 object obj = ResourceManager.GetObject("SimpleQuizCss", resourceCulture);

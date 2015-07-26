@@ -30,21 +30,49 @@ namespace QuizGameEngine
             return new Transition(key, name, () => { action(); return null; });
         }
 
-        public static Transition Simple(ConsoleKey key, string name, string jsMethod)
+        public static Transition Simple(ConsoleKey key, string name, string jsMethod, object jsParameters = null)
         {
-            return new Transition(key, name, () => new TransitionResult(null, jsMethod));
+            return new Transition(key, name, () => new TransitionResult(null, jsMethod, jsParameters));
         }
 
-        public static Transition String(ConsoleKey key, string name, string prompt, Func<string, TransitionResult> executor, bool cancelIfEmpty)
+        public static Transition String(ConsoleKey key, string name, string prompt, Func<string, TransitionResult> executor, bool allowEmpty = false)
         {
             return new Transition(key, name, () =>
             {
                 Console.Write(prompt);
                 var str = Console.ReadLine();
-                if (cancelIfEmpty && string.IsNullOrEmpty(str))
+                if (!allowEmpty && string.IsNullOrEmpty(str))
                     return null;
                 return executor(str);
             });
+        }
+
+        public static Transition String(ConsoleKey key, string name, string prompt, Action<string> executor, bool allowEmpty = false)
+        {
+            return String(key, name, prompt, s => { executor(s); return null; }, allowEmpty);
+        }
+
+        public static Transition String(ConsoleKey key, string name, string prompt1, string prompt2, Func<string, string, TransitionResult> executor, bool allowEmpty = false)
+        {
+            return new Transition(key, name, () =>
+            {
+                Console.Write(prompt1);
+                var str1 = Console.ReadLine();
+                if (!allowEmpty && string.IsNullOrEmpty(str1))
+                    return null;
+
+                Console.Write(prompt2);
+                var str2 = Console.ReadLine();
+                if (!allowEmpty && string.IsNullOrEmpty(str2))
+                    return null;
+
+                return executor(str1, str2);
+            });
+        }
+
+        public static Transition String(ConsoleKey key, string name, string prompt1, string prompt2, Action<string, string> executor, bool allowEmpty = false)
+        {
+            return String(key, name, prompt1, prompt2, (s1, s2) => { executor(s1, s2); return null; }, allowEmpty);
         }
 
         public static Transition Select(ConsoleKey key, string name, object[] selection, Func<int, TransitionResult> executor)
@@ -60,6 +88,11 @@ namespace QuizGameEngine
                     return null;
                 return executor(index - 1);
             });
+        }
+
+        public static Transition Select(ConsoleKey key, string name, object[] selection, Action<int> executor)
+        {
+            return Select(key, name, selection, index => { executor(index); return null; });
         }
 
         public TransitionResult Execute()

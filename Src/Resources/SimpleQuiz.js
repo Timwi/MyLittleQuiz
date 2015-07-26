@@ -80,11 +80,15 @@ $(function ()
             $('.welcome, .qa .q-or-a').addClass('out').removeClass('in');
             $('.contestant').remove();
             for (var i = 0; i < p.contestants.length; i++)
-                $('<div class="contestant">')
+            {
+                var div = $('<div class="contestant">')
                     .append($('<div class="name">').append($('<span class="inner">').text(p.contestants[i].Name)))
                     .append($('<div class="score">').text(p.contestants[i].Score))
                     .appendTo(content)
                     .addClassDelay('in', 200 * i);
+                if (i === p.selected)
+                    div.addClassDelay('selected', 200 * i + 1000);
+            }
             alignContestants();
         },
 
@@ -112,6 +116,9 @@ $(function ()
                     return (qa.outerHeight() > $(window).height() * .9) ? 1 : -1;
                 });
             }
+
+            if ('correct' in p)
+                window.setTimeout(function () { transitions[p.correct ? 'correct' : 'wrong']() }, 750);
         },
 
         correct: function () { $('.qa .q-or-a.answer').addClass('in correct'); },

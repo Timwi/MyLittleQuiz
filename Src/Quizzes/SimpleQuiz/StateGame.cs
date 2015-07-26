@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using RT.Util;
 using RT.Util.Consoles;
@@ -8,7 +9,7 @@ using RT.Util.Serialization;
 
 namespace QuizGameEngine.Quizzes.SimpleQuiz
 {
-    public sealed class StateGame : StateBase, IHasJsTransition
+    public sealed class StateGame : StateBase
     {
         [ClassifyIgnoreIfDefault]
         public int? SelectedContestant { get; private set; }
@@ -21,23 +22,33 @@ namespace QuizGameEngine.Quizzes.SimpleQuiz
 
         private StateGame() { }   // for Classify
 
-        public override Transition[] Transitions
+        public override IEnumerable<Transition> Transitions
         {
             get
             {
-                return Ut.NewArray<Transition>(
-                    Transition.Select(ConsoleKey.S, "Select contestant", Contestants, i => new StateGame("Selected contestant: " + Contestants[i], Questions, Contestants, i).With("select", new { index = i })),
-                    SelectedContestant.NullOr(i => Transition.Simple(ConsoleKey.U, "Unselect contestant", () => new StateGame("Unselected contestant: " + Contestants[i], Questions, Contestants, null).With("unselect"))),
-                    SelectedContestant.NullOr(i => Transition.Simple(ConsoleKey.A, "Ask a question", () => Rnd.Next(Questions.Length).Apply(qi => new StateQuestion(this, qi).With("showQuestion", new { question = Questions[qi].Item1, answer = Questions[qi].Item2 }))))
-                )
-                    .Where(t => t != null)
-                    .ToArray();
+                yield return Transition.Select(ConsoleKey.S, "Select contestant", Contestants, i => new StateGame("Selected contestant: " + Contestants[i], Questions, Contestants, i).With("select", new { index = i }));
+
+                if (SelectedContestant != null)
+                {
+                    yield return Transition.Simple(ConsoleKey.U, "Unselect contestant", () => new StateGame("Unselected contestant: " + Contestants[SelectedContestant.Value], Questions, Contestants, null).With("unselect"));
+                    yield return Transition.Simple(ConsoleKey.A, "Ask a question", () => Rnd.Next(Questions.Length).Apply(qi => new StateQuestion(this, qi)));
+                }
             }
         }
 
         public override ConsoleColoredString Describe { get { return DescribeSel(SelectedContestant); } }
 
-        public string JsMethod { get { return "showContestants"; } }
-        public object JsParameters { get { return new { contestants = Contestants }; } }
+        public override string JsMethod { get { return "showContestants"; } }
+        public override object JsParameters
+        {
+            get
+            {
+                return new
+                {
+                    contestants = Contestants,
+                    selected = SelectedContestant
+                };
+            }
+        }
     }
 }

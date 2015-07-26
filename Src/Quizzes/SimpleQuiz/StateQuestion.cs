@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using RT.Util;
 using RT.Util.Consoles;
 using RT.Util.ExtensionMethods;
@@ -19,14 +20,12 @@ namespace QuizGameEngine.Quizzes.SimpleQuiz
 
         private StateQuestion() { }    // for Classify
 
-        public override Transition[] Transitions
+        public override IEnumerable<Transition> Transitions
         {
             get
             {
-                return Ut.NewArray(
-                    Transition.Simple(ConsoleKey.G, "Correct", () => new StateQuestionAnswered(this, true).With("correct")),
-                    Transition.Simple(ConsoleKey.M, "Wrong", () => new StateQuestionAnswered(this, false).With("wrong"))
-                );
+                yield return Transition.Simple(ConsoleKey.G, "Correct", () => new StateQuestionAnswered(this, true).With("correct"));
+                yield return Transition.Simple(ConsoleKey.M, "Wrong", () => new StateQuestionAnswered(this, false).With("wrong"));
             }
         }
 
@@ -40,6 +39,19 @@ namespace QuizGameEngine.Quizzes.SimpleQuiz
                     "Answer:",
                     Game.Questions[QuestionIndex].Item2
                 );
+            }
+        }
+
+        public override string JsMethod { get { return "showQuestion"; } }
+        public override object JsParameters
+        {
+            get
+            {
+                return new
+                {
+                    question = Game.Questions[QuestionIndex].Item1,
+                    answer = Game.Questions[QuestionIndex].Item2
+                };
             }
         }
     }

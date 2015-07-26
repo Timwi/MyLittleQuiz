@@ -172,7 +172,7 @@ body {
             transform: translate(-100%, -50%) scale(.1);
             opacity: 0;
             transition: opacity linear .2s, transform cubic-bezier(0, .8, .5, 1.15) .3s;
-            transition-delay: .5s;
+            transition-delay: .25s;
         }
 
         #content .qa .answer.in::after, #content .qa .answer.out::after {

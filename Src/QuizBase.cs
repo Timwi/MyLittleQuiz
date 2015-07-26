@@ -11,6 +11,7 @@ namespace QuizGameEngine
     {
         protected QuizBase() { }    // for Classify
 
+        [ClassifyNotNull]
         protected QuizStateBase _currentState;
         public QuizStateBase CurrentState { get { return _currentState; } }
 

@@ -5,12 +5,11 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using QuizGameEngine.Quizzes.SimpleQuiz;
 using RT.Util.CommandLine;
 using RT.Util.Consoles;
 using RT.Util.Serialization;
 
-namespace QuizGameEngine.Quizzes
+namespace QuizGameEngine.Quizzes.SimpleQuiz
 {
     [CommandName("SimpleQuiz")]
     public sealed class Cmd : StartQuizCmd, ICommandLineValidatable

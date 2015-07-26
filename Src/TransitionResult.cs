@@ -23,6 +23,6 @@ namespace QuizGameEngine
             JsParameters = jsParams == null ? null : ClassifyJson.Serialize(jsParams);
         }
 
-        public static implicit operator TransitionResult(QuizStateBase state) { return state == null ? null : new TransitionResult(state, null, null); }
+        public static implicit operator TransitionResult(QuizStateBase state) { return state == null ? null : new TransitionResult(state, state.JsMethod, state.JsParameters); }
     }
 }

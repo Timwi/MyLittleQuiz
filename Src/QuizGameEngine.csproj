@@ -46,7 +46,6 @@
   <ItemGroup>
     <Compile Include="ClassifySubst.cs" />
     <Compile Include="CmdLine.cs" />
-    <Compile Include="IHasJsTransition.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -54,6 +53,12 @@
     <Compile Include="QuizStateBase.cs" />
     <Compile Include="QuizCmd.cs" />
     <Compile Include="QuizWebSocket.cs" />
+    <Compile Include="Quizzes\MyLittleQuiz\Cmd.cs" />
+    <Compile Include="Quizzes\MyLittleQuiz\Contestant.cs" />
+    <Compile Include="Quizzes\MyLittleQuiz\Question.cs" />
+    <Compile Include="Quizzes\MyLittleQuiz\Quiz.cs" />
+    <Compile Include="Quizzes\MyLittleQuiz\Round1Elimination.cs" />
+    <Compile Include="Quizzes\MyLittleQuiz\Setup.cs" />
     <Compile Include="Quizzes\SimpleQuiz\Contestant.cs" />
     <Compile Include="Quizzes\SimpleQuiz\Quiz.cs" />
     <Compile Include="Quizzes\SimpleQuiz\StateGame.cs" />
@@ -68,6 +73,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="TransitionResult.cs" />
+    <Content Include="Resources\MyLittleQuiz.css" />
+    <Content Include="Resources\MyLittleQuiz.js" />
     <Content Include="Resources\Global.js" />
     <Content Include="Resources\SimpleQuiz.css" />
     <Compile Include="Transition.cs" />

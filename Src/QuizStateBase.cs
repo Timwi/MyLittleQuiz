@@ -16,8 +16,10 @@ namespace QuizGameEngine
         [ClassifyIgnoreIfDefault]
         public string UndoLine;
 
-        public abstract Transition[] Transitions { get; }
+        public abstract IEnumerable<Transition> Transitions { get; }
         public abstract ConsoleColoredString Describe { get; }
+        public abstract string JsMethod { get; }
+        public abstract object JsParameters { get; }
 
         public QuizStateBase(string undoLine)
         {

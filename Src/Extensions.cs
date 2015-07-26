@@ -39,9 +39,9 @@ namespace QuizGameEngine
             return new TransitionResult(state, jsMethod, jsParams);
         }
 
-        public static TransitionResult With<T>(this T state) where T : QuizStateBase, IHasJsTransition
+        public static TransitionResult NoTransition(this QuizStateBase state)
         {
-            return new TransitionResult(state, state.JsMethod, state.JsParameters);
+            return new TransitionResult(state, null, null);
         }
     }
 }

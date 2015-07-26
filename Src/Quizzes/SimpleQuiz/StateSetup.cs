@@ -20,28 +20,29 @@ namespace QuizGameEngine.Quizzes.SimpleQuiz
 
         private StateSetup() { }   // for Classify
 
-        public override Transition[] Transitions
+        public override IEnumerable<Transition> Transitions
         {
             get
             {
-                return Ut.NewArray(
-                    Transition.String(ConsoleKey.N, "New contestant", "Contestant name: ", name => new StateSetup("Create contestant: {0}".Fmt(name), Questions, Contestants.Concat(name).ToArray()), true),
-                    Transition.Select(ConsoleKey.D, "Delete contestant", Contestants, index => new StateSetup("Delete contestant: {0}".Fmt(Contestants[index]), Questions, Contestants.RemoveIndex(index))),
-                    Transition.Simple(ConsoleKey.L, "List all questions (with answers!)", () =>
+                yield return Transition.String(ConsoleKey.N, "New contestant", "Contestant name: ", name => new StateSetup("Create contestant: {0}".Fmt(name), Questions, Contestants.Concat(name).ToArray()), true);
+                yield return Transition.Select(ConsoleKey.D, "Delete contestant", Contestants, index => new StateSetup("Delete contestant: {0}".Fmt(Contestants[index]), Questions, Contestants.RemoveIndex(index)));
+                yield return Transition.Simple(ConsoleKey.L, "List all questions (with answers!)", () =>
+                {
+                    Console.WriteLine();
+                    foreach (var q in Questions)
                     {
+                        ConsoleUtil.WriteParagraphs(q.Item1.Color(ConsoleColor.Green));
+                        ConsoleUtil.WriteParagraphs(("    " + q.Item2).Color(ConsoleColor.Red));
                         Console.WriteLine();
-                        foreach (var q in Questions)
-                        {
-                            ConsoleUtil.WriteParagraphs(q.Item1.Color(ConsoleColor.Green));
-                            ConsoleUtil.WriteParagraphs(("    " + q.Item2).Color(ConsoleColor.Red));
-                            Console.WriteLine();
-                        }
-                        Console.ReadKey();
-                    }),
-                    Transition.Simple(ConsoleKey.W, "Show welcome", "welcome"),
-                    Transition.Simple(ConsoleKey.S, "Start game", () => new StateGame("Start game", Questions, Contestants).With())
-                );
+                    }
+                    Program.ReadKey();
+                });
+                yield return Transition.Simple(ConsoleKey.W, "Show welcome", "welcome");
+                yield return Transition.Simple(ConsoleKey.S, "Start game", () => new StateGame("Start game", Questions, Contestants));
             }
         }
+
+        public override string JsMethod { get { return null; } }
+        public override object JsParameters { get { return null; } }
     }
 }

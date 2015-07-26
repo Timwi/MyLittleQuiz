@@ -124,6 +124,12 @@
   <data name="JQuery" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>resources\jquery-2.1.4.js;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="MyLittleQuizCss" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\mylittlequiz.css;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="MyLittleQuizJs" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\mylittlequiz.js;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="SimpleQuizCss" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>resources\simplequiz.css;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
