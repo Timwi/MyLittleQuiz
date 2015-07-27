@@ -39,7 +39,10 @@ $(function ()
         while (high - low > threshold)
         {
             var mid = (high + low) / 2;
-            if (evaluator(mid) < 0)
+            var ev = evaluator(mid);
+            if (ev === 0)
+                return mid;
+            if (ev < 0)
                 low = mid;
             else
                 high = mid;
@@ -47,22 +50,6 @@ $(function ()
         var finalValue = preferHigh ? high : low;
         evaluator(finalValue);
         return finalValue;
-    }
-
-    function alignContestants()
-    {
-        var c = $('.contestant');
-        var spacing = 1;
-        var numLeft = Math.ceil(c.length / 2);
-        c.each(function (i, t)
-        {
-            t = $(t);
-            t.removeClass('left right').css({ top: (i < numLeft ? 3 + spacing * (i + 1) + 10 * i : 3 + spacing * (i - numLeft + 1) + 10 * (i - numLeft)) + 'vh' });
-            t.addClass(i < numLeft ? 'left' : 'right');
-            var outer = t.find('.name'), inner = outer.find('.inner');
-            if (inner.width() > outer.width())
-                findBestFontSize(inner, 5, outer.width(), function () { return inner.width(); }, function (s) { inner.css('fontSize', s + 'vh'); });
-        });
     }
 
     transitions = {
@@ -78,18 +65,37 @@ $(function ()
         showContestants: function (p)
         {
             $('.welcome, .qa .q-or-a').addClass('out').removeClass('in');
-            $('.contestant').remove();
+            $('.contestants').remove();
+            var cl = $('<div class="contestants left">').appendTo(content),
+                cr = $('<div class="contestants right">').appendTo(content),
+                numLeft = Math.ceil(p.contestants.length / 2),
+                ps = [];
             for (var i = 0; i < p.contestants.length; i++)
             {
-                var div = $('<div class="contestant">')
+                ps[i] = $('<div class="contestant">')
                     .append($('<div class="name">').append($('<span class="inner">').text(p.contestants[i].Name)))
                     .append($('<div class="score">').text(p.contestants[i].Score))
-                    .appendTo(content)
-                    .addClassDelay('in', 200 * i);
+                    .addClassDelay('in', 200 * i)
+                    .appendTo(i < numLeft ? cl : cr);
+
                 if (i === p.selected)
-                    div.addClassDelay('selected', 200 * i + 1000);
+                    ps[i].addClassDelay('selected', 200 * i + 1000);
             }
-            alignContestants();
+            if (cl.height() > content.height())
+                findBestValue(10, function (fs)
+                {
+                    cl.css('font-size', fs + 'vh');
+                    cr.css('font-size', fs + 'vh');
+                    return cl.height() > content.height() ? 1 : cl.height() < content.height() ? -1 : 0;
+                });
+            for (var i = 0; i < p.contestants.length; i++)
+            {
+                var inner = ps[i].find('.inner').width(),
+                    outerE = ps[i].find('.name'),
+                    outer = outerE.width();
+                if (inner > outer)
+                    outerE.css('transform', 'scale(' + (outer / inner) + ', 1)');
+            }
         },
 
         select: function (p) { $($('.contestant').removeClass('selected')[p.index]).addClass('selected'); },

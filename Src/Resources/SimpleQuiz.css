@@ -38,61 +38,78 @@ body {
             opacity: 0;
         }
 
-    #content .contestant {
-        border: 2px solid #ff6a00;
-        border-radius: 4vw;
-        font-size: 5vh;
-        padding: 1vh 1vw;
-        transition: left ease-out .7s, right ease-out .7s;
-        width: 45vw;
+    #content .contestants {
+        top: 0;
+        font-size: 10vh;
+        line-height: 1em;
     }
 
-        #content .contestant.left {
+        #content .contestants.left {
+            left: 0;
+            right: 50%;
+        }
+
+        #content .contestants.right {
+            left: 50%;
+            right: 0;
+        }
+
+        #content .contestants .contestant {
+            border: 2px solid #ff6a00;
+            border-radius: .7em;
+            padding: .2em .1em;
+            transition: left ease-out .7s, right ease-out .7s;
+            width: 50vw;
+            position: relative;
+            margin: .5em 0;
+        }
+
+        #content .contestants.left .contestant {
             text-align: left;
-            padding-left: 15vw;
+            padding-left: 2.5em;
             left: -100vw;
             transform-origin: 10% 50%;
         }
 
-            #content .contestant.left.in {
-                left: -5vw;
+            #content .contestants.left .contestant.in {
+                left: -.7em;
             }
 
-            #content .contestant.left .score {
-                left: 6vw;
+            #content .contestants.left .contestant .score {
+                left: 1em;
             }
 
-        #content .contestant.right {
+        #content .contestants.right .contestant {
             text-align: right;
-            padding-right: 15vw;
+            padding-right: 2.5em;
             right: -100vw;
             transform-origin: 90% 50%;
         }
 
-            #content .contestant.right.in {
-                right: -5vw;
+            #content .contestants.right .contestant.in {
+                right: -.7em;
             }
 
-            #content .contestant.right .score {
-                right: 6vw;
+            #content .contestants.right .contestant .score {
+                right: 1em;
             }
 
-        #content .contestant .name {
+        #content .contestants .contestant .name {
             position: static;
+            transform-origin: 0% 50%;
         }
 
-            #content .contestant .name .inner {
+            #content .contestants .contestant .name .inner {
                 position: static;
                 white-space: nowrap;
             }
 
-        #content .contestant .score {
+        #content .contestants .contestant .score {
             top: 50%;
-            font-size: 7vh;
             transform: translate(0,-50%);
         }
 
-        #content .contestant.selected {
+        #content .contestants .contestant.selected {
             border: 2px solid white;
             background: #ff6a00;
             color: black;

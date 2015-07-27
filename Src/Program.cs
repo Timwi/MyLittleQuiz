@@ -103,30 +103,41 @@ namespace QuizGameEngine
                         goto exit;
 
                     case ConsoleKey.Backspace:
-                        if (keyInfo.Modifiers.HasFlag(ConsoleModifiers.Shift))
+                        if (keyInfo.Modifiers == ConsoleModifiers.Shift)
                             Quiz.Redo();
-                        else
+                        else if (keyInfo.Modifiers == 0)
                             Quiz.Undo();
+                        else
+                            goto default;
                         break;
 
                     default:
                         var transition = Quiz.CurrentState.Transitions.FirstOrDefault(q => q.Key == keyInfo.Key);
+                        TransitionResult transitionResult;
                         if (transition == null)
-                            goto again;
-
-                        Console.WriteLine();    // In case the transition outputs something and then waits for a key
-                        var transitionResult = transition.Execute();
-                        if (transitionResult == null)
-                            break;
+                        {
+                            if (keyInfo.Key == ConsoleKey.F5 && keyInfo.Modifiers == 0)
+                            {
+                                Quiz = ClassifyJson.DeserializeFile<QuizBase>(file);
+                                transitionResult = Quiz.CurrentState;
+                            }
+                            else
+                                goto again;
+                        }
+                        else
+                        {
+                            Console.WriteLine();    // In case transition.Execute() outputs something and then waits for a key
+                            transitionResult = transition.Execute();
+                            if (transitionResult == null)
+                                break;
+                            if (transitionResult.State != null)
+                                Quiz.Transition(transitionResult.State);
+                        }
 
                         if (transitionResult.JsMethod != null)
                             foreach (var socket in Sockets)
                                 socket.SendMessage(new JsonDict { { "method", transitionResult.JsMethod }, { "params", transitionResult.JsParameters } });
 
-                        if (transitionResult.State == null)
-                            break;
-
-                        Quiz.Transition(transitionResult.State);
                         break;
                 }
                 ClassifyJson.SerializeToFile(Quiz, file);
