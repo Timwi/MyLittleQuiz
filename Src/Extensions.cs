@@ -43,5 +43,10 @@ namespace QuizGameEngine
         {
             return new TransitionResult(state, null, null);
         }
+
+        public static IEnumerable<T> Repeat<T>(this T obj, int times)
+        {
+            return Enumerable.Repeat(obj, times);
+        }
     }
 }

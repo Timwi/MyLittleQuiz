@@ -1,55 +1,32 @@
-﻿var transitions;
-$(function ()
+﻿$(function ()
 {
     var content = $('#content');
 
-    $.fn.addClassDelay = function (cls, delay)
-    {
-        var t = this;
-        window.setTimeout(function () { t.addClass(cls); }, delay);
-        return t;
-    };
-
-    function findBestValue(startingValue, evaluator, threshold, preferHigh)
-    {
-        startingValue = +startingValue;
-        threshold = threshold || .1;
-        preferHigh = !!preferHigh;
-
-        var negative = startingValue < 0;
-        var low = negative ? startingValue : 0;
-        var high = startingValue == 0 ? 1 : (negative ? 0 : startingValue);
-        if (negative)
-        {
-            while (evaluator(low) > 0)
-            {
-                high = low;
-                low *= 2;
-            }
-        }
-        else
-        {
-            while (evaluator(high) < 0)
-            {
-                low = high;
-                high *= 2;
-            }
-        }
-
-        while (high - low > threshold)
-        {
-            var mid = (high + low) / 2;
-            if (evaluator(mid) < 0)
-                low = mid;
-            else
-                high = mid;
-        }
-        var finalValue = preferHigh ? high : low;
-        evaluator(finalValue);
-        return finalValue;
-    }
-
     transitions = {
+
+        r1_showContestants: function (p)
+        {
+            $('#r1contestants').remove();
+            var c = $('<div id="r1contestants">').appendTo(content);
+            for (var i = 0; i < p.contestants.length; i++)
+            {
+                var div = $('<div class="contestant">')
+                    .attr('data-num', p.contestants[i].Round1Number)
+                    .css('transition-delay', Math.random() * .75 + 's')
+                    .appendTo(c);
+                if (p.contestants[i].Round1Correct > 0)
+                    div.addClass('correct');
+                if (p.contestants[i].Round1Wrong > 0)
+                    div.addClass('wrong');
+            }
+            findBestValue(100, function (fs) { c.css('font-size', fs + 'px'); return c.height() < content.height() ? -1 : 1; });
+            $('.contestant').addClassDelay('in', 100);
+        },
+
+        r1_select: function (p)
+        {
+            $('#r1contestants').addClass('out');
+        }
 
     };
 });

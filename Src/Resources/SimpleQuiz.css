@@ -58,7 +58,7 @@ body {
             border: 2px solid #ff6a00;
             border-radius: .7em;
             padding: .2em .1em;
-            transition: left ease-out .7s, right ease-out .7s;
+            transition: left ease-out .7s, right ease-out .7s, background-color linear .5s, color linear .5s, transform ease-in-out .5s;
             width: 50vw;
             position: relative;
             margin: .5em 0;
@@ -114,7 +114,6 @@ body {
             background: #ff6a00;
             color: black;
             transform: scale(1.1, 1.1);
-            transition: background-color linear .5s, color linear .5s, transform ease-in-out .5s;
         }
 
     #content .qa {

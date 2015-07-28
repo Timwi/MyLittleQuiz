@@ -8,6 +8,8 @@ body {
     overflow: hidden;
     padding: 0;
     margin: 0;
+    background: black;
+    color: white;
 }
 
 #content {
@@ -17,3 +19,60 @@ body {
     height: 100vh;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
+
+    #content #r1contestants {
+        text-align: center;
+        transition: opacity linear .3s, transform linear .3s;
+    }
+
+        #content #r1contestants.out {
+            opacity: 0;
+            transform: scale(2);
+        }
+
+        #content #r1contestants .contestant {
+            background: hsl(40, 90%, 50%);
+            border-radius: 100%;
+            width: 1.2em;
+            height: 1.2em;
+            position: relative;
+            margin: .25em .5em;
+            display: inline-block;
+            transition: opacity linear .2s, transform cubic-bezier(0, .8, .5, 1.5) .3s;
+            opacity: 0;
+            transform: scale(.1);
+        }
+
+            #content #r1contestants .contestant.in {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            #content #r1contestants .contestant::before {
+                content: '';
+                position: absolute;
+                top: -.2em;
+                bottom: -.2em;
+                left: -.2em;
+                right: -.2em;
+                border: .1em solid transparent;
+                border-radius: 100%;
+            }
+
+            #content #r1contestants .contestant.correct::before {
+                border-top: .1em solid hsl(110, 100%, 50%);
+            }
+
+            #content #r1contestants .contestant.wrong::before {
+                border-bottom: .1em solid hsl(350, 100%, 50%);
+            }
+
+            #content #r1contestants .contestant::after {
+                content: attr(data-num);
+                position: absolute;
+                font-size: 70%;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                text-shadow: .1em .1em .2em rgba(0, 0, 0, .3);
+            }
