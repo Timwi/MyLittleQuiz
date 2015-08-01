@@ -49,7 +49,8 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                         (i == _selectedContestant ? "[".Color(ConsoleColor.Magenta, ConsoleColor.DarkRed) : null) +
                         "•".Color(ConsoleColor.White, ConsoleColor.DarkGreen).Repeat(c.Round1Correct)
                             .Concat("•".Color(ConsoleColor.Black, ConsoleColor.Red).Repeat(c.Round1Wrong))
-                            .JoinColoredString() + c.Round1Number.ToString().Color(ConsoleColor.White) +
+                            .JoinColoredString() +
+                        c.Round1Number.ToString().Color(ConsoleColor.White, i == _selectedContestant ? ConsoleColor.DarkRed : (ConsoleColor?) null) +
                         (i == _selectedContestant ? "]".Color(ConsoleColor.Magenta, ConsoleColor.DarkRed) : null))
                         .JoinColoredString(" ")
                 );

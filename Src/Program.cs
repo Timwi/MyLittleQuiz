@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Windows.Forms;
 using RT.Servers;
 using RT.TagSoup;
@@ -22,6 +23,17 @@ namespace QuizGameEngine
         public static QuizBase Quiz;
         public static HttpServer Server;
         public static HashSet<QuizWebSocket> Sockets = new HashSet<QuizWebSocket>();
+        private static TextBox _logBox;
+
+        public static void Invoke(Action action)
+        {
+            _logBox.BeginInvoke(action);
+        }
+
+        public static void LogMessage(string msg)
+        {
+            Invoke(() => { _logBox.AppendText(msg + Environment.NewLine + Environment.NewLine); });
+        }
 
         public static ConsoleKeyInfo ReadKey()
         {
@@ -36,7 +48,11 @@ namespace QuizGameEngine
                 return Ut.RunPostBuildChecks(args[1], Assembly.GetExecutingAssembly());
 
             try { Console.OutputEncoding = Encoding.UTF8; }
-            catch { }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                System.Diagnostics.Debugger.Break();
+            }
 
             CommandLine cmd;
             try
@@ -59,6 +75,28 @@ namespace QuizGameEngine
 
             var file = ((QuizCmdLoad) cmd.QuizCmd).File;
             Quiz = ClassifyJson.DeserializeFile<QuizBase>(file);
+
+            var thread = new Thread(() =>
+            {
+                using (var logForm = new Form { Text = "Log", FormBorderStyle = FormBorderStyle.Sizable, ControlBox = false, MinimizeBox = false, WindowState = FormWindowState.Maximized })
+                {
+                    _logBox = new TextBox { Dock = DockStyle.Fill, Multiline = true };
+                    logForm.FormClosing += (_, e) =>
+                    {
+                        if (e.CloseReason == CloseReason.UserClosing)
+                            e.Cancel = true;
+                    };
+
+                    var _clearBtn = new Button { Text = "&Clear", Dock = DockStyle.Bottom };
+                    _clearBtn.Click += delegate { _logBox.Text = ""; };
+
+                    logForm.Controls.Add(_logBox);
+                    logForm.Controls.Add(_clearBtn);
+                    logForm.Show();
+                    Application.Run(logForm);
+                }
+            });
+            thread.Start();
 
             var getResourceHandler = Ut.Lambda((Func<byte[], HttpResponse> function, byte[] resource, string filename) =>
             {
@@ -89,7 +127,7 @@ namespace QuizGameEngine
                 if (Quiz.RedoLine != null)
                     ConsoleUtil.WriteLine("→ Redo: {0/Gray}".Color(ConsoleColor.Green).Fmt(Quiz.RedoLine));
                 Console.WriteLine();
-                ConsoleUtil.WriteLine(Quiz.CurrentState.Describe);
+                ConsoleUtil.WriteParagraphs(Quiz.CurrentState.Describe);
                 Console.WriteLine();
                 foreach (var t in Quiz.CurrentState.Transitions)
                     ConsoleUtil.WriteLine("{0/White}: {1/Cyan}".Color(null).Fmt(t.Key, t.Name));
@@ -135,8 +173,9 @@ namespace QuizGameEngine
                         }
 
                         if (transitionResult.JsMethod != null)
-                            foreach (var socket in Sockets)
-                                socket.SendMessage(new JsonDict { { "method", transitionResult.JsMethod }, { "params", transitionResult.JsParameters } });
+                            lock (Sockets)
+                                foreach (var socket in Sockets)
+                                    socket.SendLoggedMessage(new JsonDict { { "method", transitionResult.JsMethod }, { "params", transitionResult.JsParameters } });
 
                         break;
                 }
@@ -144,11 +183,13 @@ namespace QuizGameEngine
             }
 
             exit:
+            Invoke(() => { Application.Exit(); });
             return 0;
         }
 
         private static HttpResponse handle(HttpRequest req)
         {
+            LogMessage("{0} request for {1} from {2}".Fmt(req.Method, req.Url.ToHref(), req.SourceIP));
             return HttpResponse.Html(
                 new HTML(
                     new HEAD(
@@ -163,7 +204,7 @@ namespace QuizGameEngine
 
         private static HttpResponse webSocket(HttpRequest req)
         {
-            return HttpResponse.WebSocket(new QuizWebSocket());
+            return HttpResponse.WebSocket(new QuizWebSocket(req.SourceIP));
         }
     }
 }

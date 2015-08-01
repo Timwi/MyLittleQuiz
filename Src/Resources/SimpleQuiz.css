@@ -64,6 +64,13 @@ body {
             margin: .5em 0;
         }
 
+            #content .contestants .contestant.selected {
+                border: 2px solid white;
+                background: #ff6a00;
+                color: black;
+                transform: scale(1.1, 1.1);
+            }
+
         #content .contestants.left .contestant {
             text-align: left;
             padding-left: 2.5em;
@@ -107,13 +114,6 @@ body {
         #content .contestants .contestant .score {
             top: 50%;
             transform: translate(0,-50%);
-        }
-
-        #content .contestants .contestant.selected {
-            border: 2px solid white;
-            background: #ff6a00;
-            color: black;
-            transform: scale(1.1, 1.1);
         }
 
     #content .qa {
