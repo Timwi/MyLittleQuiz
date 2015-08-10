@@ -63,7 +63,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                     });
 
                 if (_contestants.Count > 0)
-                    yield return Transition.Simple(ConsoleKey.S, "Start Round: Elimination Round", () => new Round1Elimination("Start game", _questions.ToArray(), _contestants.ToArray()));
+                    yield return Transition.Simple(ConsoleKey.S, "Start Round: Elimination Round", () => Round1Elimination.Create("Start game", _questions.ToArray(), _contestants.ToArray()));
             }
         }
 

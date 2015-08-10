@@ -116,6 +116,11 @@ namespace QuizGameEngine
                 new UrlMapping(path: "/js2", specificPath: true, handler: getResourceHandler(d => HttpResponse.JavaScript(d), Resources.GlobalJs, "Global.js")),
                 new UrlMapping(path: "/css", specificPath: true, handler: getResourceHandler(d => HttpResponse.Css(d), Quiz.Css, Quiz.CssJsFilename + ".css")),
                 new UrlMapping(path: "/socket", specificPath: true, handler: webSocket));
+            if (cmd.ResourcePath != null)
+            {
+                var fileResolver = new FileSystemHandler(Path.Combine(cmd.ResourcePath, Quiz.CssJsFilename));
+                resolver.Add(new UrlMapping(path: "/f", handler: fileResolver.Handle));
+            }
             Server.Handler = resolver.Handle;
             Server.StartListening();
 

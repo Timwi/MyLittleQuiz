@@ -2,12 +2,19 @@
 {
     var content = $('#content');
 
+    function ensureBackground()
+    {
+        if (!$('#background').length)
+            $('<div id="background">').prependTo(content);
+    }
+
     transitions = {
 
         r1_showContestants: function (p)
         {
-            $('#r1contestants').remove();
-            var c = $('<div id="r1contestants">').appendTo(content);
+            ensureBackground();
+            $('#r1-contestants, .r1-contestant').remove();
+            var c = $('<div id="r1-contestants">').appendTo(content);
             for (var i = 0; i < p.contestants.length; i++)
             {
                 var div = $('<div class="contestant">')
@@ -25,7 +32,17 @@
 
         r1_select: function (p)
         {
-            $('#r1contestants').addClass('out');
+            ensureBackground();
+            $('#r1-contestants').addClass('out');
+            $('.r1-contestant').remove();
+
+            var c = p.contestants[p.selected];
+            var div = $('<div class="r1-contestant" id="r1-contestant-name">').append($('<span class="inner">').text(c.Name)).appendTo(content).addClassDelay('in', 100);
+            var span = div.find('.inner');
+            $('<div class="r1-contestant" id="r1-contestant-roll">').text(c.Roll).appendTo(content).addClassDelay('in', 100);
+
+            if (span.width() > div.width())
+                span.css('transform', 'scale(' + (div.width() / span.width()) + ', 1)');
         }
 
     };
