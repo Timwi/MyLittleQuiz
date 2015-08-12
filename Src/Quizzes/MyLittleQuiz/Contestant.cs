@@ -1,14 +1,19 @@
-﻿using RT.Util.ExtensionMethods;
+﻿using System;
+using RT.Util.ExtensionMethods;
 
 namespace QuizGameEngine.Quizzes.MyLittleQuiz
 {
-    public sealed class Contestant
+    public sealed class Contestant : ICloneable
     {
         public string Name { get; private set; }
         public string Roll { get; private set; }
-        public int Round1Number { get; set; }
         public int Round1Correct { get; private set; }
         public int Round1Wrong { get; private set; }
+
+        public object Clone()
+        {
+            return MemberwiseClone();
+        }
 
         public Contestant(string name, string roll)
         {
@@ -23,6 +28,11 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         public override string ToString()
         {
             return "{0}, Roll={1}".Fmt(Name, Roll);
+        }
+
+        public Contestant IncR1Score(bool correct)
+        {
+            return correct ? this.ApplyToClone(c => { c.Round1Correct++; }) : this.ApplyToClone(c => { c.Round1Wrong++; });
         }
     }
 }

@@ -34,6 +34,11 @@ namespace QuizGameEngine
             return newArray;
         }
 
+        public static T[] ReplaceIndex<T>(this T[] array, int index, Func<T, T> elementSelector)
+        {
+            return array.ReplaceIndex(index, elementSelector(array[index]));
+        }
+
         public static TransitionResult With(this QuizStateBase state, string jsMethod, object jsParams = null)
         {
             return new TransitionResult(state, jsMethod, jsParams);
@@ -47,6 +52,17 @@ namespace QuizGameEngine
         public static IEnumerable<T> Repeat<T>(this T obj, int times)
         {
             return Enumerable.Repeat(obj, times);
+        }
+
+        public static T ApplyToClone<T>(this T obj, Action<T> action) where T : ICloneable
+        {
+            if (obj == null)
+                throw new ArgumentNullException("obj");
+            if (action == null)
+                throw new ArgumentNullException("action");
+            var newObj = (T) obj.Clone();
+            action(newObj);
+            return newObj;
         }
     }
 }

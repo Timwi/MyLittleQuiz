@@ -11,16 +11,21 @@ using RT.Util.Json;
 
 namespace QuizGameEngine.Quizzes.MyLittleQuiz
 {
-    public sealed class Setup : QuizStateBase
+    public sealed class Setup : QuizStateBase, IClassifyObjectProcessor
     {
-        public Setup() { }
+        public Setup()
+        {
+            Contestants = new List<Contestant>();
+            DeletedContestants = new List<Contestant>();
+            Questions = new List<QuestionBase>();
+        }
 
         [ClassifyNotNull]
-        public List<Contestant> _contestants = new List<Contestant>();
+        public List<Contestant> Contestants { get; private set; }
         [ClassifyNotNull]
-        private List<Contestant> _deletedContestants = new List<Contestant>();
+        public List<Contestant> DeletedContestants { get; private set; }
         [ClassifyNotNull]
-        private List<QuestionBase> _questions = new List<QuestionBase>();
+        public List<QuestionBase> Questions { get; private set; }
 
         public override IEnumerable<Transition> Transitions
         {
@@ -28,42 +33,42 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             {
                 yield return Transition.String(ConsoleKey.A, "Add contestant", "Contestant name: ", "Roll number (r for random): ", (name, roll) =>
                 {
-                    _contestants.Add(new Contestant(name, roll == "r" ? Rnd.Next().ToString() : roll));
-                    _deletedContestants.RemoveAll(c => c.Name == name && c.Roll == roll);
+                    Contestants.Add(new Contestant(name, roll == "r" ? Rnd.Next().ToString() : roll));
+                    DeletedContestants.RemoveAll(c => c.Name == name && c.Roll == roll);
                 });
 
-                if (_contestants.Count > 0)
-                    yield return Transition.Select(ConsoleKey.D, "Delete contestant", _contestants.ToArray<object>(), index =>
+                if (Contestants.Count > 0)
+                    yield return Transition.Select(ConsoleKey.D, "Delete contestant", Contestants.ToArray<object>(), index =>
                     {
-                        _deletedContestants.Add(_contestants[index]);
-                        _contestants.RemoveAt(index);
+                        DeletedContestants.Add(Contestants[index]);
+                        Contestants.RemoveAt(index);
                     });
 
-                if (_contestants.Count > 0)
+                if (Contestants.Count > 0)
                     yield return Transition.Simple(ConsoleKey.L, "List contestants", () =>
                     {
-                        foreach (var q in _contestants)
+                        foreach (var q in Contestants)
                             ConsoleUtil.WriteLine("{0/White} ({1/Green})".Color(null).Fmt(q.Name, q.Roll));
                         Program.ReadKey();
                     });
 
-                if (_deletedContestants.Count > 0)
+                if (DeletedContestants.Count > 0)
                     yield return Transition.Simple(ConsoleKey.K, "List deleted contestants", () =>
                     {
-                        foreach (var q in _deletedContestants)
+                        foreach (var q in DeletedContestants)
                             ConsoleUtil.WriteLine("{0/White} ({1/Green})".Color(null).Fmt(q.Name, q.Roll));
                         Program.ReadKey();
                     });
 
-                if (_deletedContestants.Count > 0)
-                    yield return Transition.Select(ConsoleKey.R, "Resurrect deleted contestant", _deletedContestants.ToArray<object>(), index =>
+                if (DeletedContestants.Count > 0)
+                    yield return Transition.Select(ConsoleKey.R, "Resurrect deleted contestant", DeletedContestants.ToArray<object>(), index =>
                     {
-                        _contestants.Add(_deletedContestants[index]);
-                        _deletedContestants.RemoveAt(index);
+                        Contestants.Add(DeletedContestants[index]);
+                        DeletedContestants.RemoveAt(index);
                     });
 
-                if (_contestants.Count > 0)
-                    yield return Transition.Simple(ConsoleKey.S, "Start Round: Elimination Round", () => Round1Elimination.Create("Start game", _questions.ToArray(), _contestants.ToArray()));
+                if (Contestants.Count > 0)
+                    yield return Transition.Simple(ConsoleKey.S, "Start Round: Elimination Round", () => Round1Elimination.Create("Start game", Questions.ToArray(), Contestants.ToArray()));
             }
         }
 
@@ -71,15 +76,27 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         {
             get
             {
-                return @"
-{0/White} contestants
-"
+                return "{0/White} contestants\n{1/White} questions"
                         .Color(null)
-                        .Fmt(_contestants.Count);
+                        .Fmt(Contestants.Count, Questions.Count);
             }
         }
 
         public override string JsMethod { get { return null; } }
         public override object JsParameters { get { return null; } }
+
+        void IClassifyObjectProcessor.BeforeSerialize() { }
+
+        void IClassifyObjectProcessor.AfterDeserialize()
+        {
+            if (Questions.Count > 0)
+                return;
+
+            Questions.AddRange(Ut.NewArray<QuestionBase>(
+                new SimpleQuestion { Difficulty = Difficulty.Easy, QuestionText = "What is the name of Rarity’s younger sister?", Answer = "Sweetie Belle" },
+                new SimpleQuestion { Difficulty = Difficulty.Easy, QuestionText = "What is the name of Applejack’s younger sister?", Answer = "Apple Bloom" },
+                new NOfQuestion { Difficulty = Difficulty.Medium, QuestionText = "Name two characters first introduced by name in <i>The Cutie Map</i> (S5 E01–02).", N = 2, Answers = new[] { "Starlight Glimmer", "Double Diamond", "Party Favor", "Sugar Belle" } }
+            ));
+        }
     }
 }

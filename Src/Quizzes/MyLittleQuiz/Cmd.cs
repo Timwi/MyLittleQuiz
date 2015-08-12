@@ -11,7 +11,7 @@ using RT.Util.Serialization;
 
 namespace QuizGameEngine.Quizzes.MyLittleQuiz
 {
-    [CommandName("MyLittleQuiz")]
+    [CommandName("MyLittleQuiz"), DocumentationLiteral("Brony Fair 2016 quiz")]
     public sealed class Cmd : StartQuizCmd
     {
         public override QuizBase StartState { get { return new Quiz(); } }

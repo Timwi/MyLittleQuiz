@@ -22,9 +22,6 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             if (contestants == null)
                 throw new ArgumentNullException("contestants");
 
-            for (int i = 0; i < contestants.Length; i++)
-                contestants[i].Round1Number = i + 1;
-
             return new Round1Elimination(undoLine, questions.GroupBy(q => q.Difficulty).ToDictionary(g => g.Key, g => g.ToList().Shuffle().ToArray()), contestants);
         }
 
@@ -47,12 +44,20 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         {
             get
             {
-                yield return Transition.Select(ConsoleKey.S, "Select contestant", Contestants, i => new Round1Elimination("Selected contestant #" + Contestants[i].Round1Number, Questions, Contestants, i));
+                yield return Transition.Select(ConsoleKey.S, "Select contestant", Contestants, i => new Round1Elimination("Selected contestant #" + (i + 1), Questions, Contestants, i));
+
+                yield return Transition.Simple(ConsoleKey.R, "Select contestant at random", () =>
+                {
+                    var choosableContestants = Contestants.SelectIndexWhere(c => c.Round1Correct < 2 && c.Round1Wrong < 2).ToArray();
+                    var index = choosableContestants[Rnd.Next(choosableContestants.Length)];
+                    return new Round1Elimination("Selected contestant #{0} (random)".Fmt(index + 1), Questions, Contestants, index);
+                });
+
                 if (SelectedContestant != null)
                 {
-                    var dfty = Contestants[SelectedContestant.Value].Round1Correct > 0 ? Difficulty.Medium : Difficulty.Easy;
-                    yield return Transition.Simple(ConsoleKey.Q, "Ask question ({0})".Fmt(dfty), () =>
-                        new Round1EliminationQ("Asked {0} question".Fmt(dfty), this, dfty));
+                    var difficulty = Contestants[SelectedContestant.Value].Round1Correct > 0 || !Questions.ContainsKey(Difficulty.Easy) || Questions[Difficulty.Easy].Length == 0 ? Difficulty.Medium : Difficulty.Easy;
+                    yield return Transition.Simple(ConsoleKey.Q, "Ask question ({0})".Fmt(difficulty), () =>
+                        new Round1EliminationQ("Asked {0} question".Fmt(difficulty), this, difficulty));
                 }
             }
         }
@@ -61,16 +66,18 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         {
             get
             {
-                return "{0/White}\n{1}".Color(null).Fmt(
+                return "{0/White}\n{1}{2}\n\n{3/White}\n{4}".Color(null).Fmt(
                     /* 0 */ "Contestants:",
                     /* 1 */ Contestants.Select((c, i) =>
-                        (i == SelectedContestant ? "[".Color(ConsoleColor.Magenta, ConsoleColor.DarkRed) : null) +
-                        "•".Color(ConsoleColor.White, ConsoleColor.DarkGreen).Repeat(c.Round1Correct)
-                            .Concat("•".Color(ConsoleColor.Black, ConsoleColor.Red).Repeat(c.Round1Wrong))
-                            .JoinColoredString() +
-                        c.Round1Number.ToString().Color(ConsoleColor.White, i == SelectedContestant ? ConsoleColor.DarkRed : (ConsoleColor?) null) +
-                        (i == SelectedContestant ? "]".Color(ConsoleColor.Magenta, ConsoleColor.DarkRed) : null))
-                        .JoinColoredString(" ")
+                                    (i == SelectedContestant ? "[".Color(ConsoleColor.Magenta, ConsoleColor.DarkRed) : null) +
+                                    "•".Color(ConsoleColor.White, ConsoleColor.DarkGreen).Repeat(c.Round1Correct).JoinColoredString() +
+                                    "•".Color(ConsoleColor.Black, ConsoleColor.Red).Repeat(c.Round1Wrong).JoinColoredString() +
+                                    (i + 1).ToString().Color(ConsoleColor.White, i == SelectedContestant ? ConsoleColor.DarkRed : (ConsoleColor?) null) +
+                                    (i == SelectedContestant ? "]".Color(ConsoleColor.Magenta, ConsoleColor.DarkRed) : null))
+                                    .JoinColoredString(" "),
+                    /* 2 */ SelectedContestant == null ? null : "\n\n{0/White}\n{1/Green} {2/Red} {3/Yellow}".Color(null).Fmt("Selected contestant:", Contestants[SelectedContestant.Value].Round1Correct, Contestants[SelectedContestant.Value].Round1Wrong, Contestants[SelectedContestant.Value].Name),
+                    /* 3 */ "Questions:",
+                    /* 4 */ Questions.Select(kvp => "{0/Cyan}: {1/Magenta}".Color(null).Fmt(kvp.Key, kvp.Value.Length)).JoinColoredString("\n")
                 );
             }
         }

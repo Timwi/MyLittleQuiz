@@ -48,11 +48,7 @@ namespace QuizGameEngine
                 return Ut.RunPostBuildChecks(args[1], Assembly.GetExecutingAssembly());
 
             try { Console.OutputEncoding = Encoding.UTF8; }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                System.Diagnostics.Debugger.Break();
-            }
+            catch { }
 
             CommandLine cmd;
             try
