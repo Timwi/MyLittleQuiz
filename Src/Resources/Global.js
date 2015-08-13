@@ -32,6 +32,18 @@ $(function ()
     }
 
     newSocket();
+
+    $(document.body).keypress(function (e)
+    {
+        if (e.keyCode === 99)   // 'c'
+        {
+            $(document.body).css('cursor', 'default');
+        }
+        else if (e.keyCode === 114)   // 'r'
+        {
+            $(document.body).css('cursor', 'none');
+        }
+    });
 });
 
 function findBestValue(startingValue, evaluator, threshold, preferHigh)
@@ -39,6 +51,7 @@ function findBestValue(startingValue, evaluator, threshold, preferHigh)
     startingValue = +startingValue;
     threshold = threshold || .1;
     preferHigh = !!preferHigh;
+    var iter = 0;
 
     var negative = startingValue < 0;
     var low = negative ? startingValue : 0;
@@ -47,6 +60,8 @@ function findBestValue(startingValue, evaluator, threshold, preferHigh)
     {
         while (evaluator(low) > 0)
         {
+            iter++;
+            if (iter > 1000) { alert('iteration failed'); return; }
             high = low;
             low *= 2;
         }
@@ -55,6 +70,8 @@ function findBestValue(startingValue, evaluator, threshold, preferHigh)
     {
         while (evaluator(high) < 0)
         {
+            iter++;
+            if (iter > 1000) { alert('iteration failed'); return; }
             low = high;
             high *= 2;
         }
@@ -62,6 +79,8 @@ function findBestValue(startingValue, evaluator, threshold, preferHigh)
 
     while (high - low > threshold)
     {
+        iter++;
+        if (iter > 1000) { alert('iteration failed'); return; }
         var mid = (high + low) / 2;
         var ev = evaluator(mid);
         if (ev === 0)

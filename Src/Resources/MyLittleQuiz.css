@@ -3,6 +3,10 @@
     position: absolute;
 }
 
+.static * {
+    position: static;
+}
+
 body {
     position: relative;
     overflow: hidden;
@@ -20,6 +24,14 @@ body {
     height: 100vh;
     font-family: 'Celestia Redux', 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
+
+    #content #background {
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: #004;
+    }
 
     #content #r1-contestants {
         text-align: center;
@@ -78,14 +90,6 @@ body {
                 text-shadow: .1em .1em .2em rgba(0, 0, 0, .3);
             }
 
-    #content #background {
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: #004;
-    }
-
     #content #r1-contestant-name {
         top: 5vw;
         left: -100vw;
@@ -118,7 +122,6 @@ body {
             }
 
         #content #r1-contestant-name .inner {
-            position: static;
             display: inline-block;
             white-space: nowrap;
             transform-origin: 0 50%;
@@ -154,10 +157,10 @@ body {
         right: 0;
         opacity: 1;
         transition: opacity linear .5s, transform ease-in .7s;
+        padding: 5vw;
     }
 
         #content #qa .qa {
-            position: static;
             padding: .5em 1em;
         }
 
@@ -168,11 +171,17 @@ body {
                 #content #qa .qa.question {
                     background: hsl(300, 100%, 25%);
                     box-shadow: inset .2em .2em 0 hsl(300, 100%, 40%);
-                    margin-top: 5vw;
-                    margin: 1em 5vw;
+                    margin: 0;
                     transform: scale(.1) rotate(-3deg);
                     opacity: 0;
                 }
+
+                    #content #qa .qa.question .decor {
+                        position: absolute;
+                        top: 0;
+                        left: .2em;
+                        color: hsl(300, 100%, 30%);
+                    }
 
                     #content #qa .qa.question .text {
                         opacity: 0;
@@ -191,26 +200,82 @@ body {
                         }
 
                 #content #qa .qa.answer {
-                    margin-bottom: 5vw;
-                    margin: 1em 15vw;
+                    margin: 1em 10vw 0;
                     opacity: 0;
                     transform: scale(.1) rotate(3deg);
                 }
+
+                    #content #qa .qa.answer .decor {
+                        position: absolute;
+                        top: 0;
+                        right: .2em;
+                    }
 
                     #content #qa .qa.answer.correct {
                         background: hsl(120, 100%, 25%);
                         box-shadow: inset .2em .2em 0 hsl(120, 100%, 40%);
                     }
 
+                        #content #qa .qa.answer.correct .decor {
+                            color: hsl(120, 100%, 30%);
+                        }
+
                     #content #qa .qa.answer.wrong {
                         background: hsl(0, 100%, 25%);
                         box-shadow: inset .2em .2em 0 hsl(0, 100%, 40%);
                     }
 
+                        #content #qa .qa.answer.wrong .decor {
+                            color: hsl(0, 100%, 30%);
+                        }
+
                     #content #qa .qa.answer .text {
                         opacity: 0;
                         transform: scale(.1) rotate(-10deg);
                         transition-delay: .2s;
+                        margin: 0;
+                        padding: 0;
+                        list-style: none;
+                    }
+
+                        #content #qa .qa.answer .text li {
+                            margin: .1em;
+                            opacity: 0;
+                            transform: scale(.1) rotate(30deg);
+                            transition: opacity linear .2s, transform cubic-bezier(0, .8, .5, 1.5) .3s;
+                        }
+
+                    #content #qa .qa.answer.in .text li {
+                        opacity: 1;
+                        transform: none;
+                    }
+
+                    #content #qa .qa.answer .text li .inner {
+                        display: inline-block;
+                        padding: 0 1em .2em;
+                        transform: rotate(1deg);
+                    }
+
+                    #content #qa .qa.answer .text li.sel > .inner {
+                        border-radius: 100%;
+                        background: rgba(255, 255, 0, .2);
+                    }
+
+                        #content #qa .qa.answer .text li.sel > .inner::before {
+                            content: '';
+                            position: absolute;
+                            top: 0;
+                            left: 1em;
+                            bottom: .2em;
+                            right: 1em;
+                            border-radius: 100%;
+                            background: rgba(0, 0, 0, .2);
+                            transform: rotate(-3deg);
+                        }
+
+                    #content #qa .qa.answer .text li .inner .inner {
+                        display: inline-block;
+                        transform: rotate(-2deg);
                     }
 
                     #content #qa .qa.answer.in {
@@ -224,7 +289,6 @@ body {
                         }
 
                 #content #qa .qa .text {
-                    position: static;
                     text-align: center;
                     text-shadow: .07em .07em .07em rgba(0,0,0,.3);
                 }
