@@ -14,6 +14,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         public Dictionary<Difficulty, QuestionBase[]> Questions { get; private set; }
         public Contestant[] Contestants { get; private set; }
         public int? SelectedContestant { get; private set; }
+        public int NumContestantsNeeded { get; private set; }
 
         public static Round1Elimination Create(string undoLine, QuestionBase[] questions, Contestant[] contestants)
         {
@@ -66,18 +67,19 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         {
             get
             {
-                return "{0/White}\n{1}{2}\n\n{3/White}\n{4}".Color(null).Fmt(
+                return "{0/White}\n{1}\n{2}{3}\n\n{4/White}\n{5}".Color(null).Fmt(
                     /* 0 */ "Contestants:",
-                    /* 1 */ Contestants.Select((c, i) =>
+                    /* 1 */ Contestants.SelectIndexWhere(c => c.Round1Correct < 2 && c.Round1Wrong < 2).Select(i =>
                                     (i == SelectedContestant ? "[".Color(ConsoleColor.Magenta, ConsoleColor.DarkRed) : null) +
-                                    "•".Color(ConsoleColor.White, ConsoleColor.DarkGreen).Repeat(c.Round1Correct).JoinColoredString() +
-                                    "•".Color(ConsoleColor.Black, ConsoleColor.Red).Repeat(c.Round1Wrong).JoinColoredString() +
+                                    "•".Color(ConsoleColor.White, ConsoleColor.DarkGreen).Repeat(Contestants[i].Round1Correct).JoinColoredString() +
+                                    "•".Color(ConsoleColor.Black, ConsoleColor.Red).Repeat(Contestants[i].Round1Wrong).JoinColoredString() +
                                     (i + 1).ToString().Color(ConsoleColor.White, i == SelectedContestant ? ConsoleColor.DarkRed : (ConsoleColor?) null) +
                                     (i == SelectedContestant ? "]".Color(ConsoleColor.Magenta, ConsoleColor.DarkRed) : null))
                                     .JoinColoredString(" "),
-                    /* 2 */ SelectedContestant == null ? null : "\n\n{0/White}\n{1/Green} {2/Red} {3/Yellow}".Color(null).Fmt("Selected contestant:", Contestants[SelectedContestant.Value].Round1Correct, Contestants[SelectedContestant.Value].Round1Wrong, Contestants[SelectedContestant.Value].Name),
-                    /* 3 */ "Questions:",
-                    /* 4 */ Questions.Select(kvp => "{0/Cyan}: {1/Magenta}".Color(null).Fmt(kvp.Key, kvp.Value.Length)).JoinColoredString("\n")
+                    /* 2 */ "{0/Magenta} out, {1/Green} through, {2/Cyan} remaining".Color(null).Fmt(Contestants.Count(c => c.Round1Wrong > 1), Contestants.Count(c => c.Round1Correct > 1), Contestants.Count(c => c.Round1Correct < 2 && c.Round1Wrong < 2)),
+                    /* 3 */ SelectedContestant == null ? null : "\n\n{0/White}\n{1/Green} {2/Red} {3/Yellow}".Color(null).Fmt("Selected contestant:", Contestants[SelectedContestant.Value].Round1Correct, Contestants[SelectedContestant.Value].Round1Wrong, Contestants[SelectedContestant.Value].Name),
+                    /* 4 */ "Questions:",
+                    /* 5 */ Questions.Select(kvp => "{0/Cyan}: {1/Magenta}".Color(null).Fmt(kvp.Key, kvp.Value.Length)).JoinColoredString("\n")
                 );
             }
         }

@@ -59,6 +59,7 @@
     <Compile Include="Quizzes\MyLittleQuiz\Quiz.cs" />
     <Compile Include="Quizzes\MyLittleQuiz\Round1Elimination.cs" />
     <Compile Include="Quizzes\MyLittleQuiz\Round1EliminationQ.cs" />
+    <Compile Include="Quizzes\MyLittleQuiz\Round2Categories.cs" />
     <Compile Include="Quizzes\MyLittleQuiz\Setup.cs" />
     <Compile Include="Quizzes\SimpleQuiz\Contestant.cs" />
     <Compile Include="Quizzes\SimpleQuiz\Quiz.cs" />

@@ -47,13 +47,22 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                         answerInfo.Item1, answerInfo.Item2,
                             () => new Round1EliminationQ("Answer given: " + answerInfo.Item2, Prev, Difficulty, answerInfo.Item3).With("r1_showA", new { answer = answerInfo.Item3 })));
 
-                return Ut.NewArray(
-                    Transition.Simple(ConsoleKey.Spacebar, "Back to contestant selection", () => new Round1Elimination("Dismiss question",
-                        // Remove that question
-                        Prev.Questions.Select(kvp => Ut.KeyValuePair(kvp.Key, kvp.Key == Difficulty ? kvp.Value.RemoveIndex(0) : kvp.Value)).ToDictionary(),
-                        // Update the contestant’s score
-                        Prev.Contestants.ReplaceIndex(Prev.SelectedContestant.Value, c => c.IncR1Score(!AnswerObject.Equals(false)))))
-                );
+                var wouldBe = new Round1Elimination("Question dismissed",
+                    // Remove this question
+                    Prev.Questions.Select(kvp => Ut.KeyValuePair(kvp.Key, kvp.Key == Difficulty ? kvp.Value.RemoveIndex(0) : kvp.Value)).ToDictionary(),
+                    // Update the contestant’s score
+                    Prev.Contestants.ReplaceIndex(Prev.SelectedContestant.Value, c => c.IncR1Score(!AnswerObject.Equals(false))));
+
+                var through = wouldBe.Contestants.Where(c => c.Round1Correct > 1);
+                var remaining = wouldBe.Contestants.Where(c => c.Round1Correct < 2 && c.Round1Wrong < 2);
+                var nextRoundContestants =
+                    through.Count() == wouldBe.NumContestantsNeeded ? through.ToArray() :
+                    through.Count() + remaining.Count() == wouldBe.NumContestantsNeeded ? through.Concat(remaining).ToArray() : null;
+
+                if (nextRoundContestants != null)
+                    return new[] { Transition.Simple(ConsoleKey.Spacebar, "End of round congratulations", () => new Round2Categories(nextRoundContestants)) };
+                else
+                    return new[] { Transition.Simple(ConsoleKey.Spacebar, "Back to contestant selection", () => wouldBe) };
             }
         }
 
