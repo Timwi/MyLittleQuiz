@@ -1,17 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using RT.Util;
+using RT.Util.Consoles;
+using RT.Util.ExtensionMethods;
 
 namespace QuizGameEngine.Quizzes.MyLittleQuiz
 {
-    public sealed class Round2Categories : QuizStateBase
+    public sealed class Round2_Categories_Start : QuizStateBase
     {
-        public Contestant[] Contestants { get; private set; }
+        public Round2Contestant[] Contestants { get; private set; }
+        public QuizData Data { get; private set; }
 
-        public Round2Categories(Contestant[] contestants)
+        public Round2_Categories_Start(Round1Contestant[] contestants, QuizData data)
         {
-            Contestants = contestants;
+            Contestants = contestants.Select(r1c => new Round2Contestant(r1c.Name, 0)).ToArray();
+            Data = data;
         }
 
         public override IEnumerable<Transition> Transitions
@@ -19,7 +26,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             get { throw new NotImplementedException(); }
         }
 
-        public override RT.Util.Consoles.ConsoleColoredString Describe
+        public override ConsoleColoredString Describe
         {
             get { throw new NotImplementedException(); }
         }

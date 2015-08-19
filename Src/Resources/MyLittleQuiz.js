@@ -24,15 +24,15 @@ $(function ()
             var c = $('<div id="r1-contestants" class="away">').appendTo(content);
             for (var i = 0; i < p.contestants.length; i++)
             {
-                if (p.contestants[i].Round1Correct > 1 || p.contestants[i].Round1Wrong > 1)
+                if (p.contestants[i].NumCorrect > 1 || p.contestants[i].NumWrong > 1)
                     continue;
                 var div = $('<div class="contestant">')
                     .attr('data-num', i + 1)
                     .css('transition-delay', Math.random() * .75 + 's')
                     .appendTo(c);
-                if (p.contestants[i].Round1Correct > 0)
+                if (p.contestants[i].NumCorrect > 0)
                     div.addClass('correct');
-                if (p.contestants[i].Round1Wrong > 0)
+                if (p.contestants[i].NumWrong > 0)
                     div.addClass('wrong');
             }
             findBestValue(100, function (fs) { c.css('font-size', fs + 'px'); return c.height() < content.height() ? -1 : 1; });

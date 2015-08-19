@@ -11,21 +11,21 @@ using RT.Util.Json;
 
 namespace QuizGameEngine.Quizzes.MyLittleQuiz
 {
-    public sealed class Setup : QuizStateBase, IClassifyObjectProcessor
+    public sealed class Setup : QuizStateBase
     {
         public Setup()
         {
-            Contestants = new List<Contestant>();
-            DeletedContestants = new List<Contestant>();
-            Questions = new List<QuestionBase>();
+            Contestants = new List<Round1Contestant>();
+            DeletedContestants = new List<Round1Contestant>();
         }
 
         [ClassifyNotNull]
-        public List<Contestant> Contestants { get; private set; }
+        public List<Round1Contestant> Contestants { get; private set; }
         [ClassifyNotNull]
-        public List<Contestant> DeletedContestants { get; private set; }
+        public List<Round1Contestant> DeletedContestants { get; private set; }
+
         [ClassifyNotNull]
-        public List<QuestionBase> Questions { get; private set; }
+        public QuizData Data = new QuizData(new QuestionBase[0], new Round2Category[0]);
 
         public override IEnumerable<Transition> Transitions
         {
@@ -33,7 +33,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             {
                 yield return Transition.String(ConsoleKey.A, "Add contestant", "Contestant name: ", "Roll number (r for random): ", (name, roll) =>
                 {
-                    Contestants.Add(new Contestant(name, roll == "r" ? Rnd.Next().ToString() : roll));
+                    Contestants.Add(new Round1Contestant(name, roll == "r" ? Rnd.Next().ToString() : roll));
                     DeletedContestants.RemoveAll(c => c.Name == name && c.Roll == roll);
                 });
 
@@ -68,7 +68,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                     });
 
                 if (Contestants.Count > 0)
-                    yield return Transition.Simple(ConsoleKey.S, "Start Round: Elimination Round", () => Round1Elimination.Create("Start game", Questions.ToArray(), Contestants.ToArray()));
+                    yield return Transition.Simple(ConsoleKey.S, "Start Round: Elimination Round", () => new Round1_Elimination("Start game", new Round1Data(Data)));
             }
         }
 
@@ -76,27 +76,11 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         {
             get
             {
-                return "{0/White} contestants\n{1/White} questions"
-                        .Color(null)
-                        .Fmt(Contestants.Count, Questions.Count);
+                return "{0/White} contestants".Color(null).Fmt(Contestants.Count);
             }
         }
 
         public override string JsMethod { get { return null; } }
         public override object JsParameters { get { return null; } }
-
-        void IClassifyObjectProcessor.BeforeSerialize() { }
-
-        void IClassifyObjectProcessor.AfterDeserialize()
-        {
-            if (Questions.Count > 0)
-                return;
-
-            Questions.AddRange(Ut.NewArray<QuestionBase>(
-                new SimpleQuestion { Difficulty = Difficulty.Easy, QuestionText = "What is the name of Rarity’s younger sister?", Answer = "Sweetie Belle" },
-                new SimpleQuestion { Difficulty = Difficulty.Easy, QuestionText = "What is the name of Applejack’s younger sister?", Answer = "Apple Bloom" },
-                new NOfQuestion { Difficulty = Difficulty.Medium, QuestionText = "Name two characters first introduced by name in <i>The Cutie Map</i> (S5 E01–02).", N = 2, Answers = new[] { "Starlight Glimmer", "Double Diamond", "Party Favor", "Sugar Belle" } }
-            ));
-        }
     }
 }
