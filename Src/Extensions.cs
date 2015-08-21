@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using RT.Util.Consoles;
+using RT.Util.ExtensionMethods;
 
 namespace QuizGameEngine
 {
@@ -22,6 +22,22 @@ namespace QuizGameEngine
             return newArray;
         }
 
+        public static T[] RemoveIndexes<T>(this T[] array, int index, int length)
+        {
+            if (array == null)
+                throw new ArgumentNullException("array");
+            if (index < 0 || index > array.Length)
+                throw new ArgumentOutOfRangeException("index", "Index out of bounds.");
+            if (length < 0 || index + length > array.Length)
+                throw new ArgumentOutOfRangeException("length", "Length cannot be negative or out of bounds.");
+            var newArray = new T[array.Length - length];
+            if (index > 0)
+                Array.Copy(array, 0, newArray, 0, index);
+            if (index + length < array.Length)
+                Array.Copy(array, index + length, newArray, index, array.Length - index - length);
+            return newArray;
+        }
+
         public static T[] ReplaceIndex<T>(this T[] array, int index, T element)
         {
             if (array == null)
@@ -37,6 +53,21 @@ namespace QuizGameEngine
         public static T[] ReplaceIndex<T>(this T[] array, int index, Func<T, T> elementSelector)
         {
             return array.ReplaceIndex(index, elementSelector(array[index]));
+        }
+
+        public static T[] InsertAtIndex<T>(this T[] array, int index, T element)
+        {
+            if (array == null)
+                throw new ArgumentNullException("array");
+            if (index < 0 || index > array.Length)
+                throw new ArgumentException("Index out of bounds.", "index");
+            var newArray = new T[array.Length + 1];
+            if (index > 0)
+                Array.Copy(array, 0, newArray, 0, index);
+            newArray[index] = element;
+            if (index < array.Length)
+                Array.Copy(array, index, newArray, index + 1, array.Length - index);
+            return newArray;
         }
 
         public static TransitionResult With(this QuizStateBase state, string jsMethod, object jsParams = null)
@@ -63,6 +94,24 @@ namespace QuizGameEngine
             var newObj = (T) obj.Clone();
             action(newObj);
             return newObj;
+        }
+
+        public static ConsoleColoredString ToUsefulString(this object obj)
+        {
+            if (obj is IToConsoleColoredString)
+                return ((IToConsoleColoredString) obj).ToConsoleColoredString();
+
+            var t = obj.GetType();
+            if (t.IsArray)
+                return "{0/White} × {1/DarkCyan}".Color(null).Fmt(((dynamic) obj).Length, t.GetElementType().Name);
+
+            Type[] arguments;
+            if (t.TryGetInterfaceGenericParameters(typeof(IDictionary<,>), out arguments))
+                return "{0/White} × {1/DarkMagenta} → {2/DarkCyan}".Color(null).Fmt(((dynamic) obj).Count, arguments[0].Name, arguments[1].Name);
+            if (t.TryGetInterfaceGenericParameters(typeof(ICollection<>), out arguments))
+                return "{0/White} × {1/DarkCyan}".Color(null).Fmt(((dynamic) obj).Count, arguments[0].Name);
+
+            return obj.ToConsoleColoredString();
         }
     }
 }

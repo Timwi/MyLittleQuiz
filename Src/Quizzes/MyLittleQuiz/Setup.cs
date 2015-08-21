@@ -15,17 +15,17 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
     {
         public Setup()
         {
-            Contestants = new List<Round1Contestant>();
-            DeletedContestants = new List<Round1Contestant>();
+            Contestants = new List<Contestant>(); ;
+            DeletedContestants = new List<Contestant>();
         }
 
         [ClassifyNotNull]
-        public List<Round1Contestant> Contestants { get; private set; }
+        public List<Contestant> Contestants { get; private set; }
         [ClassifyNotNull]
-        public List<Round1Contestant> DeletedContestants { get; private set; }
+        public List<Contestant> DeletedContestants { get; private set; }
 
         [ClassifyNotNull]
-        public QuizData Data = new QuizData(new QuestionBase[0], new Round2Category[0]);
+        public QuizData Data = new QuizData();
 
         public override IEnumerable<Transition> Transitions
         {
@@ -33,7 +33,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             {
                 yield return Transition.String(ConsoleKey.A, "Add contestant", "Contestant name: ", "Roll number (r for random): ", (name, roll) =>
                 {
-                    Contestants.Add(new Round1Contestant(name, roll == "r" ? Rnd.Next().ToString() : roll));
+                    Contestants.Add(new Contestant(name, roll == "r" ? Rnd.Next().ToString() : roll));
                     DeletedContestants.RemoveAll(c => c.Name == name && c.Roll == roll);
                 });
 
@@ -67,8 +67,10 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                         DeletedContestants.RemoveAt(index);
                     });
 
+                yield return Transition.Simple(ConsoleKey.E, "Edit quiz data", () => Program.Edit(Data, new[] { "Quiz data" }));
+
                 if (Contestants.Count > 0)
-                    yield return Transition.Simple(ConsoleKey.S, "Start Round: Elimination Round", () => new Round1_Elimination("Start game", new Round1Data(Data)));
+                    yield return Transition.Simple(ConsoleKey.S, "Start Round: Elimination Round", () => new Round1_Elimination("Start game", new Round1Data(Data, Contestants)));
             }
         }
 
@@ -76,7 +78,11 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         {
             get
             {
-                return "{0/White} contestants".Color(null).Fmt(Contestants.Count);
+                return "{0/White} contestants\n\n{1/White}\nNumber of contestants needed: {2/Cyan}".Color(null).Fmt(
+                    /* 0 */ Contestants.Count,
+                    /* 1 */ "ROUND 1 (Elimination)",
+                    /* 2 */ Data.Round1NumContestantsNeeded
+                );
             }
         }
 

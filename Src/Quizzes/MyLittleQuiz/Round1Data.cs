@@ -24,16 +24,18 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         [ClassifyIgnoreIfDefault]
         public object AnswerObject { get; private set; }
 
-        public Round1Data(QuizData quizData)
+        public Round1Data(QuizData quizData, IEnumerable<Contestant> contestants)
         {
             QuizData = quizData;
-            Contestants = new Round1Contestant[0];
+            Contestants = contestants.Select(c => new Round1Contestant(c.Name, c.Roll)).ToArray();
             NumContestantsNeeded = 10;
             QuestionIndex = new Dictionary<Difficulty, int> { { Difficulty.Easy, 0 }, { Difficulty.Medium, 0 } };
             SelectedContestant = null;
             CurrentDifficulty = null;
             AnswerObject = null;
         }
+
+        private Round1Data() { }    // for Classify
 
         public object Clone()
         {
@@ -91,7 +93,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                 cl.QuestionIndex[CurrentDifficulty.Value] = QuestionIndex[CurrentDifficulty.Value] + 1;
 
                 // Update the contestant’s score
-                cl.Contestants = Contestants.ReplaceIndex(cl.SelectedContestant.Value, c => c.IncR1Score(!AnswerObject.Equals(false)));
+                cl.Contestants = Contestants.ReplaceIndex(cl.SelectedContestant.Value, c => c.IncScore(!AnswerObject.Equals(false)));
 
                 cl.SelectedContestant = null;
                 cl.CurrentDifficulty = null;

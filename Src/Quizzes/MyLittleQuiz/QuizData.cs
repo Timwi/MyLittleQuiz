@@ -6,21 +6,44 @@ using System.Text;
 using System.Threading.Tasks;
 using RT.Util;
 using RT.Util.ExtensionMethods;
+using RT.Util.Serialization;
 
 namespace QuizGameEngine.Quizzes.MyLittleQuiz
 {
-    public sealed class QuizData
+    public sealed class QuizData : ICloneable
     {
+        // Round 1: Elimination
+        [EditorLabel("Round 1 (Elimination): Number of contestants needed")]
+        public int Round1NumContestantsNeeded { get; private set; }
+
+        [ClassifyNotNull]
+        [EditorLabel("Round 1 (Elimination): Questions")]
         public Dictionary<Difficulty, QuestionBase[]> Round1Questions { get; private set; }
+
+        // Round 2: Categories
+        [ClassifyNotNull]
+        [EditorLabel("Round 2 (Categories): Questions")]
         public Round2Category[] Round2Questions { get; private set; }
 
+        // Round 3: Set poker
+
+        // Round 4: Sequences
+
+        // Round 5: Sudden Death
+        [ClassifyNotNull]
+        [EditorLabel("Round 5 (Sudden Death): Questions")]
         public QuestionBase[] Round5Questions { get; private set; }
 
-        public QuizData(QuestionBase[] r1r5qs, Round2Category[] r2qs)
+        public QuizData()
         {
-            Round1Questions = r1r5qs.Where(q => q.Difficulty == Difficulty.Easy || q.Difficulty == Difficulty.Medium).GroupBy(q => q.Difficulty).ToDictionary(g => g.Key, g => g.ToArray());
-            Round2Questions = r2qs;
-            Round5Questions = r1r5qs.Where(q => q.Difficulty == Difficulty.Hard).ToArray();
+            Round1Questions = new Dictionary<Difficulty, QuestionBase[]>();
+            Round2Questions = new Round2Category[0];
+            Round5Questions = new QuestionBase[0];
+        }
+
+        public object Clone()
+        {
+            return MemberwiseClone();
         }
     }
 }

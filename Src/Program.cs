@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -12,9 +13,11 @@ using RT.TagSoup;
 using RT.Util;
 using RT.Util.CommandLine;
 using RT.Util.Consoles;
+using RT.Util.Dialogs;
 using RT.Util.ExtensionMethods;
 using RT.Util.Json;
 using RT.Util.Serialization;
+using RT.Util.Text;
 
 namespace QuizGameEngine
 {
@@ -24,6 +27,7 @@ namespace QuizGameEngine
         public static HttpServer Server;
         public static HashSet<QuizWebSocket> Sockets = new HashSet<QuizWebSocket>();
         private static TextBox _logBox;
+        private static string _dataFile;
 
         public static void Invoke(Action action)
         {
@@ -69,8 +73,8 @@ namespace QuizGameEngine
                 return 0;
             }
 
-            var file = ((QuizCmdLoad) cmd.QuizCmd).File;
-            Quiz = ClassifyJson.DeserializeFile<QuizBase>(file);
+            _dataFile = ((QuizCmdLoad) cmd.QuizCmd).File;
+            Quiz = ClassifyJson.DeserializeFile<QuizBase>(_dataFile);
 
             var thread = new Thread(() =>
             {
@@ -157,7 +161,7 @@ namespace QuizGameEngine
                         {
                             if (keyInfo.Key == ConsoleKey.F5 && keyInfo.Modifiers == 0)
                             {
-                                Quiz = ClassifyJson.DeserializeFile<QuizBase>(file);
+                                Quiz = ClassifyJson.DeserializeFile<QuizBase>(_dataFile);
                                 transitionResult = Quiz.CurrentState;
                             }
                             else
@@ -180,12 +184,17 @@ namespace QuizGameEngine
 
                         break;
                 }
-                ClassifyJson.SerializeToFile(Quiz, file);
+                save();
             }
 
             exit:
             Invoke(() => { Application.Exit(); });
             return 0;
+        }
+
+        private static void save()
+        {
+            ClassifyJson.SerializeToFile(Quiz, _dataFile);
         }
 
         private static HttpResponse handle(HttpRequest req)
@@ -206,6 +215,404 @@ namespace QuizGameEngine
         private static HttpResponse webSocket(HttpRequest req)
         {
             return HttpResponse.WebSocket(new QuizWebSocket(req.SourceIP));
+        }
+
+        public static void Edit(dynamic obj, string[] path, Type type = null, Action<object> setValue = null, string promptForPrimitiveValue = null)
+        {
+            if (type == null || obj != null)
+                type = ((object) obj).GetType();
+
+            if (ExactConvert.IsSupportedType(type))
+            {
+                object result;
+                var input = ExactConvert.ToString(((object) obj) ?? "");
+                while (true)
+                {
+                    input = InputBox.GetLine(promptForPrimitiveValue ?? "Type new value:", input);
+                    if (input == null)
+                        return;
+
+                    if (input == "" && type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
+                        input = null;
+                    else if (input == "" && type == typeof(string))
+                    {
+                        var dlgResult = DlgMessage.Show("Null or empty?", "Confirmation", DlgType.Question, "&Null", "&Empty", "&Cancel");
+                        if (dlgResult == 2)
+                            return;
+                        if (dlgResult == 0)
+                            input = null;
+                    }
+
+                    try
+                    {
+                        result = input.NullOr(i => ExactConvert.To(type, i));
+                        setValue(result);
+                        save();
+                        return;
+                    }
+                    catch (Exception e)
+                    {
+                        DlgMessage.Show(e.Message, DlgType.Error);
+                    }
+                }
+            }
+
+            Console.CursorVisible = false;
+
+            path = path ?? new[] { "Data" };
+
+            var selStart = 0;
+            var selLength = 1;
+            var selIsTop = false;
+
+            var getEditables = Ut.Lambda((IEnumerable<FieldInfo> fields) => fields.Select(f =>
+            {
+                MemberInfo getAttrsFrom = f;
+                var rFieldName = f.Name;
+
+                if (rFieldName.StartsWith("<") && rFieldName.EndsWith(">k__BackingField"))
+                {
+                    // Compiler-generated fields for auto-implemented properties 
+                    rFieldName = rFieldName.Substring(1, rFieldName.Length - "<>k__BackingField".Length);
+                    var prop = type.GetAllProperties().FirstOrDefault(p => p.Name == rFieldName);
+                    if (prop != null)
+                        getAttrsFrom = prop;
+                }
+
+                var attr = getAttrsFrom.GetCustomAttribute<EditorLabelAttribute>();
+
+                return new
+                {
+                    Label = attr == null ? rFieldName : attr.Label,
+                    DeclaredType = f.FieldType,
+                    GetValue = new Func<dynamic>(() => f.GetValue((object) obj)),
+                    SetValue = new Action<dynamic>(val => { f.SetValue((object) obj, val); }),
+                    Key = (dynamic) null
+                };
+            }).ToArray());
+
+            // Dummy value; will be overwritten
+            var editables = getEditables(Enumerable.Empty<FieldInfo>());
+
+            while (true)
+            {
+                if (editables.Length == 0)
+                    selStart = 0;
+                else
+                    selStart = selStart.Clip(0, editables.Length - 1);
+
+                var isCollection = false;
+                var isDictionary = false;
+                Type keyType = null, valueType = null;
+
+                Type[] genericArguments;
+                if (type.TryGetInterfaceGenericParameters(typeof(IDictionary<,>), out genericArguments))
+                {
+                    isDictionary = true;
+                    keyType = genericArguments[0];
+                    valueType = genericArguments[1];
+
+                    editables = ((IEnumerable) obj).Cast<dynamic>().Select(kvp => new
+                    {
+                        Label = (string) kvp.Key.ToString(),
+                        DeclaredType = valueType,
+                        GetValue = new Func<dynamic>(() => kvp.Value),
+                        SetValue = new Action<dynamic>(val => { obj[kvp.Key] = val; }),
+                        Key = kvp.Key
+                    }).ToArray();
+                }
+                else if (type.TryGetInterfaceGenericParameters(typeof(IList<>), out genericArguments) || type.IsArray)
+                {
+                    isCollection = true;
+                    valueType = genericArguments[0];
+
+                    editables = ((IEnumerable) obj).Cast<dynamic>().Select((elem, index) => new
+                    {
+                        Label = index.ToString(),
+                        DeclaredType = valueType,
+                        GetValue = new Func<dynamic>(() => elem),
+                        SetValue = new Action<dynamic>(val => { obj[index] = val; }),
+                        Key = (dynamic) index
+                    }).ToArray();
+                }
+                else
+                    editables = getEditables(type.GetAllFields());
+
+                Console.Clear();
+                ConsoleUtil.WriteLine(path.Select(p => p.Color(ConsoleColor.White)).JoinColoredString(" ▶ ".Color(ConsoleColor.Green)).ColorBackground(ConsoleColor.DarkGreen));
+                Console.WriteLine();
+
+                var t = new TextTable { ColumnSpacing = 2 };
+                for (int i = 0; i < editables.Length; i++)
+                {
+                    var editable = editables[i];
+                    var value = (object) editable.GetValue();
+
+                    t.SetCell(0, i, i >= selStart && i < selStart + selLength ? editable.Label.Color(null, ConsoleColor.DarkBlue) : editable.Label);
+                    t.SetCell(1, i, value == null ? "<null>".Color(ConsoleColor.DarkGray) : value.ToUsefulString());
+                }
+                t.WriteToConsole();
+
+                var addElement = Ut.Lambda((int index) =>
+                {
+                    object key = null;
+                    if (isDictionary)
+                    {
+                        while (true)
+                        {
+                            Edit(Activator.CreateInstance(keyType), path.Concat("new key").ToArray(), keyType, val => { key = val; }, "Enter new dictionary key:");
+                            if (key == null)
+                                return;
+                            if (!obj.ContainsKey((dynamic) key))
+                                break;
+                            DlgMessage.Show("The key is already in the dictionary.", DlgType.Error);
+                        }
+                    }
+                    else
+                        key = index;
+
+                    dynamic value = createInstance(valueType);
+                    if (value == null && valueType != typeof(string))
+                        return;
+                    Edit((object) value, path.Concat(key.ToString()).ToArray(), valueType, val => { value = val; }, "Enter new value:");
+
+                    if (isDictionary)
+                        obj.Add((dynamic) key, value);
+                    else if (!type.IsArray)
+                        obj.Add(value);
+                    else
+                    {
+                        obj = Extensions.InsertAtIndex(obj, index, value);
+                        setValue(obj);
+                    }
+                    save();
+                });
+
+                var selectedElements = Ut.Lambda((bool delete) =>
+                {
+                    object[] ret;
+                    if (isDictionary)
+                    {
+                        ret = Enumerable.Range(selStart, selLength).Select(i => (object) Ut.KeyValuePair((object) editables[i].Key, (object) obj[editables[i].Key])).ToArray();
+                        if (delete)
+                            for (int i = 0; i < selLength; i++)
+                                obj.Remove(editables[selStart + i].Key);
+                    }
+                    else if (type.IsArray)
+                    {
+                        ret = Enumerable.Range(selStart, selLength).Select(i => obj[i]).ToArray();
+                        if (delete)
+                        {
+                            obj = Extensions.RemoveIndexes(obj, selStart, selLength);
+                            setValue(obj);
+                        }
+                    }
+                    else
+                    {
+                        ret = Enumerable.Range(selStart, selLength).Select(i => obj[i]).ToArray();
+                        if (delete)
+                            for (int i = 0; i < selLength; i++)
+                                obj.RemoveAt(selStart);
+                    }
+                    if (delete)
+                        save();
+                    return ret;
+                });
+
+                var keyInfo = Console.ReadKey(true);
+                if ((keyInfo.Key == ConsoleKey.Escape || keyInfo.Key == ConsoleKey.Backspace) && keyInfo.Modifiers == 0)
+                    break;
+
+                switch (keyName(keyInfo.Key, keyInfo.Modifiers).ToString())
+                {
+                    case "UpArrow":
+                        if (selStart > 0)
+                            selStart--;
+                        selLength = 1;
+                        break;
+
+                    case "DownArrow":
+                        if (selStart + selLength < editables.Length)
+                            selStart = selStart + selLength;
+                        else
+                            selStart = editables.Length - 1;
+                        selLength = 1;
+                        break;
+
+                    case "Home":
+                        selStart = 0;
+                        selLength = 1;
+                        break;
+
+                    case "End":
+                        selStart = editables.Length - 1;
+                        selLength = 1;
+                        break;
+
+                    case "Shift+UpArrow":
+                        if (selLength == 1 || selIsTop)
+                        {
+                            if (selStart == 0)
+                                break;
+                            selIsTop = true;
+                            selStart--;
+                            selLength++;
+                        }
+                        else
+                            selLength--;
+                        break;
+
+                    case "Shift+DownArrow":
+                        if (selLength == 1 || !selIsTop)
+                        {
+                            if (selStart + selLength == editables.Length)
+                                break;
+                            selLength++;
+                            selIsTop = false;
+                        }
+                        else
+                        {
+                            selStart++;
+                            selLength--;
+                        }
+                        break;
+
+                    case "Shift+Home":
+                        if (selIsTop || selLength == 1)
+                            selLength += selStart;
+                        else
+                            selLength = selStart + 1;
+                        selIsTop = true;
+                        selStart = 0;
+                        break;
+
+                    case "Shift+End":
+                        if (selIsTop && selLength > 1)
+                            selStart = selStart + selLength - 1;
+                        selIsTop = false;
+                        selLength = editables.Length - selStart;
+                        break;
+
+                    case "Ctrl+A":
+                        selStart = 0;
+                        selLength = editables.Length;
+                        selIsTop = false;
+                        break;
+
+                    case "Shift+OemPlus":
+                        if (selLength == 1 && ExactConvert.IsTrueIntegerType(editables[selStart].DeclaredType))
+                        {
+                            editables[selStart].SetValue(unchecked(editables[selStart].GetValue() + 1));
+                            save();
+                        }
+                        break;
+
+                    case "OemMinus":
+                        if (selLength == 1 && ExactConvert.IsTrueIntegerType(editables[selStart].DeclaredType))
+                        {
+                            editables[selStart].SetValue(unchecked(editables[selStart].GetValue() - 1));
+                            save();
+                        }
+                        break;
+
+                    case "Enter":
+                        if (selLength != 1)
+                            break;
+
+                        Edit(editables[selStart].GetValue(), path.Concat(editables[selStart].Label).ToArray(), editables[selStart].DeclaredType, editables[selStart].SetValue);
+                        break;
+
+                    case "A":
+                        if (isCollection || isDictionary)
+                            addElement(editables.Length);
+                        break;
+
+                    case "Insert":
+                        if ((isCollection || isDictionary) && selLength == 1)
+                            addElement(selStart);
+                        break;
+
+                    case "Ctrl+X":
+                    case "Shift+Delete":
+                        if (isCollection || isDictionary)
+                            Clipboard.SetText(ClassifyJson.Serialize<object[]>(selectedElements(true)).ToStringIndented());
+                        break;
+
+                    case "Ctrl+C":
+                    case "Ctrl+Insert":
+                        if (isCollection || isDictionary)
+                            Clipboard.SetText(ClassifyJson.Serialize<object[]>(selectedElements(false)).ToStringIndented());
+                        break;
+
+                    case "Ctrl+V":
+                    case "Shift+Insert":
+                        if (isCollection || isDictionary)
+                        {
+                            try
+                            {
+                                var arr = ClassifyJson.Deserialize<object[]>(JsonValue.Parse(Clipboard.GetText()));
+                                throw new NotImplementedException();
+                            }
+                            catch (Exception e)
+                            {
+                                DlgMessage.Show(e.Message, DlgType.Error);
+                            }
+                        }
+                        break;
+                }
+            }
+
+            Console.Clear();
+            Console.CursorVisible = true;
+        }
+
+        private static ConsoleColoredString keyName(ConsoleKey key, ConsoleModifiers modifiers)
+        {
+            var parts = new List<ConsoleColoredString>();
+            if (modifiers.HasFlag(ConsoleModifiers.Control))
+                parts.Add("Ctrl".Color(ConsoleColor.Yellow));
+            if (modifiers.HasFlag(ConsoleModifiers.Alt))
+                parts.Add("Alt".Color(ConsoleColor.Yellow));
+            if (modifiers.HasFlag(ConsoleModifiers.Shift))
+                parts.Add("Shift".Color(ConsoleColor.Yellow));
+            parts.Add(key.ToString().Color(ConsoleColor.Yellow));
+            return parts.JoinColoredString("+".Color(ConsoleColor.DarkYellow));
+        }
+
+        private static object createInstance(Type type)
+        {
+            if (type.IsArray)
+                return Array.CreateInstance(type.GetElementType(), 0);
+
+            if (type == typeof(string))
+                return null;
+
+            if (type.IsAbstract)
+            {
+                var availableTypes = type.Assembly.GetTypes().Where(t => !t.IsAbstract && type.IsAssignableFrom(t)).ToArray();
+                Console.Clear();
+                for (int i = 0; i < availableTypes.Length; i++)
+                    ConsoleUtil.WriteLine("{0/White} = {1/Green}".Color(null).Fmt(i + 1, availableTypes[i].Name));
+                int selection;
+                while (true)
+                {
+                    var line = Console.ReadLine();
+                    if (string.IsNullOrWhiteSpace(line))
+                        return null;
+                    try
+                    {
+                        selection = int.Parse(line);
+                        break;
+                    }
+                    catch (Exception e)
+                    {
+                        ConsoleUtil.WriteLine(e.Message.Color(ConsoleColor.Red));
+                    }
+                }
+                type = availableTypes[selection - 1];
+            }
+
+            return Activator.CreateInstance(type, true);
         }
     }
 }

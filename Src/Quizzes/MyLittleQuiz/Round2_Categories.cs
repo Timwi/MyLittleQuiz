@@ -8,12 +8,10 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
 {
     public sealed class Round2_Categories : QuizStateBase
     {
-        public Round1Contestant[] Contestants { get; private set; }
+        public Round2Data Data { get; private set; }
 
-        public Round2_Categories(Round1Contestant[] contestants)
-        {
-            Contestants = contestants;
-        }
+        public Round2_Categories(string undoLine, Round2Data data) : base(undoLine) { Data = data; }
+        private Round2_Categories() { } // for Classify
 
         public override IEnumerable<Transition> Transitions
         {

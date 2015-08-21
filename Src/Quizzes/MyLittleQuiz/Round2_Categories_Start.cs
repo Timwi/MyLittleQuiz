@@ -12,14 +12,10 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
 {
     public sealed class Round2_Categories_Start : QuizStateBase
     {
-        public Round2Contestant[] Contestants { get; private set; }
-        public QuizData Data { get; private set; }
+        public Round2Data Data { get; private set; }
 
-        public Round2_Categories_Start(Round1Contestant[] contestants, QuizData data)
-        {
-            Contestants = contestants.Select(r1c => new Round2Contestant(r1c.Name, 0)).ToArray();
-            Data = data;
-        }
+        public Round2_Categories_Start(string undoLine, Round2Data data) : base(undoLine) { Data = data; }
+        private Round2_Categories_Start() { } // for Classify
 
         public override IEnumerable<Transition> Transitions
         {

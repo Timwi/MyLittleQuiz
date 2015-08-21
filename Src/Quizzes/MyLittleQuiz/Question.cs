@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using RT.TagSoup;
+using RT.Util.Consoles;
 using RT.Util.ExtensionMethods;
 
 namespace QuizGameEngine.Quizzes.MyLittleQuiz
 {
-    public abstract class QuestionBase
+    public abstract class QuestionBase : IToConsoleColoredString
     {
-        public Difficulty Difficulty;
-
         public abstract string QuestionFullText { get; }
         public abstract string AnswerFullText { get; }
         public abstract IEnumerable<Tuple<ConsoleKey, string, object>> AnswerInfos { get; }
+        public abstract ConsoleColoredString ToConsoleColoredString();
     }
 
     public abstract class TextQuestionBase : QuestionBase
@@ -33,11 +33,15 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             }
         }
         public override string AnswerFullText { get { return Answer; } }
+        public override ConsoleColoredString ToConsoleColoredString()
+        {
+            return "{0/Yellow} {1/Red}".Color(null).Fmt(QuestionText, Answer);
+        }
     }
 
     public sealed class NOfQuestion : TextQuestionBase
     {
-        public string[] Answers;
+        public string[] Answers = new string[0];
         public int N;
         public override IEnumerable<Tuple<ConsoleKey, string, object>> AnswerInfos
         {
@@ -54,6 +58,10 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             }
         }
         public override string AnswerFullText { get { return Answers.JoinString("\n"); } }
+        public override ConsoleColoredString ToConsoleColoredString()
+        {
+            return "{0/Yellow} {1/Cyan} {{ {2} }}".Color(null).Fmt(QuestionText, N, Answers.Select(a => a.Color(ConsoleColor.Red)).JoinColoredString(", "));
+        }
     }
 
     public enum Difficulty

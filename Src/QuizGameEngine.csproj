@@ -46,7 +46,9 @@
   <ItemGroup>
     <Compile Include="ClassifySubst.cs" />
     <Compile Include="CmdLine.cs" />
+    <Compile Include="EditorLabelAttribute.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="IToConsoleColoredString.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuizBase.cs" />
@@ -54,6 +56,7 @@
     <Compile Include="QuizCmd.cs" />
     <Compile Include="QuizWebSocket.cs" />
     <Compile Include="Quizzes\MyLittleQuiz\Cmd.cs" />
+    <Compile Include="Quizzes\MyLittleQuiz\Contestant.cs" />
     <Compile Include="Quizzes\MyLittleQuiz\QuizData.cs" />
     <Compile Include="Quizzes\MyLittleQuiz\Round1Contestant.cs" />
     <Compile Include="Quizzes\MyLittleQuiz\Question.cs" />
@@ -62,6 +65,7 @@
     <Compile Include="Quizzes\MyLittleQuiz\Round1_Elimination.cs" />
     <Compile Include="Quizzes\MyLittleQuiz\Round1_Elimination_Q.cs" />
     <Compile Include="Quizzes\MyLittleQuiz\Round2Category.cs" />
+    <Compile Include="Quizzes\MyLittleQuiz\Round2Data.cs" />
     <Compile Include="Quizzes\MyLittleQuiz\Round2_Categories.cs" />
     <Compile Include="Quizzes\MyLittleQuiz\Round2_Categories_Start.cs" />
     <Compile Include="Quizzes\MyLittleQuiz\Round2Contestant.cs" />

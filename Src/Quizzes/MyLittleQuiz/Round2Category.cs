@@ -6,14 +6,15 @@ using System.Text;
 using System.Threading.Tasks;
 using RT.Util;
 using RT.Util.ExtensionMethods;
+using RT.Util.Serialization;
 
 namespace QuizGameEngine.Quizzes.MyLittleQuiz
 {
     public sealed class Round2Category
     {
         public string Name { get; private set; }
+        [ClassifyNotNull]
         public QuestionBase[] Questions { get; private set; }
-        public bool[] QuestionTaken { get; private set; }
 
         public Round2Category(string name, QuestionBase[] questions, bool[] questionTaken = null)
         {
@@ -24,12 +25,11 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
 
             Name = name;
             Questions = questions;
-            QuestionTaken = questionTaken ?? new bool[questions.Length];
         }
 
-        public Round2Category TakeQuestion(int index)
+        private Round2Category()    // for Classify
         {
-            return new Round2Category(Name, Questions, QuestionTaken.ReplaceIndex(index, false));
+            Questions = new QuestionBase[0];
         }
     }
 }

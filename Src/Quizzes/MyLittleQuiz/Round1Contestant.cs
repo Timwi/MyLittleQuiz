@@ -38,7 +38,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             return "{0}, Roll={1}".Fmt(Name, Roll);
         }
 
-        public Round1Contestant IncR1Score(bool correct)
+        public Round1Contestant IncScore(bool correct)
         {
             return correct ? this.ApplyToClone(c => { c.NumCorrect++; }) : this.ApplyToClone(c => { c.NumWrong++; });
         }

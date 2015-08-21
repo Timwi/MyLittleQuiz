@@ -43,14 +43,14 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                 // Contestant HAS answered the question
                 var wouldBe = Data.DismissQuestion();
 
-                var through = wouldBe.Contestants.Where(c => c.IsThrough);
-                var remaining = wouldBe.Contestants.Where(c => c.IsStillInGame);
+                var through = wouldBe.Contestants.Where(c => c.IsThrough).ToArray();
+                var throughAndRemaining = wouldBe.Contestants.Where(c => c.IsThrough || c.IsStillInGame).ToArray();
                 var nextRoundContestants =
-                    through.Count() == wouldBe.NumContestantsNeeded ? through.ToArray() :
-                    through.Count() + remaining.Count() == wouldBe.NumContestantsNeeded ? through.Concat(remaining).ToArray() : null;
+                    through.Length == wouldBe.NumContestantsNeeded ? through :
+                    throughAndRemaining.Length == wouldBe.NumContestantsNeeded ? throughAndRemaining : null;
 
                 if (nextRoundContestants != null)
-                    return new[] { Transition.Simple(ConsoleKey.Spacebar, "End of round congratulations", () => new Round2_Categories(nextRoundContestants)) };
+                    return new[] { Transition.Simple(ConsoleKey.Spacebar, "End of round congratulations", () => new Round2_Categories("Started Round 2 (Categories)", new Round2Data(Data.QuizData, nextRoundContestants.Select(c => new Round2Contestant(c.Name, 0)).ToArray()))) };
                 else
                     return new[] { Transition.Simple(ConsoleKey.Spacebar, "Back to contestant selection", () => new Round1_Elimination("Question dismissed", wouldBe)) };
             }
