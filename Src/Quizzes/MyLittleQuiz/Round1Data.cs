@@ -60,7 +60,9 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                                     "•".Color(ConsoleColor.Black, ConsoleColor.Red).Repeat(Contestants[i].NumWrong).JoinColoredString() +
                                     (i + 1).ToString().Color(ConsoleColor.White, i == SelectedContestant ? ConsoleColor.DarkRed : (ConsoleColor?) null) +
                                     (i == SelectedContestant ? "]".Color(ConsoleColor.Magenta, ConsoleColor.DarkRed) : null))
-                                    .JoinColoredString(" "),
+                                    .JoinColoredString(" ")
+                                    .WordWrap(ConsoleUtil.WrapToWidth(), 4)
+                                    .JoinColoredString(Environment.NewLine),
                     /* 2 */ "{0/Red} out, {1/Green} through, {2/Cyan} remaining, need {3/Yellow} more through or {4/Magenta} more out".Color(null).Fmt(numOut, numThrough, numRemaining, NumContestantsNeeded - numThrough, numThrough + numRemaining - NumContestantsNeeded),
                     /* 3 */ SelectedContestant == null ? null : "\n\n{0/White}\n{1/Green} {2/Red} {3/Yellow}".Color(null).Fmt("Selected contestant:", Contestants[SelectedContestant.Value].NumCorrect, Contestants[SelectedContestant.Value].NumWrong, Contestants[SelectedContestant.Value].Name),
                     /* 4 */ "Questions:",

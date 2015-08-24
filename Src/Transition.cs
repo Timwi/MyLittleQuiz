@@ -22,7 +22,18 @@ namespace QuizGameEngine
 
         public static Transition Simple(ConsoleKey key, string name, Func<TransitionResult> executor)
         {
-            return new Transition(key, name, executor);
+            return new Transition(key, name, () =>
+            {
+                var ret = executor();
+                if (ret != null && ret.UndoLine == null)
+                    ret = new TransitionResult(ret.State, name, ret.JsMethod, ret.JsParameters);
+                return ret;
+            });
+        }
+
+        public static Transition Simple(ConsoleKey key, string name, Func<QuizStateBase> executor)
+        {
+            return new Transition(key, name, () => new TransitionResult(executor(), name));
         }
 
         public static Transition Simple(ConsoleKey key, string name, Action action)
@@ -32,7 +43,7 @@ namespace QuizGameEngine
 
         public static Transition Simple(ConsoleKey key, string name, string jsMethod, object jsParameters = null)
         {
-            return new Transition(key, name, () => new TransitionResult(null, jsMethod, jsParameters));
+            return new Transition(key, name, () => new TransitionResult(null, null, jsMethod, jsParameters));
         }
 
         public static Transition String(ConsoleKey key, string name, string prompt, Func<string, TransitionResult> executor, bool allowEmpty = false)
@@ -86,13 +97,21 @@ namespace QuizGameEngine
                 int index;
                 if (string.IsNullOrWhiteSpace(line) || !int.TryParse(line, out index) || index < 1 || index > selection.Length)
                     return null;
-                return executor(index - 1);
+                var ret = executor(index - 1);
+                if (ret != null && ret.UndoLine == null)
+                    ret = new TransitionResult(ret.State, name, ret.JsMethod, ret.JsParameters);
+                return ret;
             });
+        }
+
+        public static Transition Select(ConsoleKey key, string name, object[] selection, Func<int, QuizStateBase> executor)
+        {
+            return Select(key, name, selection, index => new TransitionResult(executor(index), name));
         }
 
         public static Transition Select(ConsoleKey key, string name, object[] selection, Action<int> executor)
         {
-            return Select(key, name, selection, index => { executor(index); return null; });
+            return Select(key, name, selection, index => { executor(index); return (TransitionResult) null; });
         }
 
         public TransitionResult Execute()

@@ -15,24 +15,30 @@ namespace QuizGameEngine
         protected QuizStateBase _currentState;
         public QuizStateBase CurrentState { get { return _currentState; } }
 
-        [ClassifyNotNull, ClassifySubstitute(typeof(StackToListSubstitution<QuizStateBase>))]
-        protected Stack<QuizStateBase> _undo = new Stack<QuizStateBase>();
-        [ClassifyNotNull, ClassifySubstitute(typeof(StackToListSubstitution<QuizStateBase>))]
-        protected Stack<QuizStateBase> _redo = new Stack<QuizStateBase>();
+        [ClassifyIgnoreIfDefault]
+        public string UndoLine { get; private set; }
 
-        public void Transition(QuizStateBase newState)
+        [ClassifyNotNull, ClassifySubstitute(typeof(StackToListSubstitution<Tuple<QuizStateBase, string>>))]
+        protected Stack<Tuple<QuizStateBase, string>> _undo = new Stack<Tuple<QuizStateBase, string>>();
+        [ClassifyNotNull, ClassifySubstitute(typeof(StackToListSubstitution<Tuple<QuizStateBase, string>>))]
+        protected Stack<Tuple<QuizStateBase, string>> _redo = new Stack<Tuple<QuizStateBase, string>>();
+
+        public void Transition(QuizStateBase newState, string undoLine)
         {
             _redo.Clear();
-            _undo.Push(CurrentState);
+            _undo.Push(Tuple.Create(CurrentState, UndoLine));
             _currentState = newState;
+            UndoLine = undoLine;
         }
 
         public bool Undo()
         {
             if (_undo.Count == 0)
                 return false;
-            _redo.Push(CurrentState);
-            _currentState = _undo.Pop();
+            _redo.Push(Tuple.Create(CurrentState, UndoLine));
+            var tup = _undo.Pop();
+            _currentState = tup.Item1;
+            UndoLine = tup.Item2;
             return true;
         }
 
@@ -40,13 +46,14 @@ namespace QuizGameEngine
         {
             if (_redo.Count == 0)
                 return false;
-            _undo.Push(CurrentState);
-            _currentState = _redo.Pop();
+            _undo.Push(Tuple.Create(CurrentState, UndoLine));
+            var tup = _redo.Pop();
+            _currentState = tup.Item1;
+            UndoLine = tup.Item2;
             return true;
         }
 
-        public string UndoLine { get { return CurrentState == null ? null : CurrentState.UndoLine; } }
-        public string RedoLine { get { return _redo.Count == 0 ? null : _redo.Peek().UndoLine; } }
+        public string RedoLine { get { return _redo.Count == 0 ? null : _redo.Peek().Item2; } }
 
         public abstract byte[] Css { get; }
         public abstract byte[] Js { get; }

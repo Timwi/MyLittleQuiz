@@ -10,7 +10,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
     {
         public Round2Data Data { get; private set; }
 
-        public Round2_Categories(string undoLine, Round2Data data) : base(undoLine) { Data = data; }
+        public Round2_Categories(Round2Data data) { Data = data; }
         private Round2_Categories() { } // for Classify
 
         public override IEnumerable<Transition> Transitions

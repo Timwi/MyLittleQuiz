@@ -5,11 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using RT.Util;
+using RT.Util.Consoles;
 using RT.Util.ExtensionMethods;
 
 namespace QuizGameEngine.Quizzes.MyLittleQuiz
 {
-    public sealed class Round2Contestant
+    public sealed class Round2Contestant : IToConsoleColoredString
     {
         public string Name { get; private set; }
         public int Score { get; private set; }
@@ -20,9 +21,16 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             Score = score;
         }
 
+        private Round2Contestant() { }  // for Classify
+
         public Round2Contestant IncScore(int amount)
         {
             return new Round2Contestant(Name, Score + amount);
+        }
+
+        public ConsoleColoredString ToConsoleColoredString()
+        {
+            return "{0/Yellow}, Score={1/Cyan}".Color(ConsoleColor.DarkCyan).Fmt(Name, Score);
         }
     }
 }

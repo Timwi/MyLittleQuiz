@@ -14,8 +14,7 @@ namespace QuizGameEngine.Quizzes.SimpleQuiz
         [ClassifyIgnoreIfDefault]
         public int? SelectedContestant { get; private set; }
 
-        public StateGame(string undoLine, Tuple<string, string>[] questions, Contestant[] contestants, int? selContestant = null)
-            : base(undoLine, questions, contestants)
+        public StateGame(Tuple<string, string>[] questions, Contestant[] contestants, int? selContestant = null)
         {
             SelectedContestant = selContestant;
         }
@@ -26,11 +25,11 @@ namespace QuizGameEngine.Quizzes.SimpleQuiz
         {
             get
             {
-                yield return Transition.Select(ConsoleKey.S, "Select contestant", Contestants, i => new StateGame("Selected contestant: " + Contestants[i], Questions, Contestants, i).With("select", new { index = i }));
+                yield return Transition.Select(ConsoleKey.S, "Select contestant", Contestants, i => new StateGame(Questions, Contestants, i).With("select", new { index = i }));
 
                 if (SelectedContestant != null)
                 {
-                    yield return Transition.Simple(ConsoleKey.U, "Unselect contestant", () => new StateGame("Unselected contestant: " + Contestants[SelectedContestant.Value], Questions, Contestants, null).With("unselect"));
+                    yield return Transition.Simple(ConsoleKey.U, "Unselect contestant", () => new StateGame(Questions, Contestants, null).With("unselect"));
                     yield return Transition.Simple(ConsoleKey.A, "Ask a question", () => Rnd.Next(Questions.Length).Apply(qi => new StateQuestion(this, qi)));
                 }
             }

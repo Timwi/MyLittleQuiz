@@ -12,7 +12,6 @@ namespace QuizGameEngine.Quizzes.SimpleQuiz
         public bool Correct { get; private set; }
 
         public StateQuestionAnswered(StateQuestion questionState, bool correct)
-            : base(correct ? "Correct answer" : "Wrong answer")
         {
             QuestionState = questionState;
             Correct = correct;
@@ -28,7 +27,7 @@ namespace QuizGameEngine.Quizzes.SimpleQuiz
                     Correct
                         ? QuestionState.Game.Contestants.ReplaceIndex(QuestionState.Game.SelectedContestant.Value, QuestionState.Game.Contestants[QuestionState.Game.SelectedContestant.Value].IncScore())
                             .Apply(newContestants =>
-                                new StateGame("Go back to game", QuestionState.Game.Questions.RemoveIndex(QuestionState.QuestionIndex), newContestants))
+                                new StateGame(QuestionState.Game.Questions.RemoveIndex(QuestionState.QuestionIndex), newContestants))
                         : QuestionState.Game);
             }
         }

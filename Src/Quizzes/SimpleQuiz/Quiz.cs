@@ -14,7 +14,7 @@ namespace QuizGameEngine.Quizzes.SimpleQuiz
 
         public Quiz(Tuple<string, string>[] questions)
         {
-            _currentState = new StateSetup(null, questions);
+            _currentState = new StateSetup(questions);
         }
         private Quiz() { }    // for Classify
     }

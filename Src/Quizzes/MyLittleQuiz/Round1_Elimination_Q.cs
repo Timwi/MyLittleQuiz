@@ -11,7 +11,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
     {
         public Round1Data Data { get; private set; }
 
-        public Round1_Elimination_Q(string undoLine, Round1Data data) : base(undoLine) { Data = data; }
+        public Round1_Elimination_Q(Round1Data data) { Data = data; }
         private Round1_Elimination_Q() { }    // for Classify
 
         public QuestionBase CurrentQuestion { get { return Data.Questions[Data.CurrentDifficulty.Value][Data.QuestionIndex[Data.CurrentDifficulty.Value]]; } }
@@ -22,10 +22,10 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             {
                 return "{0/White}\n{1/Cyan}\n\n{2/White}\n{3/Green}{4}\n\n{5}".Color(null).Fmt(
                     /* 0 */ "Question:",
-                    /* 1 */ CurrentQuestion.QuestionFullText,
+                    /* 1 */ CurrentQuestion.QuestionFullText.WordWrap(ConsoleUtil.WrapToWidth(), 4).JoinColoredString(Environment.NewLine),
                     /* 2 */ "Answer(s):",
-                    /* 3 */ CurrentQuestion.AnswerFullText,
-                    /* 4 */ Data.AnswerObject == null ? null : "\n\nAnswer given".Color(ConsoleColor.White),
+                    /* 3 */ CurrentQuestion.AnswerFullText.WordWrap(ConsoleUtil.WrapToWidth(), 4).JoinColoredString(Environment.NewLine),
+                    /* 4 */ Data.AnswerObject == null ? null : "\n\nAnswer given".Color(Data.AnswerObject.Equals(false) ? ConsoleColor.Red : ConsoleColor.Green),
                     /* 5 */ Data.Describe
                 );
             }
@@ -37,8 +37,8 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             {
                 // Contestant has not yet answered the question
                 if (Data.AnswerObject == null)
-                    return CurrentQuestion.AnswerInfos.Select(answerInfo => Transition.Simple(
-                        answerInfo.Item1, answerInfo.Item2, () => new Round1_Elimination_Q("Answer given: " + answerInfo.Item2, Data.GiveAnswer(answerInfo.Item3)).With("r1_showA", new { answer = answerInfo.Item3 })));
+                    return CurrentQuestion.CorrectAnswerInfos.Concat(Tuple.Create(ConsoleKey.Z, "Wrong", (object) false)).Select(answerInfo => Transition.Simple(
+                        answerInfo.Item1, "Answer: " + answerInfo.Item2, () => new Round1_Elimination_Q(Data.GiveAnswer(answerInfo.Item3)).With("r1_showA", new { answer = answerInfo.Item3 })));
 
                 // Contestant HAS answered the question
                 var wouldBe = Data.DismissQuestion();
@@ -50,13 +50,23 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                     throughAndRemaining.Length == wouldBe.NumContestantsNeeded ? throughAndRemaining : null;
 
                 if (nextRoundContestants != null)
-                    return new[] { Transition.Simple(ConsoleKey.Spacebar, "End of round congratulations", () => new Round2_Categories("Started Round 2 (Categories)", new Round2Data(Data.QuizData, nextRoundContestants.Select(c => new Round2Contestant(c.Name, 0)).ToArray()))) };
+                    return new[] { Transition.Simple(ConsoleKey.Spacebar, "End of round congratulations", () => new Round2_Categories_ShowContestants(new Round2Data(Data.QuizData, nextRoundContestants.Select(c => new Round2Contestant(c.Name, 0)).ToArray()))) };
                 else
-                    return new[] { Transition.Simple(ConsoleKey.Spacebar, "Back to contestant selection", () => new Round1_Elimination("Question dismissed", wouldBe)) };
+                    return new[] { Transition.Simple(ConsoleKey.Spacebar, "Dismiss question", () => new Round1_Elimination(wouldBe)) };
             }
         }
 
         public override string JsMethod { get { return Data.AnswerObject == null ? "r1_showQ" : "r1_showQA"; } }
-        public override object JsParameters { get { return new { question = Data.Questions[Data.CurrentDifficulty.Value][Data.QuestionIndex[Data.CurrentDifficulty.Value]], answer = Data.AnswerObject }; } }
+        public override object JsParameters
+        {
+            get
+            {
+                return new
+                {
+                    question = Data.Questions[Data.CurrentDifficulty.Value][Data.QuestionIndex[Data.CurrentDifficulty.Value]],
+                    answer = Data.AnswerObject
+                };
+            }
+        }
     }
 }

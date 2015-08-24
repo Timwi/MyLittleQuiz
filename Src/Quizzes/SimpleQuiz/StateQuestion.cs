@@ -12,7 +12,6 @@ namespace QuizGameEngine.Quizzes.SimpleQuiz
         public int QuestionIndex { get; private set; }
 
         public StateQuestion(StateGame game, int questionIndex)
-            : base("Asked question: " + game.Questions[questionIndex].Item1)
         {
             Game = game;
             QuestionIndex = questionIndex;

@@ -5,12 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using RT.Util;
+using RT.Util.Consoles;
 using RT.Util.ExtensionMethods;
 using RT.Util.Serialization;
 
 namespace QuizGameEngine.Quizzes.MyLittleQuiz
 {
-    public sealed class Round2Category
+    public sealed class Round2Category : IToConsoleColoredString
     {
         public string Name { get; private set; }
         [ClassifyNotNull]
@@ -30,6 +31,11 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         private Round2Category()    // for Classify
         {
             Questions = new QuestionBase[0];
+        }
+
+        public ConsoleColoredString ToConsoleColoredString()
+        {
+            return "{0/Yellow} ({1/Cyan} questions)".Color(null).Fmt(Name, Questions.Length);
         }
     }
 }

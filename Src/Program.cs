@@ -132,59 +132,79 @@ namespace QuizGameEngine
                 if (Quiz.RedoLine != null)
                     ConsoleUtil.WriteLine("→ Redo: {0/Gray}".Color(ConsoleColor.Green).Fmt(Quiz.RedoLine));
                 Console.WriteLine();
-                ConsoleUtil.WriteParagraphs(Quiz.CurrentState.Describe);
+                ConsoleUtil.WriteLine(Quiz.CurrentState.Describe);
                 Console.WriteLine();
+
+                var keysUsed = new Dictionary<ConsoleKey, int>();
                 foreach (var t in Quiz.CurrentState.Transitions)
+                {
+                    keysUsed.IncSafe(t.Key);
+                    if (keysUsed[t.Key] > 1)
+                        ConsoleUtil.WriteLine("Key {0/Magenta} used more than once.".Color(ConsoleColor.Red).Fmt(t.Key));
+                    else if (t.Key == ConsoleKey.Escape || t.Key == ConsoleKey.Backspace)
+                        ConsoleUtil.WriteLine("Key {0/Magenta} is already bound.".Color(ConsoleColor.Red).Fmt(t.Key));
                     ConsoleUtil.WriteLine("{0/White}: {1/Cyan}".Color(null).Fmt(t.Key, t.Name));
+                }
 
                 again:
                 var keyInfo = Console.ReadKey(true);
+                TransitionResult transitionResult = null;
+                string transitionUndoLine = null;
 
                 switch (keyInfo.Key)
                 {
                     case ConsoleKey.Escape:
+                        if (keyInfo.Modifiers != 0)
+                            goto default;
                         goto exit;
 
                     case ConsoleKey.Backspace:
-                        if (keyInfo.Modifiers == ConsoleModifiers.Shift)
-                            Quiz.Redo();
-                        else if (keyInfo.Modifiers == 0)
-                            Quiz.Undo();
-                        else
+                        if (
+                            (keyInfo.Modifiers == ConsoleModifiers.Shift) ? Quiz.Redo() :
+                            (keyInfo.Modifiers == 0) ? Quiz.Undo() :
+                            false)
+                            save();
+                        break;
+
+                    case ConsoleKey.F5:
+                        if (keyInfo.Modifiers != 0)
                             goto default;
+                        Quiz = ClassifyJson.DeserializeFile<QuizBase>(_dataFile);
+                        save();
+                        break;
+
+                    case ConsoleKey.E:
+                        if (keyInfo.Modifiers != 0)
+                            goto default;
+                        var newState = Quiz.CurrentState;
+                        Edit(newState, new[] { "Quiz" }, setValue: val => { newState = (QuizStateBase) val; });
+                        transitionResult = new TransitionResult(newState);
+                        transitionUndoLine = "Edit quiz state manually";
                         break;
 
                     default:
                         var transition = Quiz.CurrentState.Transitions.FirstOrDefault(q => q.Key == keyInfo.Key);
-                        TransitionResult transitionResult;
                         if (transition == null)
-                        {
-                            if (keyInfo.Key == ConsoleKey.F5 && keyInfo.Modifiers == 0)
-                            {
-                                Quiz = ClassifyJson.DeserializeFile<QuizBase>(_dataFile);
-                                transitionResult = Quiz.CurrentState;
-                            }
-                            else
-                                goto again;
-                        }
-                        else
-                        {
-                            Console.WriteLine();    // In case transition.Execute() outputs something and then waits for a key
-                            transitionResult = transition.Execute();
-                            if (transitionResult == null)
-                                break;
-                            if (transitionResult.State != null)
-                                Quiz.Transition(transitionResult.State);
-                        }
+                            goto again;
 
-                        if (transitionResult.JsMethod != null)
-                            lock (Sockets)
-                                foreach (var socket in Sockets)
-                                    socket.SendLoggedMessage(new JsonDict { { "method", transitionResult.JsMethod }, { "params", transitionResult.JsParameters } });
-
+                        Console.WriteLine();    // In case transition.Execute() outputs something and then waits for a key
+                        transitionResult = transition.Execute();
+                        transitionUndoLine = transition.Name;
                         break;
                 }
-                save();
+
+                if (transitionResult != null)
+                {
+                    if (transitionResult.State != null && transitionUndoLine != null)
+                        Quiz.Transition(transitionResult.State, transitionUndoLine);
+
+                    if (transitionResult.JsMethod != null)
+                        lock (Sockets)
+                            foreach (var socket in Sockets)
+                                socket.SendLoggedMessage(new JsonDict { { "method", transitionResult.JsMethod }, { "params", transitionResult.JsParameters } });
+
+                    save();
+                }
             }
 
             exit:
@@ -219,10 +239,13 @@ namespace QuizGameEngine
 
         public static void Edit(dynamic obj, string[] path, Type type = null, Action<object> setValue = null, string promptForPrimitiveValue = null)
         {
-            if (type == null || obj != null)
+            var isNullable = type != null && type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
+            var nullableElementType = isNullable ? type.GetGenericArguments()[0] : null;
+
+            if (type == null || (obj != null && !isNullable))
                 type = ((object) obj).GetType();
 
-            if (ExactConvert.IsSupportedType(type))
+            if (ExactConvert.IsSupportedType(type) || (isNullable && ExactConvert.IsSupportedType(nullableElementType)))
             {
                 object result;
                 var input = ExactConvert.ToString(((object) obj) ?? "");
@@ -232,7 +255,7 @@ namespace QuizGameEngine
                     if (input == null)
                         return;
 
-                    if (input == "" && type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
+                    if (input == "" && isNullable)
                         input = null;
                     else if (input == "" && type == typeof(string))
                     {
@@ -245,7 +268,7 @@ namespace QuizGameEngine
 
                     try
                     {
-                        result = input.NullOr(i => ExactConvert.To(type, i));
+                        result = input.NullOr(i => ExactConvert.To(isNullable ? nullableElementType : type, i));
                         setValue(result);
                         save();
                         return;
@@ -257,6 +280,7 @@ namespace QuizGameEngine
                 }
             }
 
+            var cursorVisible = Console.CursorVisible;
             Console.CursorVisible = false;
 
             path = path ?? new[] { "Data" };
@@ -340,6 +364,7 @@ namespace QuizGameEngine
 
                 Console.Clear();
                 ConsoleUtil.WriteLine(path.Select(p => p.Color(ConsoleColor.White)).JoinColoredString(" ▶ ".Color(ConsoleColor.Green)).ColorBackground(ConsoleColor.DarkGreen));
+                ConsoleUtil.WriteLine(type.FullName.Color(ConsoleColor.DarkGreen));
                 Console.WriteLine();
 
                 var t = new TextTable { ColumnSpacing = 2 };
@@ -518,8 +543,11 @@ namespace QuizGameEngine
                     case "Enter":
                         if (selLength != 1)
                             break;
-
-                        Edit(editables[selStart].GetValue(), path.Concat(editables[selStart].Label).ToArray(), editables[selStart].DeclaredType, editables[selStart].SetValue);
+                        var value = editables[selStart].GetValue();
+                        if (value is bool)
+                            editables[selStart].SetValue(!((bool) value));
+                        else
+                            Edit(value, path.Concat(editables[selStart].Label).ToArray(), editables[selStart].DeclaredType, editables[selStart].SetValue);
                         break;
 
                     case "A":
@@ -563,7 +591,7 @@ namespace QuizGameEngine
             }
 
             Console.Clear();
-            Console.CursorVisible = true;
+            Console.CursorVisible = cursorVisible;
         }
 
         private static ConsoleColoredString keyName(ConsoleKey key, ConsoleModifiers modifiers)

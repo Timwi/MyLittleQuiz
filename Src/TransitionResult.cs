@@ -13,16 +13,16 @@ namespace QuizGameEngine
     public sealed class TransitionResult
     {
         public QuizStateBase State { get; private set; }
+        public string UndoLine { get; private set; }
         public string JsMethod { get; private set; }
         public JsonValue JsParameters { get; private set; }
 
-        public TransitionResult(QuizStateBase state, string jsMethod = null, object jsParams = null)
+        public TransitionResult(QuizStateBase state, string undoLine = null, string jsMethod = null, object jsParams = null)
         {
             State = state;
+            UndoLine = undoLine;
             JsMethod = jsMethod;
             JsParameters = jsParams == null ? null : ClassifyJson.Serialize(jsParams);
         }
-
-        public static implicit operator TransitionResult(QuizStateBase state) { return state == null ? null : new TransitionResult(state, state.JsMethod, state.JsParameters); }
     }
 }

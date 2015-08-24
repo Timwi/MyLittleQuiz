@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using RT.Util;
 using RT.Util.Consoles;
 using RT.Util.ExtensionMethods;
 
@@ -72,12 +73,7 @@ namespace QuizGameEngine
 
         public static TransitionResult With(this QuizStateBase state, string jsMethod, object jsParams = null)
         {
-            return new TransitionResult(state, jsMethod, jsParams);
-        }
-
-        public static TransitionResult NoTransition(this QuizStateBase state)
-        {
-            return new TransitionResult(state, null, null);
+            return new TransitionResult(state, null, jsMethod, jsParams);
         }
 
         public static IEnumerable<T> Repeat<T>(this T obj, int times)
@@ -100,6 +96,12 @@ namespace QuizGameEngine
         {
             if (obj is IToConsoleColoredString)
                 return ((IToConsoleColoredString) obj).ToConsoleColoredString();
+            if (obj is string)
+                return ((string) obj).Color(ConsoleColor.Yellow);
+            if (ExactConvert.IsTrueIntegerType(obj.GetType()))
+                return obj.ToString().Color(ConsoleColor.Red);
+            if (obj is bool)
+                return obj.ToString().Color(ConsoleColor.Green);
 
             var t = obj.GetType();
             if (t.IsArray)
@@ -111,7 +113,7 @@ namespace QuizGameEngine
             if (t.TryGetInterfaceGenericParameters(typeof(ICollection<>), out arguments))
                 return "{0/White} × {1/DarkCyan}".Color(null).Fmt(((dynamic) obj).Count, arguments[0].Name);
 
-            return obj.ToConsoleColoredString();
+            return obj.ToConsoleColoredString(ConsoleColor.Magenta);
         }
     }
 }

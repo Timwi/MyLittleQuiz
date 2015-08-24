@@ -22,7 +22,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
 
         // Round 2: Categories
         [ClassifyNotNull]
-        [EditorLabel("Round 2 (Categories): Questions")]
+        [EditorLabel("Round 2 (Categories): Categories")]
         public Round2Category[] Round2Questions { get; private set; }
 
         // Round 3: Set poker

@@ -13,8 +13,8 @@ namespace QuizGameEngine.Quizzes.SimpleQuiz
 {
     public sealed class StateSetup : StateBase
     {
-        public StateSetup(string undoLine, Tuple<string, string>[] questions, Contestant[] contestants = null)
-            : base(undoLine, questions, contestants)
+        public StateSetup(Tuple<string, string>[] questions, Contestant[] contestants = null)
+            : base(questions, contestants)
         {
         }
 
@@ -24,8 +24,8 @@ namespace QuizGameEngine.Quizzes.SimpleQuiz
         {
             get
             {
-                yield return Transition.String(ConsoleKey.N, "New contestant", "Contestant name: ", name => new StateSetup("Create contestant: {0}".Fmt(name), Questions, Contestants.Concat(name).ToArray()), true);
-                yield return Transition.Select(ConsoleKey.D, "Delete contestant", Contestants, index => new StateSetup("Delete contestant: {0}".Fmt(Contestants[index]), Questions, Contestants.RemoveIndex(index)));
+                yield return Transition.String(ConsoleKey.N, "New contestant", "Contestant name: ", name => new StateSetup(Questions, Contestants.Concat(name).ToArray()), true);
+                yield return Transition.Select(ConsoleKey.D, "Delete contestant", Contestants, index => new StateSetup(Questions, Contestants.RemoveIndex(index)));
                 yield return Transition.Simple(ConsoleKey.L, "List all questions (with answers!)", () =>
                 {
                     Console.WriteLine();
@@ -38,7 +38,7 @@ namespace QuizGameEngine.Quizzes.SimpleQuiz
                     Program.ReadKey();
                 });
                 yield return Transition.Simple(ConsoleKey.W, "Show welcome", "welcome");
-                yield return Transition.Simple(ConsoleKey.S, "Start game", () => new StateGame("Start game", Questions, Contestants));
+                yield return Transition.Simple(ConsoleKey.S, "Start game", () => new StateGame(Questions, Contestants));
             }
         }
 

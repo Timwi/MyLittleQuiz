@@ -1,13 +1,10 @@
 ﻿using System;
-using RT.Util.ExtensionMethods;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using RT.Util.Consoles;
-using RT.Util.Serialization;
 using RT.Util;
-using RT.Util.Json;
+using RT.Util.Consoles;
+using RT.Util.ExtensionMethods;
+using RT.Util.Serialization;
 
 namespace QuizGameEngine.Quizzes.MyLittleQuiz
 {
@@ -67,10 +64,8 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                         DeletedContestants.RemoveAt(index);
                     });
 
-                yield return Transition.Simple(ConsoleKey.E, "Edit quiz data", () => Program.Edit(Data, new[] { "Quiz data" }));
-
                 if (Contestants.Count > 0)
-                    yield return Transition.Simple(ConsoleKey.S, "Start Round: Elimination Round", () => new Round1_Elimination("Start game", new Round1Data(Data, Contestants)));
+                    yield return Transition.Simple(ConsoleKey.S, "Start Round: Elimination Round", () => new Round1_Elimination(new Round1Data(Data, Contestants)));
             }
         }
 
@@ -78,11 +73,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         {
             get
             {
-                return "{0/White} contestants\n\n{1/White}\nNumber of contestants needed: {2/Cyan}".Color(null).Fmt(
-                    /* 0 */ Contestants.Count,
-                    /* 1 */ "ROUND 1 (Elimination)",
-                    /* 2 */ Data.Round1NumContestantsNeeded
-                );
+                return "{0/White} contestants".Color(null).Fmt(Contestants.Count);
             }
         }
 

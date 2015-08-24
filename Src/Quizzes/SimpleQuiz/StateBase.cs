@@ -13,8 +13,7 @@ namespace QuizGameEngine.Quizzes.SimpleQuiz
         [ClassifyNotNull, ClassifyIgnoreIfDefault, ClassifyIgnoreIfEmpty]
         public Tuple<string, string>[] Questions = new Tuple<string, string>[0];
 
-        protected StateBase(string undoLine, Tuple<string, string>[] questions, Contestant[] contestants)
-            : base(undoLine)
+        protected StateBase(Tuple<string, string>[] questions, Contestant[] contestants)
         {
             if (questions == null)
                 throw new ArgumentNullException("questions");
