@@ -51,7 +51,11 @@ namespace QuizGameEngine
             if (args.Length == 2 && args[0] == "--post-build-check")
                 return Ut.RunPostBuildChecks(args[1], Assembly.GetExecutingAssembly());
 
-            try { Console.OutputEncoding = Encoding.UTF8; }
+            try
+            {
+                Console.OutputEncoding = Encoding.UTF8;
+                Console.TreatControlCAsInput = true;
+            }
             catch { }
 
             CommandLine cmd;
@@ -124,6 +128,7 @@ namespace QuizGameEngine
             Server.Handler = resolver.Handle;
             Server.StartListening();
 
+            var needSave = false;
             while (true)
             {
                 Console.Clear();
@@ -147,6 +152,12 @@ namespace QuizGameEngine
                 }
 
                 again:
+                if (needSave)
+                {
+                    save();
+                    needSave = false;
+                }
+
                 var keyInfo = Console.ReadKey(true);
                 TransitionResult transitionResult = null;
                 string transitionUndoLine = null;
@@ -163,14 +174,14 @@ namespace QuizGameEngine
                             (keyInfo.Modifiers == ConsoleModifiers.Shift) ? Quiz.Redo() :
                             (keyInfo.Modifiers == 0) ? Quiz.Undo() :
                             false)
-                            save();
+                            needSave = true;
                         break;
 
                     case ConsoleKey.F5:
                         if (keyInfo.Modifiers != 0)
                             goto default;
                         Quiz = ClassifyJson.DeserializeFile<QuizBase>(_dataFile);
-                        save();
+                        needSave = true;
                         break;
 
                     case ConsoleKey.E:
@@ -178,6 +189,7 @@ namespace QuizGameEngine
                             goto default;
                         var newState = Quiz.CurrentState;
                         Edit(newState, new[] { "Quiz" }, setValue: val => { newState = (QuizStateBase) val; });
+                        needSave = true;
                         transitionResult = new TransitionResult(newState);
                         transitionUndoLine = "Edit quiz state manually";
                         break;
@@ -203,7 +215,7 @@ namespace QuizGameEngine
                             foreach (var socket in Sockets)
                                 socket.SendLoggedMessage(new JsonDict { { "method", transitionResult.JsMethod }, { "params", transitionResult.JsParameters } });
 
-                    save();
+                    needSave = true;
                 }
             }
 
@@ -244,6 +256,39 @@ namespace QuizGameEngine
 
             if (type == null || (obj != null && !isNullable))
                 type = ((object) obj).GetType();
+            var genericType = type.IsGenericType ? type.GetGenericTypeDefinition() : null;
+            var genericArguments = type.IsGenericType ? type.GetGenericArguments() : null;
+
+            var copyEnsured = false;
+            var ensureCopy = Ut.Lambda(() =>
+            {
+                if (copyEnsured)
+                    return;
+                copyEnsured = true;
+                if (obj is Array)
+                {
+                    var arr = (Array) obj;
+                    var newObj = Array.CreateInstance(type.GetElementType(), arr.Length);
+                    Array.Copy(obj, newObj, arr.Length);
+                    obj = newObj;
+                    setValue(obj);
+                }
+                else if (genericType == typeof(List<>))
+                {
+                    obj = Activator.CreateInstance(typeof(List<>).MakeGenericType(genericArguments), new object[] { obj });
+                    setValue(obj);
+                }
+                else if (genericType == typeof(Dictionary<,>))
+                {
+                    obj = Activator.CreateInstance(typeof(Dictionary<,>).MakeGenericType(genericArguments), new object[] { obj });
+                    setValue(obj);
+                }
+                else if (obj is ICloneable)
+                {
+                    obj = ((ICloneable) obj).Clone();
+                    setValue(obj);
+                }
+            });
 
             if (ExactConvert.IsSupportedType(type) || (isNullable && ExactConvert.IsSupportedType(nullableElementType)))
             {
@@ -270,7 +315,6 @@ namespace QuizGameEngine
                     {
                         result = input.NullOr(i => ExactConvert.To(isNullable ? nullableElementType : type, i));
                         setValue(result);
-                        save();
                         return;
                     }
                     catch (Exception e)
@@ -310,7 +354,7 @@ namespace QuizGameEngine
                     Label = attr == null ? rFieldName : attr.Label,
                     DeclaredType = f.FieldType,
                     GetValue = new Func<dynamic>(() => f.GetValue((object) obj)),
-                    SetValue = new Action<dynamic>(val => { f.SetValue((object) obj, val); }),
+                    SetValue = new Action<dynamic>(val => { ensureCopy(); f.SetValue((object) obj, val); }),
                     Key = (dynamic) null
                 };
             }).ToArray());
@@ -329,8 +373,7 @@ namespace QuizGameEngine
                 var isDictionary = false;
                 Type keyType = null, valueType = null;
 
-                Type[] genericArguments;
-                if (type.TryGetInterfaceGenericParameters(typeof(IDictionary<,>), out genericArguments))
+                if (genericType == typeof(Dictionary<,>))
                 {
                     isDictionary = true;
                     keyType = genericArguments[0];
@@ -341,21 +384,21 @@ namespace QuizGameEngine
                         Label = (string) kvp.Key.ToString(),
                         DeclaredType = valueType,
                         GetValue = new Func<dynamic>(() => kvp.Value),
-                        SetValue = new Action<dynamic>(val => { obj[kvp.Key] = val; }),
+                        SetValue = new Action<dynamic>(val => { ensureCopy(); obj[kvp.Key] = val; }),
                         Key = kvp.Key
                     }).ToArray();
                 }
-                else if (type.TryGetInterfaceGenericParameters(typeof(IList<>), out genericArguments) || type.IsArray)
+                else if (genericType == typeof(List<>) || type.IsArray)
                 {
                     isCollection = true;
-                    valueType = genericArguments[0];
+                    valueType = type.IsArray ? type.GetElementType() : genericArguments[0];
 
                     editables = ((IEnumerable) obj).Cast<dynamic>().Select((elem, index) => new
                     {
                         Label = index.ToString(),
                         DeclaredType = valueType,
                         GetValue = new Func<dynamic>(() => elem),
-                        SetValue = new Action<dynamic>(val => { obj[index] = val; }),
+                        SetValue = new Action<dynamic>(val => { ensureCopy(); obj[index] = val; }),
                         Key = (dynamic) index
                     }).ToArray();
                 }
@@ -365,6 +408,8 @@ namespace QuizGameEngine
                 Console.Clear();
                 ConsoleUtil.WriteLine(path.Select(p => p.Color(ConsoleColor.White)).JoinColoredString(" ▶ ".Color(ConsoleColor.Green)).ColorBackground(ConsoleColor.DarkGreen));
                 ConsoleUtil.WriteLine(type.FullName.Color(ConsoleColor.DarkGreen));
+                if (genericType != typeof(Dictionary<,>) && genericType != typeof(List<>) && !(obj is ICloneable) && !(obj is Array))
+                    ConsoleUtil.WriteLine("NOT CLONEABLE".Color(ConsoleColor.Yellow, ConsoleColor.Red));
                 Console.WriteLine();
 
                 var t = new TextTable { ColumnSpacing = 2 };
@@ -401,6 +446,7 @@ namespace QuizGameEngine
                         return;
                     Edit((object) value, path.Concat(key.ToString()).ToArray(), valueType, val => { value = val; }, "Enter new value:");
 
+                    ensureCopy();
                     if (isDictionary)
                         obj.Add((dynamic) key, value);
                     else if (!type.IsArray)
@@ -410,7 +456,6 @@ namespace QuizGameEngine
                         obj = Extensions.InsertAtIndex(obj, index, value);
                         setValue(obj);
                     }
-                    save();
                 });
 
                 var selectedElements = Ut.Lambda((bool delete) =>
@@ -420,14 +465,18 @@ namespace QuizGameEngine
                     {
                         ret = Enumerable.Range(selStart, selLength).Select(i => (object) Ut.KeyValuePair((object) editables[i].Key, (object) obj[editables[i].Key])).ToArray();
                         if (delete)
+                        {
+                            ensureCopy();
                             for (int i = 0; i < selLength; i++)
                                 obj.Remove(editables[selStart + i].Key);
+                        }
                     }
                     else if (type.IsArray)
                     {
                         ret = Enumerable.Range(selStart, selLength).Select(i => obj[i]).ToArray();
                         if (delete)
                         {
+                            copyEnsured = true;
                             obj = Extensions.RemoveIndexes(obj, selStart, selLength);
                             setValue(obj);
                         }
@@ -436,17 +485,20 @@ namespace QuizGameEngine
                     {
                         ret = Enumerable.Range(selStart, selLength).Select(i => obj[i]).ToArray();
                         if (delete)
+                        {
+                            ensureCopy();
                             for (int i = 0; i < selLength; i++)
                                 obj.RemoveAt(selStart);
+                        }
                     }
-                    if (delete)
-                        save();
                     return ret;
                 });
 
                 var keyInfo = Console.ReadKey(true);
                 if ((keyInfo.Key == ConsoleKey.Escape || keyInfo.Key == ConsoleKey.Backspace) && keyInfo.Modifiers == 0)
                     break;
+
+                bool insertAtBottom = false;
 
                 switch (keyName(keyInfo.Key, keyInfo.Modifiers).ToString())
                 {
@@ -526,18 +578,12 @@ namespace QuizGameEngine
 
                     case "Shift+OemPlus":
                         if (selLength == 1 && ExactConvert.IsTrueIntegerType(editables[selStart].DeclaredType))
-                        {
                             editables[selStart].SetValue(unchecked(editables[selStart].GetValue() + 1));
-                            save();
-                        }
                         break;
 
                     case "OemMinus":
                         if (selLength == 1 && ExactConvert.IsTrueIntegerType(editables[selStart].DeclaredType))
-                        {
                             editables[selStart].SetValue(unchecked(editables[selStart].GetValue() - 1));
-                            save();
-                        }
                         break;
 
                     case "Enter":
@@ -572,14 +618,46 @@ namespace QuizGameEngine
                             Clipboard.SetText(ClassifyJson.Serialize<object[]>(selectedElements(false)).ToStringIndented());
                         break;
 
+                    case "Ctrl+Alt+V":
+                    case "Shift+Alt+Insert":
+                        insertAtBottom = true;
+                        goto case "Ctrl+V";
+
                     case "Ctrl+V":
                     case "Shift+Insert":
-                        if (isCollection || isDictionary)
+                        if ((isCollection || isDictionary) && selLength == 1)
                         {
                             try
                             {
                                 var arr = ClassifyJson.Deserialize<object[]>(JsonValue.Parse(Clipboard.GetText()));
-                                throw new NotImplementedException();
+                                var index = insertAtBottom ? (type.IsArray ? obj.Length : obj.Count) : selStart;
+                                if (isDictionary)
+                                {
+                                    if (arr.Any(o => getCompatibleKeyValuePair(keyType, valueType, o) == null))
+                                        goto cannot;
+                                }
+                                else // isCollection
+                                {
+                                    if (arr.Any(o => !valueType.IsAssignableFrom(o.GetType())))
+                                        goto cannot;
+                                }
+
+                                foreach (dynamic o in arr)
+                                {
+                                    if (isDictionary)
+                                        obj.Add(o.Key, o.Value);
+                                    else if (type.IsArray)
+                                    {
+                                        obj = Extensions.InsertAtIndex(obj, index, o);
+                                        setValue(obj);
+                                        index++;
+                                    }
+                                    else // isCollection
+                                    {
+                                        obj.Insert(index, o);
+                                        index++;
+                                    }
+                                }
                             }
                             catch (Exception e)
                             {
@@ -587,11 +665,29 @@ namespace QuizGameEngine
                             }
                         }
                         break;
+
+                        cannot:
+                        DlgMessage.Show("The value(s) from the clipboard cannot be used in this context.", DlgType.Error);
+                        break;
                 }
             }
 
             Console.Clear();
             Console.CursorVisible = cursorVisible;
+        }
+
+        private static object getCompatibleKeyValuePair(Type keyType, Type valueType, object kvp)
+        {
+            var type = kvp.GetType();
+            if (!type.IsGenericType)
+                return null;
+            if (type.GetGenericTypeDefinition() != typeof(KeyValuePair<,>))
+                return null;
+            var args = type.GetGenericArguments();
+            if (!keyType.IsAssignableFrom(args[0]) || !valueType.IsAssignableFrom(args[1]))
+                return null;
+            dynamic kvpDyn = kvp;
+            return Activator.CreateInstance(typeof(KeyValuePair<,>).MakeGenericType(keyType, valueType), new object[] { kvpDyn.Key, kvpDyn.Value });
         }
 
         private static ConsoleColoredString keyName(ConsoleKey key, ConsoleModifiers modifiers)

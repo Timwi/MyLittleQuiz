@@ -9,7 +9,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
 {
     public sealed class Round1_Elimination_Q : QuizStateBase
     {
-        public Round1Data Data { get; private set; }
+        private Round1Data Data;
 
         public Round1_Elimination_Q(Round1Data data) { Data = data; }
         private Round1_Elimination_Q() { }    // for Classify
@@ -50,7 +50,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                     throughAndRemaining.Length == wouldBe.NumContestantsNeeded ? throughAndRemaining : null;
 
                 if (nextRoundContestants != null)
-                    return new[] { Transition.Simple(ConsoleKey.Spacebar, "End of round congratulations", () => new Round2_Categories_ShowContestants(new Round2Data(Data.QuizData, nextRoundContestants.Select(c => new Round2Contestant(c.Name, 0)).ToArray()))) };
+                    return new[] { Transition.Simple(ConsoleKey.Spacebar, "End of round congratulations", () => new Round2_Categories_ShowContestants(new Round2Data(Data.QuizData, nextRoundContestants.Select(c => new Round2Contestant(c.Name, 0)).ToArray()), noScores: true)) };
                 else
                     return new[] { Transition.Simple(ConsoleKey.Spacebar, "Dismiss question", () => new Round1_Elimination(wouldBe)) };
             }
@@ -63,7 +63,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             {
                 return new
                 {
-                    question = Data.Questions[Data.CurrentDifficulty.Value][Data.QuestionIndex[Data.CurrentDifficulty.Value]],
+                    question = CurrentQuestion,
                     answer = Data.AnswerObject
                 };
             }

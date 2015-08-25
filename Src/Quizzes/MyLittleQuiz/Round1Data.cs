@@ -66,7 +66,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                     /* 2 */ "{0/Red} out, {1/Green} through, {2/Cyan} remaining, need {3/Yellow} more through or {4/Magenta} more out".Color(null).Fmt(numOut, numThrough, numRemaining, NumContestantsNeeded - numThrough, numThrough + numRemaining - NumContestantsNeeded),
                     /* 3 */ SelectedContestant == null ? null : "\n\n{0/White}\n{1/Green} {2/Red} {3/Yellow}".Color(null).Fmt("Selected contestant:", Contestants[SelectedContestant.Value].NumCorrect, Contestants[SelectedContestant.Value].NumWrong, Contestants[SelectedContestant.Value].Name),
                     /* 4 */ "Questions:",
-                    /* 5 */ Questions.Select(kvp => "{0/Cyan}: {1/Magenta}".Color(null).Fmt(kvp.Key, kvp.Value.Length)).JoinColoredString("\n")
+                    /* 5 */ Questions.Select(kvp => "{0/Cyan}: {1/Magenta}".Color(null).Fmt(kvp.Key, kvp.Value.Length - QuestionIndex[kvp.Key])).JoinColoredString("\n")
                 );
             }
         }

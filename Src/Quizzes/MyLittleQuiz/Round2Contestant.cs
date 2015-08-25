@@ -10,7 +10,7 @@ using RT.Util.ExtensionMethods;
 
 namespace QuizGameEngine.Quizzes.MyLittleQuiz
 {
-    public sealed class Round2Contestant : IToConsoleColoredString
+    public sealed class Round2Contestant : IToConsoleColoredString, ICloneable
     {
         public string Name { get; private set; }
         public int Score { get; private set; }
@@ -25,12 +25,17 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
 
         public Round2Contestant IncScore(int amount)
         {
-            return new Round2Contestant(Name, Score + amount);
+            return this.ApplyToClone(c => { c.Score = Score + amount; });
         }
 
         public ConsoleColoredString ToConsoleColoredString()
         {
             return "{0/Yellow}, Score={1/Cyan}".Color(ConsoleColor.DarkCyan).Fmt(Name, Score);
+        }
+
+        public object Clone()
+        {
+            return MemberwiseClone();
         }
     }
 }

@@ -34,6 +34,8 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
 
                 if (NoScores)
                     yield return Transition.Simple(ConsoleKey.S, "Show scores", () => new Round2_Categories_ShowContestants(Data));
+                else
+                    yield return Transition.Simple(ConsoleKey.C, "Show categories", () => new Round2_Categories_ShowCategories(Data));
             }
         }
 

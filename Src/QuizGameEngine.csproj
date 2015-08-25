@@ -67,6 +67,8 @@
     <Compile Include="Quizzes\MyLittleQuiz\Round2Category.cs" />
     <Compile Include="Quizzes\MyLittleQuiz\Round2Data.cs" />
     <Compile Include="Quizzes\MyLittleQuiz\Round2_Categories.cs" />
+    <Compile Include="Quizzes\MyLittleQuiz\Round2_Categories_Q.cs" />
+    <Compile Include="Quizzes\MyLittleQuiz\Round2_Categories_ShowCategories.cs" />
     <Compile Include="Quizzes\MyLittleQuiz\Round2_Categories_ShowContestants.cs" />
     <Compile Include="Quizzes\MyLittleQuiz\Round2Contestant.cs" />
     <Compile Include="Quizzes\MyLittleQuiz\Setup.cs" />

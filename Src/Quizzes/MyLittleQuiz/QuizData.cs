@@ -10,7 +10,7 @@ using RT.Util.Serialization;
 
 namespace QuizGameEngine.Quizzes.MyLittleQuiz
 {
-    public sealed class QuizData : ICloneable
+    public sealed class QuizData
     {
         // Round 1: Elimination
         [EditorLabel("Round 1 (Elimination): Number of contestants needed")]
@@ -23,7 +23,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         // Round 2: Categories
         [ClassifyNotNull]
         [EditorLabel("Round 2 (Categories): Categories")]
-        public Round2Category[] Round2Questions { get; private set; }
+        public Round2Category[] Round2Categories { get; private set; }
 
         // Round 3: Set poker
 
@@ -37,13 +37,8 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         public QuizData()
         {
             Round1Questions = new Dictionary<Difficulty, QuestionBase[]>();
-            Round2Questions = new Round2Category[0];
+            Round2Categories = new Round2Category[0];
             Round5Questions = new QuestionBase[0];
-        }
-
-        public object Clone()
-        {
-            return MemberwiseClone();
         }
     }
 }
