@@ -44,7 +44,7 @@ namespace QuizGameEngine
             if (array == null)
                 throw new ArgumentNullException("array");
             if (index < 0 || index >= array.Length)
-                throw new ArgumentException("Index out of bounds.", "index");
+                throw new ArgumentOutOfRangeException("index", "Index out of bounds.");
             var newArray = new T[array.Length];
             Array.Copy(array, 0, newArray, 0, array.Length);
             newArray[index] = element;
@@ -53,6 +53,12 @@ namespace QuizGameEngine
 
         public static T[] ReplaceIndex<T>(this T[] array, int index, Func<T, T> elementSelector)
         {
+            if (array == null)
+                throw new ArgumentNullException("array");
+            if (elementSelector == null)
+                throw new ArgumentNullException("elementSelector");
+            if (index < 0 || index >= array.Length)
+                throw new ArgumentOutOfRangeException("index", "Index out of bounds.");
             return array.ReplaceIndex(index, elementSelector(array[index]));
         }
 

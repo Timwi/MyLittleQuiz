@@ -7,14 +7,15 @@ using RT.Util.ExtensionMethods;
 
 namespace QuizGameEngine.Quizzes.MyLittleQuiz
 {
-    public sealed class Round1_Elimination_Q : QuizStateBase
+    public sealed class Round1_Elimination_Q : MyLittleQuizStateBase
     {
         private Round1Data Data;
 
         public Round1_Elimination_Q(Round1Data data) { Data = data; }
         private Round1_Elimination_Q() { }    // for Classify
 
-        public QuestionBase CurrentQuestion { get { return Data.Questions[Data.CurrentDifficulty.Value][Data.QuestionIndex[Data.CurrentDifficulty.Value]]; } }
+        public override QuestionBase CurrentQuestion { get { return Data.Questions[Data.CurrentDifficulty.Value][Data.QuestionIndex[Data.CurrentDifficulty.Value]]; } }
+        public override QuizStateBase GiveAnswer(object answer) { return new Round1_Elimination(Data.GiveAnswer(answer)); }
 
         public override ConsoleColoredString Describe
         {
@@ -31,16 +32,12 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             }
         }
 
-        public override IEnumerable<Transition> Transitions
+        public override IEnumerable<Transition> Transitions { get { return Data.AnswerObject == null ? getAnswerTransitions() : transitionsAfterAnswer; } }
+
+        private IEnumerable<Transition> transitionsAfterAnswer
         {
             get
             {
-                // Contestant has not yet answered the question
-                if (Data.AnswerObject == null)
-                    return CurrentQuestion.CorrectAnswerInfos.Concat(Tuple.Create(ConsoleKey.Z, "Wrong", (object) false)).Select(answerInfo => Transition.Simple(
-                        answerInfo.Item1, "Answer: " + answerInfo.Item2, () => new Round1_Elimination_Q(Data.GiveAnswer(answerInfo.Item3)).With("r1_showA", new { answer = answerInfo.Item3 })));
-
-                // Contestant HAS answered the question
                 var wouldBe = Data.DismissQuestion();
 
                 var through = wouldBe.Contestants.Where(c => c.IsThrough).ToArray();
@@ -50,13 +47,13 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                     throughAndRemaining.Length == wouldBe.NumContestantsNeeded ? throughAndRemaining : null;
 
                 if (nextRoundContestants != null)
-                    return new[] { Transition.Simple(ConsoleKey.Spacebar, "End of round congratulations", () => new Round2_Categories_ShowContestants(new Round2Data(Data.QuizData, nextRoundContestants.Select(c => new Round2Contestant(c.Name, 0)).ToArray()), noScores: true)) };
+                    yield return Transition.Simple(ConsoleKey.Spacebar, "End of round congratulations", () => new Round2_Categories_ShowContestants(new Round2Data(Data.QuizData, nextRoundContestants.Select(c => new Round2Contestant(c.Name, 0)).ToArray()), noScores: true));
                 else
-                    return new[] { Transition.Simple(ConsoleKey.Spacebar, "Dismiss question", () => new Round1_Elimination(wouldBe)) };
+                    yield return Transition.Simple(ConsoleKey.Spacebar, "Dismiss question", () => new Round1_Elimination(wouldBe));
             }
         }
 
-        public override string JsMethod { get { return Data.AnswerObject == null ? "r1_showQ" : "r1_showQA"; } }
+        public override string JsMethod { get { return Data.AnswerObject == null ? "showQ" : "showQA"; } }
         public override object JsParameters
         {
             get
@@ -64,7 +61,8 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                 return new
                 {
                     question = CurrentQuestion,
-                    answer = Data.AnswerObject
+                    answer = Data.AnswerObject,
+                    round = "r1"
                 };
             }
         }

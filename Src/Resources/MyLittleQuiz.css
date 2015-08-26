@@ -297,3 +297,64 @@ body {
             opacity: 0;
             transform: scale(5);
         }
+
+    #content #r2-contestants {
+        top: 0;
+        left: 0;
+        right: 0;
+        padding: .5em 1em;
+        box-sizing: content-box;
+    }
+
+        #content #r2-contestants.no-scores .score {
+            display: none;
+        }
+
+        #content #r2-contestants .r2-contestant {
+            position: relative;
+            margin: .2em 0;
+            color: white;
+            border-bottom: .3vh solid orange;
+            width: 47.4%;
+            float: left;
+            left: -100vw;
+            transition: left ease-out 1s;
+        }
+
+            #content #r2-contestants .r2-contestant:nth-child(even) {
+                left: 100vw;
+            }
+
+        #content #r2-contestants.in .r2-contestant {
+            left: 0;
+        }
+
+        #content #r2-contestants .r2-contestant:nth-child(odd) {
+            margin-right: 5%;
+        }
+
+        #content #r2-contestants:not(.no-scores) .r2-contestant {
+            padding-right: 2em;
+        }
+
+        #content #r2-contestants .r2-contestant .name {
+            transform-origin: left center;
+        }
+
+            #content #r2-contestants .r2-contestant .name .inner {
+                white-space: nowrap;
+            }
+
+        #content #r2-contestants .r2-contestant .score {
+            position: absolute;
+            top: 50%;
+            right: 0;
+            transform: translate(0, -50%);
+            border-radius: 50%;
+            border: 2px solid orange;
+            background: black;
+            width: 1.5em;
+            height: 1.2em;
+            text-align: center;
+            line-height: 1.1em;
+        }

@@ -182,6 +182,7 @@ namespace QuizGameEngine
                             goto default;
                         Quiz = ClassifyJson.DeserializeFile<QuizBase>(_dataFile);
                         needSave = true;
+                        transitionResult = new TransitionResult(Quiz.CurrentState, null, Quiz.CurrentState.JsMethod, Quiz.CurrentState.JsParameters);
                         break;
 
                     case ConsoleKey.E:

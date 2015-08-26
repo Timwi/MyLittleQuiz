@@ -8,14 +8,15 @@ using RT.Util.Consoles;
 
 namespace QuizGameEngine.Quizzes.MyLittleQuiz
 {
-    class Round2_Categories_Q : QuizStateBase
+    class Round2_Categories_Q : MyLittleQuizStateBase
     {
         private Round2Data Data;
 
         public Round2_Categories_Q(Round2Data data) { Data = data; }
         private Round2_Categories_Q() { }    // for Classify
 
-        public QuestionBase CurrentQuestion { get { return Data.Categories[Data.SelectedCategory.Value].Questions[Data.SelectedQuestion.Value]; } }
+        public override QuestionBase CurrentQuestion { get { return Data.Categories[Data.SelectedCategory.Value].Questions[Data.SelectedQuestion.Value]; } }
+        public override QuizStateBase GiveAnswer(object answer) { return new Round2_Categories_Q(Data.GiveAnswer(answer)); }
 
         public override ConsoleColoredString Describe
         {
@@ -32,17 +33,13 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         {
             get
             {
-                // Contestant has not yet answered the question
-                if (Data.AnswerObject == null)
-                    return CurrentQuestion.CorrectAnswerInfos.Concat(Tuple.Create(ConsoleKey.Z, "Wrong", (object) false)).Select(answerInfo => Transition.Simple(
-                        answerInfo.Item1, "Answer: " + answerInfo.Item2, () => new Round2_Categories_Q(Data.GiveAnswer(answerInfo.Item3)).With("r2_showA", new { answer = answerInfo.Item3 })));
-
-                // Contestant HAS answered the question
-                return new[] { Transition.Simple(ConsoleKey.Spacebar, "Dismiss question", () => new Round2_Categories_ShowCategories(Data.DismissQuestion())) };
+                return Data.AnswerObject == null
+                    ? getAnswerTransitions()
+                    : new[] { Transition.Simple(ConsoleKey.Spacebar, "Dismiss question", () => new Round2_Categories_ShowCategories(Data.DismissQuestion())) };
             }
         }
 
-        public override string JsMethod { get { return Data.AnswerObject == null ? "r2_showQ" : "r2_showQA"; } }
+        public override string JsMethod { get { return Data.AnswerObject == null ? "showQ" : "showQA"; } }
         public override object JsParameters
         {
             get
@@ -50,7 +47,8 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                 return new
                 {
                     question = CurrentQuestion,
-                    answer = Data.AnswerObject
+                    answer = Data.AnswerObject,
+                    round = "r2"
                 };
             }
         }

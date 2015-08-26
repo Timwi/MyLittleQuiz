@@ -45,7 +45,7 @@ namespace QuizGameEngine
 
         public void SendLoggedMessage(JsonValue json)
         {
-            Program.LogMessage("{0}: {1}".Fmt(_endpoint, json));
+            Program.LogMessage("{0}: {1}".Fmt(_endpoint, JsonValue.ToString(json)));
             SendMessage(json);
         }
     }

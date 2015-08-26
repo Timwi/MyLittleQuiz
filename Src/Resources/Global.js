@@ -26,8 +26,13 @@ $(function ()
         {
             console.log('socket message: ' + msg.data);
             var data = JSON.parse(msg.data);
-            if ('method' in data && data.method in transitions)
-                transitions[data.method](data.params);
+            if ('method' in data)
+            {
+                if (data.method in transitions)
+                    transitions[data.method](data.params);
+                else
+                    console.log('Undefined transition method: ' + data.method);
+            }
         };
     }
 

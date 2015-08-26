@@ -57,6 +57,7 @@
     <Compile Include="QuizWebSocket.cs" />
     <Compile Include="Quizzes\MyLittleQuiz\Cmd.cs" />
     <Compile Include="Quizzes\MyLittleQuiz\Contestant.cs" />
+    <Compile Include="Quizzes\MyLittleQuiz\MyLittleQuizStateBase.cs" />
     <Compile Include="Quizzes\MyLittleQuiz\QuizData.cs" />
     <Compile Include="Quizzes\MyLittleQuiz\Round1Contestant.cs" />
     <Compile Include="Quizzes\MyLittleQuiz\Question.cs" />

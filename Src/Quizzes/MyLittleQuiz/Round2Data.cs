@@ -11,12 +11,13 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         public Round2Contestant[] Contestants { get; private set; }
         public int CurrentContestant { get; private set; }
         public bool[][] QuestionsUsed { get; private set; }
-        public object AnswerObject { get; private set; }
-
+        
         [ClassifyIgnoreIfDefault]
         public int? SelectedCategory { get; private set; }
         [ClassifyIgnoreIfDefault]
         public int? SelectedQuestion { get; private set; }
+        [ClassifyIgnoreIfDefault]
+        public object AnswerObject { get; private set; }
 
         public Round2Category[] Categories { get { return QuizData.Round2Categories; } }
 

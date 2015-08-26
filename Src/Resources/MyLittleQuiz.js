@@ -3,64 +3,22 @@ $(function ()
 {
     var content = $('#content');
 
-    function ensureBackground()
+    function clearScreen()
     {
+        $('.away').removeClass('in').addClass('out');
         if (!$('#background').length)
             $('<div id="background">').prependTo(content);
     }
 
-    function clearScreen()
-    {
-        $('.away').removeClass('in').addClass('out');
-    }
-
     transitions = {
 
-        r1_showContestants: function (p)
-        {
-            $('#r1-contestants, .r1-contestant').remove();
-            ensureBackground();
-            clearScreen();
-            var c = $('<div id="r1-contestants" class="away">').appendTo(content);
-            for (var i = 0; i < p.contestants.length; i++)
-            {
-                if (p.contestants[i].NumCorrect > 1 || p.contestants[i].NumWrong > 1)
-                    continue;
-                var div = $('<div class="contestant">')
-                    .attr('data-num', i + 1)
-                    .css('transition-delay', Math.random() * .75 + 's')
-                    .appendTo(c);
-                if (p.contestants[i].NumCorrect > 0)
-                    div.addClass('correct');
-                if (p.contestants[i].NumWrong > 0)
-                    div.addClass('wrong');
-            }
-            findBestValue(100, function (fs) { c.css('font-size', fs + 'px'); return c.height() < content.height() ? -1 : 1; });
-            $('.contestant').addClassDelay('in', 100);
-        },
-
-        r1_select: function (p)
-        {
-            $('.r1-contestant').remove();
-            clearScreen();
-            ensureBackground();
-
-            var c = p.contestants[p.selected];
-            var span = $('<span class="inner">').text(c.Name);
-            var div = $('<div class="r1-contestant away static" id="r1-contestant-name">').append(span).appendTo(content).addClassDelay('in', 100);
-            $('<div class="r1-contestant away" id="r1-contestant-roll">').text(c.Roll).appendTo(content).addClassDelay('in', 100);
-
-            if (span.width() > div.width())
-                span.css('transform', 'scale(' + (div.width() / span.width()) + ', 1)');
-        },
-
-        r1_showQ: function (p)
+        //#region QUESTION/ANSWER (showQ, showA, showQA)
+        showQ: function (p)
         {
             $('#qa').remove();
             clearScreen();
-            ensureBackground();
 
-            var qa = $('<div id="qa" class="static away">').appendTo(content);
+            var qa = $('<div id="qa" class="static away ' + p.round + '">').appendTo(content);
 
             var q = p.question;
             qa.data('type', q[':type']);
@@ -97,7 +55,7 @@ $(function ()
             findBestValue(20, function (fs) { adecor.css('font-size', fs + 'px'); return adecor.outerHeight() < adiv.outerHeight() ? -1 : 1; });
         },
 
-        r1_showA: function (p)
+        showA: function (p)
         {
             var qa = $('#qa');
             if (!qa.length)
@@ -124,11 +82,79 @@ $(function ()
             }
         },
 
-        r1_showQA: function (p)
+        showQA: function (p)
         {
-            transitions.r1_showQ(p);
-            window.setTimeout(function () { transitions.r1_showA(p); }, 750);
-        }
+            transitions.showQ(p);
+            window.setTimeout(function () { transitions.showA(p); }, 750);
+        },
+        //#endregion
 
+        //#region ROUND 1 (Elimination)
+        r1_showContestants: function (p)
+        {
+            $('#r1-contestants, .r1-contestant').remove();
+            clearScreen();
+            var c = $('<div id="r1-contestants" class="away">').appendTo(content);
+            for (var i = 0; i < p.contestants.length; i++)
+            {
+                if (p.contestants[i].NumCorrect > 1 || p.contestants[i].NumWrong > 1)
+                    continue;
+                var div = $('<div class="contestant">')
+                    .attr('data-num', i + 1)
+                    .css('transition-delay', Math.random() * .75 + 's')
+                    .appendTo(c);
+                if (p.contestants[i].NumCorrect > 0)
+                    div.addClass('correct');
+                if (p.contestants[i].NumWrong > 0)
+                    div.addClass('wrong');
+            }
+            findBestValue(100, function (fs) { c.css('font-size', fs + 'px'); return c.height() < content.height() ? -1 : 1; });
+            $('.contestant').addClassDelay('in', 100);
+        },
+
+        r1_select: function (p)
+        {
+            $('.r1-contestant').remove();
+            clearScreen();
+
+            var c = p.contestants[p.selected];
+            var span = $('<span class="inner">').text(c.Name);
+            var div = $('<div class="r1-contestant away static" id="r1-contestant-name">').append(span).appendTo(content).addClassDelay('in', 100);
+            $('<div class="r1-contestant away" id="r1-contestant-roll">').text(c.Roll).appendTo(content).addClassDelay('in', 100);
+
+            if (span.width() > div.width())
+                span.css('transform', 'scale(' + (div.width() / span.width()) + ', 1)');
+        },
+        //#endregion
+
+        //#region ROUND 2 (Categories)
+        r2_showContestants: function (p)
+        {
+            $('#r2-contestants').remove();
+            clearScreen();
+
+            var c = $('<div id="r2-contestants" class="static' + (p.noscores ? ' no-scores' : '') + '">')
+                .addClassDelay('in', 100 + i * 600)
+                .appendTo(content);
+            var cs = [];
+            for (var i = 0; i < p.contestants.length; i++)
+            {
+                cs.push($('<div class="r2-contestant">')
+                    .append($('<div class="name">').append($('<span class="inner">').text(p.contestants[i].Name)))
+                    .append($('<div class="score">').text(p.contestants[i].Score))
+                    .css('transition-delay', (p.noscores ? i * .3 : i * .1) + 's')
+                    .appendTo(c));
+            }
+
+            findBestValue(100, function (fs) { c.css('font-size', fs + 'px'); return c.outerHeight() < content.height() ? -1 : 1; });
+
+            for (var i = 0; i < cs.length; i++)
+            {
+                var name = cs[i].find('.name .inner');
+                if (name.width() > cs[i].width())
+                    cs[i].find('.name').css('transform', 'scale(' + (cs[i].width() / name.width()) + ', 1)');
+            }
+        },
+        //#endregion
     };
 });
