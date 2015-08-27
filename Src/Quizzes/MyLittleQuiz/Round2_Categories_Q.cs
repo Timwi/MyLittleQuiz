@@ -24,7 +24,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             {
                 return "{0}\n\n{1}".Color(null).Fmt(
                     /* 0 */ CurrentQuestion.Describe(Data.AnswerObject),
-                    /* 1 */ Data.Describe
+                    /* 1 */ Data.DescribeContestants
                 );
             }
         }

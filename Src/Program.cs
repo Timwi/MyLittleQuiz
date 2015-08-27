@@ -418,9 +418,14 @@ namespace QuizGameEngine
                 {
                     var editable = editables[i];
                     var value = (object) editable.GetValue();
+                    var selected = i >= selStart && i < selStart + selLength;
 
-                    t.SetCell(0, i, i >= selStart && i < selStart + selLength ? editable.Label.Color(null, ConsoleColor.DarkBlue) : editable.Label);
-                    t.SetCell(1, i, value == null ? "<null>".Color(ConsoleColor.DarkGray) : value.ToUsefulString());
+                    if (i == (selIsTop ? selStart : selStart + selLength - 1))
+                        t.SetCell(0, i, "▶");
+                    t.SetCell(1, i, editable.Label);
+                    t.SetCell(2, i, value == null ? "<null>".Color(ConsoleColor.DarkGray) : value.ToUsefulString());
+                    if (selected)
+                        t.SetRowBackground(i, ConsoleColor.DarkBlue);
                 }
                 t.WriteToConsole();
 

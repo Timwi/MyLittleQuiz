@@ -39,25 +39,8 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             }
         }
 
-        public override ConsoleColoredString Describe
-        {
-            get
-            {
-                var tt = new TextTable { ColumnSpacing = 2 };
-                for (int i = 0; i < Data.Contestants.Length; i++)
-                {
-                    tt.SetCell(0, i, (i + 1).ToString().Color(ConsoleColor.Yellow));
-                    tt.SetCell(1, i, Data.Contestants[i].Name.Color(ConsoleColor.Green));
-                }
-                return tt.ToColoredString();
-            }
-        }
-
-        public override string JsMethod
-        {
-            get { return "r2_showContestants"; }
-        }
-
+        public override ConsoleColoredString Describe { get { return Data.DescribeContestants; } }
+        public override string JsMethod { get { return "r2_showContestants"; } }
         public override object JsParameters
         {
             get

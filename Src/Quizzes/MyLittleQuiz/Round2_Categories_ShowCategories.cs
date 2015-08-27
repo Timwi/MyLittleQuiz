@@ -37,10 +37,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             }
         }
 
-        public override ConsoleColoredString Describe
-        {
-            get { throw new NotImplementedException(); }
-        }
+        public override ConsoleColoredString Describe { get { return Data.DescribeContestants; } }
 
         public override string JsMethod
         {
