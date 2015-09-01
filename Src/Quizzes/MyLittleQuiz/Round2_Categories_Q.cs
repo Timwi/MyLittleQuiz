@@ -23,8 +23,8 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             get
             {
                 return "{0}\n\n{1}".Color(null).Fmt(
-                    /* 0 */ CurrentQuestion.Describe(Data.AnswerObject),
-                    /* 1 */ Data.DescribeContestants
+                    /* 0 */ Data.Describe,
+                    /* 1 */ CurrentQuestion.Describe(Data.AnswerObject)
                 );
             }
         }
@@ -35,7 +35,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             {
                 return Data.AnswerObject == null
                     ? getAnswerTransitions()
-                    : new[] { Transition.Simple(ConsoleKey.Spacebar, "Dismiss question", () => new Round2_Categories_ShowCategories(Data.DismissQuestion())) };
+                    : new[] { Transition.Simple(ConsoleKey.Spacebar, "Dismiss question", () => new Round2_Categories_ShowContestants(Data.DismissQuestion())) };
             }
         }
 

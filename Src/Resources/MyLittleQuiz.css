@@ -3,10 +3,6 @@
     position: absolute;
 }
 
-.static * {
-    position: static;
-}
-
 body {
     position: relative;
     overflow: hidden;
@@ -15,6 +11,17 @@ body {
     background: black;
     color: white;
     cursor: none;
+}
+
+.static * {
+    position: static;
+}
+
+.full-flow {
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 5vh 5vw;
 }
 
 #content {
@@ -152,12 +159,8 @@ body {
         }
 
     #content #qa {
-        top: 0;
-        left: 0;
-        right: 0;
         opacity: 1;
         transition: opacity linear .5s, transform ease-in .7s;
-        padding: 5vw;
     }
 
         #content #qa .qa {
@@ -298,52 +301,76 @@ body {
             transform: scale(5);
         }
 
-    #content #r2-contestants {
+    #content .two-col {
         top: 0;
         left: 0;
         right: 0;
-        padding: .5em 1em;
-        box-sizing: content-box;
+        transition: transform linear 1s, opacity linear 1s;
     }
 
-        #content #r2-contestants.no-scores .score {
-            display: none;
+        #content .two-col .col-1 {
+            top: 0;
+            left: 0;
+            width: 50vw;
         }
 
-        #content #r2-contestants .r2-contestant {
+        #content .two-col .col-2 {
+            top: 0;
+            right: 0;
+            width: 50vw;
+        }
+
+        #content .two-col .col .two-col-elem {
             position: relative;
-            margin: .2em 0;
-            color: white;
-            border-bottom: .3vh solid orange;
-            width: 47.4%;
-            float: left;
-            left: -100vw;
             transition: left ease-out 1s;
         }
 
-            #content #r2-contestants .r2-contestant:nth-child(even) {
-                left: 100vw;
-            }
+        #content .two-col .col-1 .two-col-elem {
+            left: -100vw;
+        }
 
-        #content #r2-contestants.in .r2-contestant {
+        #content .two-col .col-2 .two-col-elem {
+            left: 100vw;
+        }
+
+        #content .two-col.in .two-col-elem {
             left: 0;
         }
 
-        #content #r2-contestants .r2-contestant:nth-child(odd) {
-            margin-right: 5%;
+        #content .two-col.out {
+            opacity: 0;
+            transform: scale(1.5);
         }
 
-        #content #r2-contestants:not(.no-scores) .r2-contestant {
-            padding-right: 2em;
-        }
-
-        #content #r2-contestants .r2-contestant .name {
+        #content .two-col .two-col-elem .name {
             transform-origin: left center;
         }
 
-            #content #r2-contestants .r2-contestant .name .inner {
+            #content .two-col .two-col-elem .name .inner {
                 white-space: nowrap;
             }
+
+    #content #r2-contestants.no-scores .score {
+        display: none;
+    }
+
+    #content #r2-contestants:not(.no-scores) .r2-contestant {
+        padding-right: 1.8em;
+    }
+
+    #content #r2-contestants .col-1 {
+        padding: 5vh 2vw 5vh 5vw;
+    }
+
+    #content #r2-contestants .col-2 {
+        padding: 5vh 5vw 5vh 2vw;
+    }
+
+    #content #r2-contestants .r2-contestant {
+        color: white;
+        border-bottom: .3vh solid orange;
+        margin: .2em 0;
+    }
 
         #content #r2-contestants .r2-contestant .score {
             position: absolute;
@@ -358,3 +385,106 @@ body {
             text-align: center;
             line-height: 1.1em;
         }
+
+    #content #r2-cats .r2-cat {
+        color: white;
+        padding: .1em 1em .5em 1em;
+        margin: .5em 0;
+        background: hsl(220, 60%, 33.3%);
+        box-shadow: inset -.05em -.15em 0 hsl(220, 60%, 25%);
+        transition: left ease-out 1s, background ease-in-out .7s, box-shadow ease-in-out .7s, transform ease-out .7s;
+    }
+
+        #content #r2-cats .r2-cat.all-used {
+            opacity: .3;
+        }
+
+            #content #r2-cats .r2-cat.all-used .name {
+                visibility: hidden;
+            }
+
+        #content #r2-cats .r2-cat.selected {
+            background: hsl(60, 100%, 30%);
+            box-shadow: inset -.05em -.15em 0 hsl(60, 100%, 25%);
+            transform: scale(1.1);
+        }
+
+    #content #r2-cats .col-1 {
+        padding: 5vh 3vw 5vh 0;
+    }
+
+        #content #r2-cats .col-1 .r2-cat {
+            border-top-right-radius: 10em;
+            border-bottom-right-radius: 10em;
+            transform-origin: left center;
+        }
+
+    #content #r2-cats .col-2 {
+        padding: 5vh 0 5vh 3vw;
+    }
+
+        #content #r2-cats .col-2 .r2-cat {
+            border-top-left-radius: 10em;
+            border-bottom-left-radius: 10em;
+            transform-origin: right center;
+        }
+
+    #content #r2-cats .r2-cat::before {
+        content: '';
+        position: absolute;
+        top: .1em;
+        left: .7em;
+        right: .8em;
+        height: .2em;
+        background: hsl(220, 50%, 40%);
+        border-radius: 2em;
+        transition: background ease-in-out .7s;
+    }
+
+    #content #r2-cats .r2-cat.selected::before {
+        background: hsl(60, 100%, 35%);
+    }
+
+    #content #r2-cats .r2-cat::after {
+        content: '';
+        position: absolute;
+        top: .7em;
+        left: .2em;
+        width: .5em;
+        height: .5em;
+        background: hsl(220, 50%, 50%);
+        border-radius: 2em;
+        transition: background ease-in-out .7s;
+    }
+
+    #content #r2-cats .r2-cat.selected::after {
+        background: hsl(60, 100%, 40%);
+    }
+
+    #content #r2-cats .r2-cat .useds {
+        position: absolute;
+        bottom: -.5em;
+        right: .5em;
+    }
+
+        #content #r2-cats .r2-cat .useds .used {
+            display: inline-block;
+            margin-left: .5em;
+            width: .7em;
+            height: .7em;
+            border-radius: .7em;
+            background: hsl(220, 50%, 70%);
+            transition: background ease-in-out .7s;
+        }
+
+    #content #r2-cats .r2-cat.selected .useds .used {
+        background: hsl(60, 100%, 70%);
+    }
+
+    #content #r2-cats .r2-cat .useds .used.yes {
+        background: hsla(220, 50%, 70%, .2);
+    }
+
+    #content #r2-cats .r2-cat.selected .useds .used.yes {
+        background: hsla(60, 100%, 70%, .2);
+    }

@@ -132,11 +132,9 @@ namespace QuizGameEngine
             while (true)
             {
                 Console.Clear();
-                if (Quiz.UndoLine != null)
-                    ConsoleUtil.WriteLine("← Undo: {0/Gray}".Color(ConsoleColor.Magenta).Fmt(Quiz.UndoLine));
-                if (Quiz.RedoLine != null)
-                    ConsoleUtil.WriteLine("→ Redo: {0/Gray}".Color(ConsoleColor.Green).Fmt(Quiz.RedoLine));
-                Console.WriteLine();
+                ConsoleUtil.WriteLine(Quiz.UndoLine == null ? null : "← Undo: {0/Gray}".Color(ConsoleColor.Magenta).Fmt(Quiz.UndoLine));
+                ConsoleUtil.WriteLine(Quiz.RedoLine == null ? null : "→ Redo: {0/Gray}".Color(ConsoleColor.Green).Fmt(Quiz.RedoLine));
+                ConsoleUtil.WriteLine(Quiz.CurrentState.GetType().Name.Color(ConsoleColor.DarkYellow), align: HorizontalTextAlignment.Right);
                 ConsoleUtil.WriteLine(Quiz.CurrentState.Describe);
                 Console.WriteLine();
 
@@ -212,9 +210,12 @@ namespace QuizGameEngine
                         Quiz.Transition(transitionResult.State, transitionUndoLine);
 
                     if (transitionResult.JsMethod != null)
+                    {
+                        var json = ClassifyJson.Serialize(transitionResult.JsParameters);
                         lock (Sockets)
                             foreach (var socket in Sockets)
-                                socket.SendLoggedMessage(new JsonDict { { "method", transitionResult.JsMethod }, { "params", transitionResult.JsParameters } });
+                                socket.SendLoggedMessage(new JsonDict { { "method", transitionResult.JsMethod }, { "params", json } });
+                    }
 
                     needSave = true;
                 }

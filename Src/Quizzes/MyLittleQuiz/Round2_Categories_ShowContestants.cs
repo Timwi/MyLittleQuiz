@@ -27,19 +27,20 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         {
             get
             {
-                yield return Transition.Simple(ConsoleKey.I, "Intro", () =>
-                {
-                    // TODO
-                });
-
                 if (NoScores)
+                {
+                    yield return Transition.Simple(ConsoleKey.I, "Intro", () =>
+                    {
+                        // TODO
+                    });
                     yield return Transition.Simple(ConsoleKey.S, "Show scores", () => new Round2_Categories_ShowContestants(Data));
+                }
                 else
                     yield return Transition.Simple(ConsoleKey.C, "Show categories", () => new Round2_Categories_ShowCategories(Data));
             }
         }
 
-        public override ConsoleColoredString Describe { get { return Data.DescribeContestants; } }
+        public override ConsoleColoredString Describe { get { return Data.Describe; } }
         public override string JsMethod { get { return "r2_showContestants"; } }
         public override object JsParameters
         {

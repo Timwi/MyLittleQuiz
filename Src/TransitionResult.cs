@@ -15,14 +15,14 @@ namespace QuizGameEngine
         public QuizStateBase State { get; private set; }
         public string UndoLine { get; private set; }
         public string JsMethod { get; private set; }
-        public JsonValue JsParameters { get; private set; }
+        public object JsParameters { get; private set; }
 
         public TransitionResult(QuizStateBase state, string undoLine = null, string jsMethod = null, object jsParams = null)
         {
             State = state;
             UndoLine = undoLine;
             JsMethod = jsMethod;
-            JsParameters = jsParams == null ? null : ClassifyJson.Serialize(jsParams);
+            JsParameters = jsParams;
         }
     }
 }

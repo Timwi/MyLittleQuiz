@@ -10,6 +10,33 @@ $(function ()
             $('<div id="background">').prependTo(content);
     }
 
+    function twoColumnLayout(id, divClassName, num, nameFnc, fnc)
+    {
+        var c = $('<div class="two-col">').attr('id', id).appendTo(content).addClassDelay('in', 100);
+        if (divClassName !== null)
+            c.addClass(divClassName);
+        var c1 = $('<div class="col col-1 static">').appendTo(c);
+        var c2 = $('<div class="col col-2 static">').appendTo(c);
+        var cs = [];
+        for (var i = 0; i < num; i++)
+        {
+            var elem = $('<div class="two-col-elem">').appendTo(i % 2 ? c2 : c1)
+                .append($('<div class="name">').append($('<span class="inner">').text(nameFnc(i))));
+            if (fnc !== null)
+                fnc(elem, i);
+            cs.push(elem);
+        }
+
+        findBestValue(100, function (fs) { c.css('font-size', fs + 'px'); return c1.outerHeight() < content.height() && c2.outerHeight() < content.height() ? -1 : 1; });
+
+        for (var i = 0; i < cs.length; i++)
+        {
+            var name = cs[i].find('.name .inner');
+            if (name.width() > cs[i].width())
+                cs[i].find('.name').css('transform', 'scale(' + (cs[i].width() / name.width()) + ', 1)');
+        }
+    }
+
     transitions = {
 
         //#region QUESTION/ANSWER (showQ, showA, showQA)
@@ -18,7 +45,7 @@ $(function ()
             $('#qa').remove();
             clearScreen();
 
-            var qa = $('<div id="qa" class="static away ' + p.round + '">').appendTo(content);
+            var qa = $('<div id="qa" class="static full-flow away ' + p.round + '">').appendTo(content);
 
             var q = p.question;
             qa.data('type', q[':type']);
@@ -94,7 +121,7 @@ $(function ()
         {
             $('#r1-contestants, .r1-contestant').remove();
             clearScreen();
-            var c = $('<div id="r1-contestants" class="away">').appendTo(content);
+            var c = $('<div id="r1-contestants" class="full-flow away">').appendTo(content);
             for (var i = 0; i < p.contestants.length; i++)
             {
                 if (p.contestants[i].NumCorrect > 1 || p.contestants[i].NumWrong > 1)
@@ -133,27 +160,52 @@ $(function ()
             $('#r2-contestants').remove();
             clearScreen();
 
-            var c = $('<div id="r2-contestants" class="static' + (p.noscores ? ' no-scores' : '') + '">')
-                .addClassDelay('in', 100 + i * 600)
-                .appendTo(content);
-            var cs = [];
-            for (var i = 0; i < p.contestants.length; i++)
-            {
-                cs.push($('<div class="r2-contestant">')
-                    .append($('<div class="name">').append($('<span class="inner">').text(p.contestants[i].Name)))
-                    .append($('<div class="score">').text(p.contestants[i].Score))
-                    .css('transition-delay', (p.noscores ? i * .3 : i * .1) + 's')
-                    .appendTo(c));
-            }
+            twoColumnLayout('r2-contestants', p.noscores ? 'no-scores away' : 'away', p.contestants.length,
+                function (i) { return p.contestants[i].Name; },
+                function (div, i)
+                {
+                    div.append($('<div class="score">').text(p.contestants[i].Score))
+                        .css('transition-delay', (p.noscores ? i * .3 : i * .1) + 's')
+                        .addClass('r2-contestant');
+                });
 
-            findBestValue(100, function (fs) { c.css('font-size', fs + 'px'); return c.outerHeight() < content.height() ? -1 : 1; });
-
-            for (var i = 0; i < cs.length; i++)
+            window.setTimeout(function ()
             {
-                var name = cs[i].find('.name .inner');
-                if (name.width() > cs[i].width())
-                    cs[i].find('.name').css('transform', 'scale(' + (cs[i].width() / name.width()) + ', 1)');
-            }
+                $('.r2-contestant').css('transition-delay', '');
+            }, 1500 + (p.noscores ? 300 : 100) * p.contestants.length);
+        },
+
+        r2_showCats: function (p)
+        {
+            $('#r2-cats').remove();
+            clearScreen();
+
+            twoColumnLayout('r2-cats', 'away', p.categories.length,
+                function (i) { return p.categories[i]; },
+                function (div, i)
+                {
+                    var used = $('<div class="useds">');
+                    var anyUnused = false;
+                    for (var j = 0; j < 5; j++)
+                    {
+                        used.append($('<div class="used ' + (p.used[i][j] ? 'yes' : 'no') + '">'));
+                        if (!p.used[i][j])
+                            anyUnused = true;
+                    }
+                    div.prepend($('<div class="decor">'))
+                        .append(used)
+                        .css('transition-delay', (i * .1) + 's')
+                        .addClass('r2-cat');
+                    if (!anyUnused)
+                        div.addClass('all-used');
+                    if (p.selected === i)
+                        div.addClassDelay('selected', 1500 + i * 100);
+                });
+        },
+
+        r2_selectCat: function (p)
+        {
+            $($('#r2-cats .r2-cat').removeClass('selected')[p.selected]).addClass('selected');
         },
         //#endregion
     };

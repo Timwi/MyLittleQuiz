@@ -20,6 +20,13 @@ namespace QuizGameEngine
             _executor = executor;
         }
 
+        private static TransitionResult resultFromState(QuizStateBase state, string name)
+        {
+            if (state == null)
+                return null;
+            return new TransitionResult(state, name, state.JsMethod, state.JsParameters);
+        }
+
         public static Transition Simple(ConsoleKey key, string name, Func<TransitionResult> executor)
         {
             return new Transition(key, name, () =>
@@ -33,7 +40,7 @@ namespace QuizGameEngine
 
         public static Transition Simple(ConsoleKey key, string name, Func<QuizStateBase> executor)
         {
-            return new Transition(key, name, () => new TransitionResult(executor(), name));
+            return new Transition(key, name, () => resultFromState(executor(), name));
         }
 
         public static Transition Simple(ConsoleKey key, string name, Action action)
@@ -106,7 +113,7 @@ namespace QuizGameEngine
 
         public static Transition Select(ConsoleKey key, string name, object[] selection, Func<int, QuizStateBase> executor)
         {
-            return Select(key, name, selection, index => new TransitionResult(executor(index), name));
+            return Select(key, name, selection, index => resultFromState(executor(index), name));
         }
 
         public static Transition Select(ConsoleKey key, string name, object[] selection, Action<int> executor)

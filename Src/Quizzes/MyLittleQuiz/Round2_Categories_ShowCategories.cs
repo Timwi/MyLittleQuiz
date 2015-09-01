@@ -23,9 +23,12 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         {
             get
             {
-                if (Data.SelectedCategory == null)
+                if (Data.NextCategoryToPresent != null)
+                    yield return Transition.Simple(ConsoleKey.P, "Present category " + Data.Categories[Data.NextCategoryToPresent.Value].Name, () =>
+                        new Round2_Categories_ShowCategories(Data.PresentCategory()));
+                else if (Data.SelectedCategory == null)
                     yield return Transition.Select(ConsoleKey.C, "Select a category", Data.QuizData.Round2Categories.Select(cat => cat.Name).ToArray<object>(),
-                        index => new Round2_Categories_ShowCategories(Data.SelectCategory(index)));
+                        index => new Round2_Categories_ShowCategories(Data.SelectCategory(index)).With("r2_selectCat", new { selected = index }));
                 else
                 {
                     var sel = Data.SelectedCategory.Value;
@@ -37,11 +40,11 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             }
         }
 
-        public override ConsoleColoredString Describe { get { return Data.DescribeContestants; } }
+        public override ConsoleColoredString Describe { get { return Data.Describe; } }
 
         public override string JsMethod
         {
-            get { return "r2_showCats"; }
+            get { return Data.NextCategoryToPresent == null ? "r2_showCats" : "r2_presentCat"; }
         }
 
         public override object JsParameters
@@ -51,7 +54,9 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                 return new
                 {
                     categories = Data.QuizData.Round2Categories.Select(cat => cat.Name).ToArray(),
-                    used = Data.QuestionsUsed
+                    used = Data.QuestionsUsed,
+                    selected = Data.SelectedCategory,
+                    index = Data.NextCategoryToPresent
                 };
             }
         }
