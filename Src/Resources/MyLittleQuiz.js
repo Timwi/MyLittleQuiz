@@ -21,9 +21,10 @@ $(function ()
         for (var i = 0; i < num; i++)
         {
             var elem = $('<div class="two-col-elem">').appendTo(i % 2 ? c2 : c1)
-                .append($('<div class="name">').append($('<span class="inner">').text(nameFnc(i))));
+                .append($('<div class="name">').append($('<span class="inner">').text(nameFnc(i))))
+                .data('index', i);
             if (fnc !== null)
-                fnc(elem, i);
+                fnc(elem);
             cs.push(elem);
         }
 
@@ -35,6 +36,29 @@ $(function ()
             if (name.width() > cs[i].width())
                 cs[i].find('.name').css('transform', 'scale(' + (cs[i].width() / name.width()) + ', 1)');
         }
+    }
+
+    function r2_setupCats(cats, used)
+    {
+        $('#r2-cats').remove();
+        clearScreen();
+        twoColumnLayout('r2-cats', 'away', cats.length,
+            function (i) { return cats[i]; },
+            function (div)
+            {
+                var i = div.data('index');
+                var useds = $('<div class="useds">');
+                var anyUnused = false;
+                for (var j = 0; j < 5; j++)
+                {
+                    useds.append($('<div class="used ' + (used[i][j] ? 'yes' : 'no') + '">'));
+                    if (!used[i][j])
+                        anyUnused = true;
+                }
+                div.addClass('r2-cat').prepend($('<div class="decor">')).append(useds);
+                if (!anyUnused)
+                    div.addClass('all-used');
+            });
     }
 
     transitions = {
@@ -119,7 +143,7 @@ $(function ()
         //#region ROUND 1 (Elimination)
         r1_showContestants: function (p)
         {
-            $('#r1-contestants, .r1-contestant').remove();
+            $('#r1-contestants').remove();
             clearScreen();
             var c = $('<div id="r1-contestants" class="full-flow away">').appendTo(content);
             for (var i = 0; i < p.contestants.length; i++)
@@ -162,50 +186,56 @@ $(function ()
 
             twoColumnLayout('r2-contestants', p.noscores ? 'no-scores away' : 'away', p.contestants.length,
                 function (i) { return p.contestants[i].Name; },
-                function (div, i)
+                function (div)
                 {
+                    var i = div.data('index');
                     div.append($('<div class="score">').text(p.contestants[i].Score))
                         .css('transition-delay', (p.noscores ? i * .3 : i * .1) + 's')
                         .addClass('r2-contestant');
                 });
-
-            window.setTimeout(function ()
-            {
-                $('.r2-contestant').css('transition-delay', '');
-            }, 1500 + (p.noscores ? 300 : 100) * p.contestants.length);
         },
 
         r2_showCats: function (p)
         {
-            $('#r2-cats').remove();
-            clearScreen();
+            if (!$('#r2-cats:not(.out)').length)
+                r2_setupCats(p.categories, p.used);
+            $('#r2-cats').removeClass('presenting');
 
-            twoColumnLayout('r2-cats', 'away', p.categories.length,
-                function (i) { return p.categories[i]; },
-                function (div, i)
+            if (!$('#r2-cats').hasClass('was-presenting'))
+            {
+                $('#r2-cats .r2-cat').each(function ()
                 {
-                    var used = $('<div class="useds">');
-                    var anyUnused = false;
-                    for (var j = 0; j < 5; j++)
-                    {
-                        used.append($('<div class="used ' + (p.used[i][j] ? 'yes' : 'no') + '">'));
-                        if (!p.used[i][j])
-                            anyUnused = true;
-                    }
-                    div.prepend($('<div class="decor">'))
-                        .append(used)
-                        .css('transition-delay', (i * .1) + 's')
-                        .addClass('r2-cat');
-                    if (!anyUnused)
-                        div.addClass('all-used');
+                    var div = $(this), i = div.data('index');
+                    div.css('transition-delay', (i * .1) + 's');
                     if (p.selected === i)
-                        div.addClassDelay('selected', 1500 + i * 100);
+                        window.setTimeout(function () { div.css('transition-delay', '').addClass('selected'); }, 1500 + i * 100);
                 });
+            }
+        },
+
+        r2_presentCat: function (p)
+        {
+            if (!$('#r2-cats:not(.out).presenting').length)
+            {
+                r2_setupCats(p.categories, p.used);
+                $('#r2-cats').addClass('presenting was-presenting');
+                $('#r2-cats .r2-cat')
+                    .each(function () { var i = $(this).data('index'); $(this).css('transform-origin', (100 * (i % 2)) + '% ' + (Math.floor(i / 2) / Math.ceil(p.categories.length / 2 - 1) * 80 + 10) + '%'); })
+                    .filter(function () { return $(this).data('index') > p.index; })
+                    .addClass('hidden');
+            }
+
+            $('#r2-cats .r2-cat.present').removeClass('present');
+            $('#r2-cats .r2-cat').filter(function () { return $(this).data('index') === p.index; }).removeClass('hidden').addClass('present');
         },
 
         r2_selectCat: function (p)
         {
-            $($('#r2-cats .r2-cat').removeClass('selected')[p.selected]).addClass('selected');
+            $('#r2-cats').removeClass('was-presenting');
+            $('#r2-cats .r2-cat')
+                .removeClass('selected')
+                .filter(function () { return $(this).data('index') === p.selected; })
+                .addClass('selected');
         },
         //#endregion
     };

@@ -25,7 +25,7 @@ namespace QuizGameEngine.Quizzes.SimpleQuiz
             get
             {
                 yield return Transition.String(ConsoleKey.N, "New contestant", "Contestant name: ", name => new StateSetup(Questions, Contestants.Concat(name).ToArray()), true);
-                yield return Transition.Select(ConsoleKey.D, "Delete contestant", Contestants, index => new StateSetup(Questions, Contestants.RemoveIndex(index)));
+                yield return Transition.SelectIndex(ConsoleKey.D, "Delete contestant", Contestants, index => new StateSetup(Questions, Contestants.RemoveIndex(index)));
                 yield return Transition.Simple(ConsoleKey.L, "List all questions (with answers!)", () =>
                 {
                     Console.WriteLine();

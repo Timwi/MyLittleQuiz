@@ -35,7 +35,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                 });
 
                 if (Contestants.Count > 0)
-                    yield return Transition.Select(ConsoleKey.D, "Delete contestant", Contestants.ToArray<object>(), index =>
+                    yield return Transition.SelectIndex(ConsoleKey.D, "Delete contestant", Contestants.ToArray(), index =>
                     {
                         DeletedContestants.Add(Contestants[index]);
                         Contestants.RemoveAt(index);
@@ -58,7 +58,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                     });
 
                 if (DeletedContestants.Count > 0)
-                    yield return Transition.Select(ConsoleKey.R, "Resurrect deleted contestant", DeletedContestants.ToArray<object>(), index =>
+                    yield return Transition.SelectIndex(ConsoleKey.R, "Resurrect deleted contestant", DeletedContestants.ToArray(), index =>
                     {
                         Contestants.Add(DeletedContestants[index]);
                         DeletedContestants.RemoveAt(index);

@@ -1,9 +1,9 @@
 ﻿using System;
-using RT.Util;
+using System.Collections.Generic;
+using System.Linq;
 using RT.Util.Consoles;
+using RT.Util.Dialogs;
 using RT.Util.ExtensionMethods;
-using RT.Util.Json;
-using RT.Util.Serialization;
 
 namespace QuizGameEngine
 {
@@ -57,9 +57,8 @@ namespace QuizGameEngine
         {
             return new Transition(key, name, () =>
             {
-                Console.Write(prompt);
-                var str = Console.ReadLine();
-                if (!allowEmpty && string.IsNullOrEmpty(str))
+                var str = InputBox.GetLine(prompt);
+                if (str == null || (!allowEmpty && string.IsNullOrEmpty(str)))
                     return null;
                 return executor(str);
             });
@@ -74,14 +73,12 @@ namespace QuizGameEngine
         {
             return new Transition(key, name, () =>
             {
-                Console.Write(prompt1);
-                var str1 = Console.ReadLine();
-                if (!allowEmpty && string.IsNullOrEmpty(str1))
+                var str1 = InputBox.GetLine(prompt1);
+                if (str1 == null || (!allowEmpty && string.IsNullOrEmpty(str1)))
                     return null;
 
-                Console.Write(prompt2);
-                var str2 = Console.ReadLine();
-                if (!allowEmpty && string.IsNullOrEmpty(str2))
+                var str2 = InputBox.GetLine(prompt2);
+                if (str2 == null || (!allowEmpty && string.IsNullOrEmpty(str2)))
                     return null;
 
                 return executor(str1, str2);
@@ -93,32 +90,52 @@ namespace QuizGameEngine
             return String(key, name, prompt1, prompt2, (s1, s2) => { executor(s1, s2); return null; }, allowEmpty);
         }
 
-        public static Transition Select(ConsoleKey key, string name, object[] selection, Func<int, TransitionResult> executor)
+        public static Transition Select<T>(ConsoleKey key, string name, IEnumerable<T> selection, Func<T, ConsoleColoredString> describe, Func<T, TransitionResult> executor)
         {
             return new Transition(key, name, () =>
             {
-                Console.WriteLine();
-                for (int i = 0; i < selection.Length; i++)
-                    ConsoleUtil.WriteLine("{0/Cyan}: {1/Green}".Color(null).Fmt(i + 1, selection[i]));
-                var line = Console.ReadLine();
-                int index;
-                if (string.IsNullOrWhiteSpace(line) || !int.TryParse(line, out index) || index < 1 || index > selection.Length)
+                var selected = Program.ConsoleSelect(selection, describe);
+                if (selected == null)
                     return null;
-                var ret = executor(index - 1);
-                if (ret != null && ret.UndoLine == null)
-                    ret = new TransitionResult(ret.State, name, ret.JsMethod, ret.JsParameters);
-                return ret;
+                var transition = executor(selected);
+                if (transition != null && transition.UndoLine == null)
+                    transition = new TransitionResult(transition.State, name, transition.JsMethod, transition.JsParameters);
+                return transition;
             });
         }
 
-        public static Transition Select(ConsoleKey key, string name, object[] selection, Func<int, QuizStateBase> executor)
+        public static Transition Select<T>(ConsoleKey key, string name, IEnumerable<T> selection, Func<T, ConsoleColoredString> describe, Func<T, QuizStateBase> executor)
         {
-            return Select(key, name, selection, index => resultFromState(executor(index), name));
+            return Select(key, name, selection, describe, obj => resultFromState(executor(obj), name));
         }
 
-        public static Transition Select(ConsoleKey key, string name, object[] selection, Action<int> executor)
+        public static Transition Select<T>(ConsoleKey key, string name, IEnumerable<T> selection, Func<T, ConsoleColoredString> describe, Action<T> executor)
         {
-            return Select(key, name, selection, index => { executor(index); return (TransitionResult) null; });
+            return Select(key, name, selection, describe, obj => { executor(obj); return (TransitionResult) null; });
+        }
+
+        public static Transition SelectIndex<T>(ConsoleKey key, string name, T[] selection, Func<int, TransitionResult> executor) where T : IToConsoleColoredString
+        {
+            return new Transition(key, name, () =>
+            {
+                var selected = Program.ConsoleSelect(Enumerable.Range(0, selection.Length).Cast<int?>(), index => "({0}) {1}".Color(ConsoleColor.White).Fmt(index.Value + 1, selection[index.Value].ToConsoleColoredString()));
+                if (selected == null)
+                    return null;
+                var transition = executor(selected.Value);
+                if (transition != null && transition.UndoLine == null)
+                    transition = new TransitionResult(transition.State, name, transition.JsMethod, transition.JsParameters);
+                return transition;
+            });
+        }
+
+        public static Transition SelectIndex<T>(ConsoleKey key, string name, T[] selection, Func<int, QuizStateBase> executor) where T : IToConsoleColoredString
+        {
+            return SelectIndex(key, name, selection, index => resultFromState(executor(index), name));
+        }
+
+        public static Transition SelectIndex<T>(ConsoleKey key, string name, T[] selection, Action<int> executor) where T : IToConsoleColoredString
+        {
+            return SelectIndex(key, name, selection, index => { executor(index); return (TransitionResult) null; });
         }
 
         public TransitionResult Execute()

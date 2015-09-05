@@ -14,6 +14,8 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         public abstract QuestionBase CurrentQuestion { get; }
         public abstract QuizStateBase GiveAnswer(object answer);
 
+        protected MyLittleQuizStateBase() { }   // for Classify
+
         protected IEnumerable<Transition> getAnswerTransitions()
         {
             return CurrentQuestion.CorrectAnswerInfos

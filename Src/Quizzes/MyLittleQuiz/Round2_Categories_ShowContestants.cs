@@ -11,15 +11,14 @@ using RT.Util.Text;
 
 namespace QuizGameEngine.Quizzes.MyLittleQuiz
 {
-    public sealed class Round2_Categories_ShowContestants : QuizStateBase
+    public sealed class Round2_Categories_ShowContestants : Round2_Categories_Base
     {
         public bool NoScores { get; private set; }
-        public Round2Data Data { get; private set; }
 
         public Round2_Categories_ShowContestants(Round2Data data, bool noScores = false)
+            : base(data)
         {
             NoScores = noScores;
-            Data = data;
         }
         private Round2_Categories_ShowContestants() { } // for Classify
 
@@ -37,6 +36,8 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                 }
                 else
                     yield return Transition.Simple(ConsoleKey.C, "Show categories", () => new Round2_Categories_ShowCategories(Data));
+
+                yield return listContestantsTransition;
             }
         }
 

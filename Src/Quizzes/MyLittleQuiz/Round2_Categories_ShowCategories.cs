@@ -8,15 +8,9 @@ using RT.Util;
 
 namespace QuizGameEngine.Quizzes.MyLittleQuiz
 {
-    class Round2_Categories_ShowCategories : QuizStateBase
+    class Round2_Categories_ShowCategories : Round2_Categories_Base
     {
-        private Round2Data Data;
-
-        public Round2_Categories_ShowCategories(Round2Data data)
-        {
-            Data = data;
-        }
-
+        public Round2_Categories_ShowCategories(Round2Data data) : base(data) { }
         private Round2_Categories_ShowCategories() { }  // for Classify
 
         public override IEnumerable<Transition> Transitions
@@ -24,19 +18,31 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             get
             {
                 if (Data.NextCategoryToPresent != null)
-                    yield return Transition.Simple(ConsoleKey.P, "Present category " + Data.Categories[Data.NextCategoryToPresent.Value].Name, () =>
-                        new Round2_Categories_ShowCategories(Data.PresentCategory()));
+                {
+                    var newData = Data.PresentCategory();
+                    if (newData.NextCategoryToPresent != null)
+                        yield return Transition.Simple(ConsoleKey.P, "Present category " + Data.Categories[newData.NextCategoryToPresent.Value].Name, () => new Round2_Categories_ShowCategories(newData));
+                    else
+                        yield return Transition.Simple(ConsoleKey.P, "Show question difficulties", () => new Round2_Categories_ShowCategories(newData));
+                }
                 else if (Data.SelectedCategory == null)
-                    yield return Transition.Select(ConsoleKey.C, "Select a category", Data.QuizData.Round2Categories.Select(cat => cat.Name).ToArray<object>(),
+                {
+                    yield return Transition.Simple(ConsoleKey.S, "Show scores", () => new Round2_Categories_ShowContestants(Data));
+                    yield return Transition.SelectIndex(ConsoleKey.C, "Select a category", Data.QuizData.Round2Categories,
                         index => new Round2_Categories_ShowCategories(Data.SelectCategory(index)).With("r2_selectCat", new { selected = index }));
+                    if (Data.Contestants[Data.CurrentContestant].Passes > 0)
+                        yield return Transition.Simple(ConsoleKey.P, "Pass", () => new Round2_Categories_ShowCategories(Data.Pass()).NoTransition());
+                }
                 else
                 {
                     var sel = Data.SelectedCategory.Value;
-                    var difficulties = new[] { "Very easy", "Easy", "Medium", "Hard", "Very hard" };
                     yield return Transition.Select(ConsoleKey.Q, "Select a question",
-                        Data.QuestionsUsed[sel].Select((taken, index) => difficulties[index] + (taken ? " (taken)" : "")).ToArray<object>(),
-                        index => new Round2_Categories_Q(Data.SelectQuestion(index)));
+                        new[] { "Very easy", "Easy", "Medium", "Hard", "Very hard" }
+                            .Select((df, ix) => new { Index = ix, Difficulty = df, Taken = Data.QuestionsUsed[sel][ix] }),
+                        qs => qs.Difficulty.Color(qs.Taken ? ConsoleColor.DarkYellow : ConsoleColor.Yellow) + (qs.Taken ? " (taken)".Color(ConsoleColor.DarkRed) : null),
+                        qs => new Round2_Categories_Q(Data.SelectQuestion(qs.Index)));
                 }
+                yield return listContestantsTransition;
             }
         }
 

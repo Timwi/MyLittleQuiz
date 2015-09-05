@@ -5,11 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using RT.Util;
+using RT.Util.Consoles;
 using RT.Util.ExtensionMethods;
 
 namespace QuizGameEngine.Quizzes.MyLittleQuiz
 {
-    public sealed class Contestant
+    public sealed class Contestant : IToConsoleColoredString
     {
         public string Name { get; private set; }
         public string Roll { get; private set; }
@@ -25,6 +26,11 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         public override string ToString()
         {
             return "{0}, Roll={1}".Fmt(Name, Roll);
+        }
+
+        public ConsoleColoredString ToConsoleColoredString()
+        {
+            return "{0/Yellow}{2/DarkYellow} Roll={1/Cyan}".Color(ConsoleColor.DarkCyan).Fmt(Name, Roll, ",");
         }
     }
 }

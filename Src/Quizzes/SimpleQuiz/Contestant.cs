@@ -1,8 +1,10 @@
-﻿using RT.Util.ExtensionMethods;
+﻿using System;
+using RT.Util.Consoles;
+using RT.Util.ExtensionMethods;
 
 namespace QuizGameEngine.Quizzes.SimpleQuiz
 {
-    public sealed class Contestant
+    public sealed class Contestant : IToConsoleColoredString
     {
         public string Name { get; private set; }
         public int Score { get; private set; }
@@ -17,5 +19,10 @@ namespace QuizGameEngine.Quizzes.SimpleQuiz
 
         public override string ToString() { return "{0} ({1})".Fmt(Name, Score); }
         public Contestant IncScore(int by = 1) { return new Contestant(Name, Score + by); }
+
+        public ConsoleColoredString ToConsoleColoredString()
+        {
+            return "{0/Yellow} ({1/Cyan})".Color(null).Fmt(Name, Score);
+        }
     }
 }

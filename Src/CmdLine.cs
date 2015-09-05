@@ -14,6 +14,9 @@ namespace QuizGameEngine
         [Option("-r"), DocumentationRhoML("Specifies the path containing the resource files. Without this option, the resources embedded in the executable are used.")]
         public string ResourcePath = null;
 
+        [Option("-l"), DocumentationRhoML("Specifies a path and filename to which to write logging messages. Without this option, no logging is performed.")]
+        public string LogFile = null;
+
         [IsMandatory, IsPositional]
         public QuizCmd QuizCmd = null;
 

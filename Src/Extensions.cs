@@ -82,6 +82,11 @@ namespace QuizGameEngine
             return new TransitionResult(state, null, jsMethod, jsParams);
         }
 
+        public static TransitionResult NoTransition(this QuizStateBase state)
+        {
+            return new TransitionResult(state, null, null, null);
+        }
+
         public static IEnumerable<T> Repeat<T>(this T obj, int times)
         {
             return Enumerable.Repeat(obj, times);

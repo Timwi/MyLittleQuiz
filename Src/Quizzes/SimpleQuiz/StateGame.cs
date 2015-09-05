@@ -25,7 +25,7 @@ namespace QuizGameEngine.Quizzes.SimpleQuiz
         {
             get
             {
-                yield return Transition.Select(ConsoleKey.S, "Select contestant", Contestants, i => new StateGame(Questions, Contestants, i).With("select", new { index = i }));
+                yield return Transition.SelectIndex(ConsoleKey.S, "Select contestant", Contestants, i => new StateGame(Questions, Contestants, i).With("select", new { index = i }));
 
                 if (SelectedContestant != null)
                 {

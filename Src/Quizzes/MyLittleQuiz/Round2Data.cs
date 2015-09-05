@@ -38,7 +38,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             SelectedCategory = null;
             SelectedQuestion = null;
             CurrentContestant = 0;
-            NextCategoryToPresent = 0;
+            NextCategoryToPresent = -1;
         }
 
         private Round2Data() { }    // for Classify
@@ -46,6 +46,15 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         public Round2Data SelectCategory(int cat) { return this.ApplyToClone(r2d => { r2d.SelectedCategory = cat; }); }
         public Round2Data SelectQuestion(int index) { return this.ApplyToClone(r2d => { r2d.SelectedQuestion = index; }); }
         public Round2Data GiveAnswer(object answer) { return this.ApplyToClone(r2d => { r2d.AnswerObject = answer; }); }
+
+        public Round2Data Pass()
+        {
+            return this.ApplyToClone(r2d =>
+            {
+                r2d.Contestants = Contestants.ReplaceIndex(CurrentContestant, c => c.DecPasses());
+                r2d.CurrentContestant = (CurrentContestant + 1) % Contestants.Length;
+            });
+        }
 
         public Round2Data DismissQuestion()
         {
@@ -75,28 +84,46 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         {
             get
             {
+                var totalRemainingPoints = QuestionsUsed.Sum(cat => cat.Select((taken, i) => taken ? 0 : i + 1).Sum());
+                var contestantsSorted = Contestants.OrderByDescending(c => c.Score).ToArray();
+
                 var tt = new TextTable { ColumnSpacing = 2 };
                 var row = 0;
 
-                tt.SetCell(1, row, "CONTESTANTS".Color(ConsoleColor.White), alignment: HorizontalTextAlignment.Center, background: ConsoleColor.DarkGreen, colSpan: 4);
-                tt.SetCell(7, row, "CATEGORIES".Color(ConsoleColor.White), alignment: HorizontalTextAlignment.Center, background: ConsoleColor.DarkGreen, colSpan: 7);
+                const int colContSel = 0;
+                const int colContName = 1;
+                const int colContScore = 2;
+                const int colContRank = 3;
+                const int colContPasses = 4;
+                const int numColsCont = 4;
+
+                const int colCatSel = 6;
+                const int colCatName = 7;
+                const int colCatQs = 8;
+
+                var qs = Ut.NewArray(
+                    Tuple.Create("Very Easy", "VE"),
+                    Tuple.Create("Easy", "Ea"),
+                    Tuple.Create("Medium", "Me"),
+                    Tuple.Create("Hard", "Ha"),
+                    Tuple.Create("Very Hard", "VH"));
+
+                var numColsCat = 1 + qs.Length;
+
+                tt.SetCell(colContName, row, "CONTESTANTS".Color(ConsoleColor.White), alignment: HorizontalTextAlignment.Center, background: ConsoleColor.DarkGreen, colSpan: numColsCont);
+                tt.SetCell(colCatName, row, "CATEGORIES".Color(ConsoleColor.White), alignment: HorizontalTextAlignment.Center, background: ConsoleColor.DarkGreen, colSpan: numColsCat);
 
                 row++;
 
-                tt.SetCell(1, row, "Index".Color(ConsoleColor.White), alignment: HorizontalTextAlignment.Right);
-                tt.SetCell(2, row, "Contestant".Color(ConsoleColor.White));
-                tt.SetCell(3, row, "Score".Color(ConsoleColor.White), alignment: HorizontalTextAlignment.Right);
-                tt.SetCell(4, row, "Rank".Color(ConsoleColor.White), alignment: HorizontalTextAlignment.Right);
+                tt.SetCell(colContName, row, "Contestant".Color(ConsoleColor.White));
+                tt.SetCell(colContScore, row, "Score".Color(ConsoleColor.White), alignment: HorizontalTextAlignment.Right);
+                tt.SetCell(colContRank, row, "Rk".Color(ConsoleColor.White), alignment: HorizontalTextAlignment.Right);
+                tt.SetCell(colContPasses, row, "Ps".Color(ConsoleColor.White), alignment: HorizontalTextAlignment.Right);
 
-                tt.SetCell(5, row, "•");
-
-                tt.SetCell(7, row, "Index".Color(ConsoleColor.White), alignment: HorizontalTextAlignment.Right);
-                tt.SetCell(8, row, "Category".Color(ConsoleColor.White));
-                tt.SetCell(9, row, "VE".Color(ConsoleColor.White));
-                tt.SetCell(10, row, "Ea".Color(ConsoleColor.White));
-                tt.SetCell(11, row, "Me".Color(ConsoleColor.White));
-                tt.SetCell(12, row, "Ha".Color(ConsoleColor.White));
-                tt.SetCell(13, row, "VH".Color(ConsoleColor.White));
+                tt.SetCell(colCatName, row, "Category".Color(ConsoleColor.White));
+                for (int i = 0; i < qs.Length; i++)
+                    tt.SetCell(colCatQs + i, row, qs[i].Item2.Color(ConsoleColor.White));
+                tt.SetCell(colCatQs + qs.Length, row, " ");
 
                 row++;
 
@@ -105,15 +132,21 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                     ConsoleColor? bg = null;
                     if (i < Contestants.Length)
                     {
+                        ConsoleColoredString str = "";
+                        if (Contestants[i].Score - totalRemainingPoints > contestantsSorted[6].Score)
+                            str += "✓".Color(ConsoleColor.Green);
+                        else if (Contestants[i].Score + totalRemainingPoints < contestantsSorted[5].Score)
+                            str += "✗".Color(ConsoleColor.Red);
                         if (i == CurrentContestant)
                         {
-                            tt.SetCell(0, row, "▶");
+                            str += "▶".Color(ConsoleColor.White);
                             bg = ConsoleColor.DarkBlue;
                         }
-                        tt.SetCell(1, row, (i + 1).ToString().Color(ConsoleColor.Green), alignment: HorizontalTextAlignment.Right, background: bg);
-                        tt.SetCell(2, row, Contestants[i].Name.Color(ConsoleColor.Yellow), background: bg);
-                        tt.SetCell(3, row, Contestants[i].Score.ToString().Color(ConsoleColor.Cyan), alignment: HorizontalTextAlignment.Right, background: bg);
-                        tt.SetCell(4, row, (Contestants.Count(c => c.Score > Contestants[i].Score) + 1).ToString().Color(ConsoleColor.Magenta), alignment: HorizontalTextAlignment.Right, background: bg);
+                        tt.SetCell(colContSel, row, str);
+                        tt.SetCell(colContName, row, Contestants[i].Name.Color(ConsoleColor.Yellow), background: bg);
+                        tt.SetCell(colContScore, row, Contestants[i].Score.ToString().Color(ConsoleColor.Cyan), alignment: HorizontalTextAlignment.Right, background: bg);
+                        tt.SetCell(colContRank, row, (Contestants.Count(c => c.Score > Contestants[i].Score) + colContName).ToString().Color(ConsoleColor.Magenta), alignment: HorizontalTextAlignment.Right, background: bg);
+                        tt.SetCell(colContPasses, row, Contestants[i].Passes.ToString().Color(ConsoleColor.Red), alignment: HorizontalTextAlignment.Right, background: bg);
                     }
 
                     if (i < Categories.Length)
@@ -121,19 +154,21 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                         bg = null;
                         if (i == SelectedCategory)
                         {
-                            tt.SetCell(6, row, "▶");
+                            tt.SetCell(colCatSel, row, "▶");
                             bg = ConsoleColor.DarkBlue;
                         }
                         var dark = NextCategoryToPresent != null && NextCategoryToPresent.Value <= i;
-                        tt.SetCell(7, row, (i + 1).ToString().Color(dark ? ConsoleColor.DarkGreen : ConsoleColor.Green), alignment: HorizontalTextAlignment.Right, background: bg);
-                        tt.SetCell(8, row, Categories[i].Name.Color(dark ? ConsoleColor.DarkYellow : ConsoleColor.Yellow), background: bg);
-                        for (int j = 0; j < 5; j++)
-                            tt.SetCell(9 + j, row, j >= QuestionsUsed[i].Length ? "?".Color(dark ? ConsoleColor.DarkRed : ConsoleColor.Red) : QuestionsUsed[i][j] ? "" : "█".Color(dark ? ConsoleColor.DarkCyan : ConsoleColor.Cyan), background: bg);
+                        tt.SetCell(colCatName, row, Categories[i].Name.Color(dark ? ConsoleColor.DarkYellow : ConsoleColor.Yellow), background: bg);
+                        for (int j = 0; j < qs.Length; j++)
+                            tt.SetCell(colCatQs + j, row, j >= QuestionsUsed[i].Length ? "?".Color(dark ? ConsoleColor.DarkRed : ConsoleColor.Red) : QuestionsUsed[i][j] ? "" : "█".Color(dark ? ConsoleColor.DarkCyan : ConsoleColor.Cyan), background: bg);
                     }
 
                     row++;
                 }
-                return tt.ToColoredString();
+                return "{0}\n\nTotal remaining points: {1/Magenta}".Color(ConsoleColor.White).Fmt(
+                    tt.ToColoredString(),
+                    totalRemainingPoints
+                );
             }
         }
 

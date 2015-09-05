@@ -57,6 +57,7 @@
     <Compile Include="QuizWebSocket.cs" />
     <Compile Include="Quizzes\MyLittleQuiz\Cmd.cs" />
     <Compile Include="Quizzes\MyLittleQuiz\Contestant.cs" />
+    <Compile Include="Quizzes\MyLittleQuiz\Round2_Categories_Base.cs" />
     <Compile Include="Quizzes\MyLittleQuiz\MyLittleQuizStateBase.cs" />
     <Compile Include="Quizzes\MyLittleQuiz\QuizData.cs" />
     <Compile Include="Quizzes\MyLittleQuiz\Round1Contestant.cs" />
@@ -67,7 +68,6 @@
     <Compile Include="Quizzes\MyLittleQuiz\Round1_Elimination_Q.cs" />
     <Compile Include="Quizzes\MyLittleQuiz\Round2Category.cs" />
     <Compile Include="Quizzes\MyLittleQuiz\Round2Data.cs" />
-    <Compile Include="Quizzes\MyLittleQuiz\Round2_Categories.cs" />
     <Compile Include="Quizzes\MyLittleQuiz\Round2_Categories_Q.cs" />
     <Compile Include="Quizzes\MyLittleQuiz\Round2_Categories_ShowCategories.cs" />
     <Compile Include="Quizzes\MyLittleQuiz\Round2_Categories_ShowContestants.cs" />

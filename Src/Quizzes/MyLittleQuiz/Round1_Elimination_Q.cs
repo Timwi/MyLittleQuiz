@@ -15,7 +15,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         private Round1_Elimination_Q() { }    // for Classify
 
         public override QuestionBase CurrentQuestion { get { return Data.Questions[Data.CurrentDifficulty.Value][Data.QuestionIndex[Data.CurrentDifficulty.Value]]; } }
-        public override QuizStateBase GiveAnswer(object answer) { return new Round1_Elimination(Data.GiveAnswer(answer)); }
+        public override QuizStateBase GiveAnswer(object answer) { return new Round1_Elimination_Q(Data.GiveAnswer(answer)); }
 
         public override ConsoleColoredString Describe
         {

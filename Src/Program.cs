@@ -6,7 +6,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading;
 using System.Windows.Forms;
 using RT.Servers;
 using RT.TagSoup;
@@ -26,23 +25,22 @@ namespace QuizGameEngine
         public static QuizBase Quiz;
         public static HttpServer Server;
         public static HashSet<QuizWebSocket> Sockets = new HashSet<QuizWebSocket>();
-        private static TextBox _logBox;
         private static string _dataFile;
-
-        public static void Invoke(Action action)
-        {
-            _logBox.BeginInvoke(action);
-        }
+        private static string _logFile;
 
         public static void LogMessage(string msg)
         {
-            Invoke(() => { _logBox.AppendText(msg + Environment.NewLine + Environment.NewLine); });
+            if (_logFile != null)
+                lock (_logFile)
+                    File.AppendAllText(_logFile, Environment.NewLine + Environment.NewLine + msg);
         }
 
         public static ConsoleKeyInfo ReadKey()
         {
             ConsoleUtil.Write("<press a key>".Color(ConsoleColor.DarkYellow));
-            return Console.ReadKey(true);
+            var ret = Console.ReadKey(true);
+            Console.WriteLine();
+            return ret;
         }
 
         [STAThread]
@@ -79,28 +77,7 @@ namespace QuizGameEngine
 
             _dataFile = ((QuizCmdLoad) cmd.QuizCmd).File;
             Quiz = ClassifyJson.DeserializeFile<QuizBase>(_dataFile);
-
-            var thread = new Thread(() =>
-            {
-                using (var logForm = new Form { Text = "Log", FormBorderStyle = FormBorderStyle.Sizable, ControlBox = false, MinimizeBox = false, WindowState = FormWindowState.Maximized })
-                {
-                    _logBox = new TextBox { Dock = DockStyle.Fill, Multiline = true };
-                    logForm.FormClosing += (_, e) =>
-                    {
-                        if (e.CloseReason == CloseReason.UserClosing)
-                            e.Cancel = true;
-                    };
-
-                    var _clearBtn = new Button { Text = "&Clear", Dock = DockStyle.Bottom };
-                    _clearBtn.Click += delegate { _logBox.Text = ""; };
-
-                    logForm.Controls.Add(_logBox);
-                    logForm.Controls.Add(_clearBtn);
-                    logForm.Show();
-                    Application.Run(logForm);
-                }
-            });
-            thread.Start();
+            _logFile = cmd.LogFile;
 
             var getResourceHandler = Ut.Lambda((Func<byte[], HttpResponse> function, byte[] resource, string filename) =>
             {
@@ -165,7 +142,7 @@ namespace QuizGameEngine
                     case ConsoleKey.Escape:
                         if (keyInfo.Modifiers != 0)
                             goto default;
-                        goto exit;
+                        return 0;
 
                     case ConsoleKey.Backspace:
                         if (
@@ -220,10 +197,6 @@ namespace QuizGameEngine
                     needSave = true;
                 }
             }
-
-            exit:
-            Invoke(() => { Application.Exit(); });
-            return 0;
         }
 
         private static void save()
@@ -720,30 +693,63 @@ namespace QuizGameEngine
 
             if (type.IsAbstract)
             {
-                var availableTypes = type.Assembly.GetTypes().Where(t => !t.IsAbstract && type.IsAssignableFrom(t)).ToArray();
                 Console.Clear();
-                for (int i = 0; i < availableTypes.Length; i++)
-                    ConsoleUtil.WriteLine("{0/White} = {1/Green}".Color(null).Fmt(i + 1, availableTypes[i].Name));
-                int selection;
-                while (true)
-                {
-                    var line = Console.ReadLine();
-                    if (string.IsNullOrWhiteSpace(line))
-                        return null;
-                    try
-                    {
-                        selection = int.Parse(line);
-                        break;
-                    }
-                    catch (Exception e)
-                    {
-                        ConsoleUtil.WriteLine(e.Message.Color(ConsoleColor.Red));
-                    }
-                }
-                type = availableTypes[selection - 1];
+                var availableTypes = type.Assembly.GetTypes().Where(t => !t.IsAbstract && type.IsAssignableFrom(t)).ToArray();
+                type = ConsoleSelect(availableTypes, t => t.Name);
+                if (type == null)
+                    return null;
             }
 
             return Activator.CreateInstance(type, true);
+        }
+
+        public static object GetConsoleSelection(Dictionary<ConsoleKey, Tuple<ConsoleColoredString, object>> selections)
+        {
+            Console.WriteLine();
+            var keysUsed = new HashSet<ConsoleKey>();
+
+            foreach (var kvp in selections)
+            {
+                if (!keysUsed.Add(kvp.Key))
+                    ConsoleUtil.WriteLine("Key {0/Magenta} used more than once.".Color(ConsoleColor.Red).Fmt(kvp.Key));
+                ConsoleUtil.WriteLine("{0/White}: {1}".Color(null).Fmt(kvp.Key, kvp.Value.Item1));
+            }
+
+            Tuple<ConsoleColoredString, object> ret;
+            return selections.TryGetValue(Program.ReadKey().Key, out ret) ? ret.Item2 : null;
+        }
+
+        public static object GetConsoleSelectionFull(Dictionary<ConsoleKey, Tuple<ConsoleColoredString, object>> selections)
+        {
+            object cur = selections;
+            while (true)
+            {
+                var curDic = cur as Dictionary<ConsoleKey, Tuple<ConsoleColoredString, object>>;
+                if (curDic == null)
+                    return cur;
+                cur = GetConsoleSelection(curDic);
+            }
+        }
+
+        public static T ConsoleSelect<T>(this IEnumerable<T> objs, Func<T, ConsoleColoredString> describe)
+        {
+            var dic = new Dictionary<ConsoleKey, Tuple<ConsoleColoredString, object>>();
+            var curDic = dic;
+            var curKey = ConsoleKey.A;
+            foreach (var obj in objs)
+            {
+                if (curKey == ConsoleKey.Z)
+                {
+                    var newDic = new Dictionary<ConsoleKey, Tuple<ConsoleColoredString, object>>();
+                    curDic[curKey] = new Tuple<ConsoleColoredString, object>("more...".Color(ConsoleColor.Magenta), newDic);
+                    curDic = newDic;
+                    curKey = ConsoleKey.A;
+                }
+
+                curDic[curKey] = new Tuple<ConsoleColoredString, object>(describe(obj), obj);
+                curKey++;
+            }
+            return (T) GetConsoleSelectionFull(dic);
         }
     }
 }

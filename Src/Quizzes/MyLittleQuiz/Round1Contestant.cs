@@ -1,10 +1,11 @@
 ﻿using System;
+using RT.Util.Consoles;
 using RT.Util.ExtensionMethods;
 using RT.Util.Serialization;
 
 namespace QuizGameEngine.Quizzes.MyLittleQuiz
 {
-    public sealed class Round1Contestant : ICloneable
+    public sealed class Round1Contestant : ICloneable, IToConsoleColoredString
     {
         public string Name { get; private set; }
         public string Roll { get; private set; }
@@ -33,14 +34,19 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
 
         private Round1Contestant() { }    // for Classify
 
+        public Round1Contestant IncScore(bool correct)
+        {
+            return correct ? this.ApplyToClone(c => { c.NumCorrect++; }) : this.ApplyToClone(c => { c.NumWrong++; });
+        }
+
         public override string ToString()
         {
             return "{0}, Roll={1}".Fmt(Name, Roll);
         }
 
-        public Round1Contestant IncScore(bool correct)
+        public ConsoleColoredString ToConsoleColoredString()
         {
-            return correct ? this.ApplyToClone(c => { c.NumCorrect++; }) : this.ApplyToClone(c => { c.NumWrong++; });
+            return "{0/Yellow}, Roll={1/Cyan}".Color(null).Fmt(Name, Roll);
         }
     }
 }

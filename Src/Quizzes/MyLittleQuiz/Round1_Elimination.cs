@@ -20,7 +20,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         {
             get
             {
-                yield return Transition.Select(ConsoleKey.S, "Select contestant", Data.Contestants, index => new Round1_Elimination(Data.SelectContestant(index)));
+                yield return Transition.SelectIndex(ConsoleKey.S, "Select contestant", Data.Contestants, index => new Round1_Elimination(Data.SelectContestant(index)));
 
                 yield return Transition.Simple(ConsoleKey.R, "Select contestant at random", () =>
                 {
