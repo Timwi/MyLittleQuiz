@@ -14,30 +14,25 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
     {
         public string Name { get; private set; }
         public int Score { get; private set; }
-        public int Passes { get; private set; }
 
         public Round2Contestant(string name, int score)
         {
             Name = name;
             Score = score;
-            Passes = 3;
         }
 
-        private Round2Contestant() { Passes = 3; }  // for Classify
+        private Round2Contestant() { }  // for Classify
 
         public Round2Contestant IncScore(int amount)
         {
             return this.ApplyToClone(c => { c.Score = Score + amount; });
         }
 
-        public Round2Contestant DecPasses()
-        {
-            return this.ApplyToClone(c => { c.Passes = Passes - 1; });
-        }
-
         public ConsoleColoredString ToConsoleColoredString()
         {
-            return "{0/Yellow}{1/DarkYellow} Score={2/Cyan}, {3/DarkRed}{4/Red}".Color(ConsoleColor.DarkCyan).Fmt(Name, ",", Score, "Passes=", Passes);
+            return
+                "{0/Yellow}, ".Color(ConsoleColor.DarkYellow).Fmt(Name) +
+                "Score={1/Cyan}".Color(ConsoleColor.DarkCyan).Fmt(Score);
         }
 
         public object Clone()

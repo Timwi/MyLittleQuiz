@@ -38,6 +38,9 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                     yield return Transition.Simple(ConsoleKey.C, "Show categories", () => new Round2_Categories_ShowCategories(Data));
 
                 yield return listContestantsTransition;
+
+                yield return Transition.Simple(ConsoleKey.N, "Go to next round", () =>
+                    new Round3_SetPoker_MakeTeams(Data.QuizData, Data.Contestants.OrderByDescending(c => c.Score).Take(Data.NumContestantsNeeded).Select(c => c.Name).ToArray()));
             }
         }
 

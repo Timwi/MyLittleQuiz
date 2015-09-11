@@ -24,6 +24,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         public object AnswerObject { get; private set; }
 
         public Round2Category[] Categories { get { return QuizData.Round2Categories; } }
+        public int NumContestantsNeeded { get { return QuizData.Round2NumContestantsNeeded; } }
 
         public Round2Data(QuizData quizData, Round2Contestant[] contestants)
         {
@@ -51,7 +52,6 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         {
             return this.ApplyToClone(r2d =>
             {
-                r2d.Contestants = Contestants.ReplaceIndex(CurrentContestant, c => c.DecPasses());
                 r2d.CurrentContestant = (CurrentContestant + 1) % Contestants.Length;
             });
         }
@@ -91,15 +91,14 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                 var row = 0;
 
                 const int colContSel = 0;
-                const int colContName = 1;
-                const int colContScore = 2;
-                const int colContRank = 3;
-                const int colContPasses = 4;
-                const int numColsCont = 4;
+                const int colContName = colContSel + 1;
+                const int colContScore = colContName + 1;
+                const int colContRank = colContScore + 1;
+                const int numColsCont = colContRank - colContSel;
 
-                const int colCatSel = 6;
-                const int colCatName = 7;
-                const int colCatQs = 8;
+                const int colCatSel = colContRank + 2;
+                const int colCatName = colCatSel + 1;
+                const int colCatQs = colCatName + 1;
 
                 var qs = Ut.NewArray(
                     Tuple.Create("Very Easy", "VE"),
@@ -118,7 +117,6 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                 tt.SetCell(colContName, row, "Contestant".Color(ConsoleColor.White));
                 tt.SetCell(colContScore, row, "Score".Color(ConsoleColor.White), alignment: HorizontalTextAlignment.Right);
                 tt.SetCell(colContRank, row, "Rk".Color(ConsoleColor.White), alignment: HorizontalTextAlignment.Right);
-                tt.SetCell(colContPasses, row, "Ps".Color(ConsoleColor.White), alignment: HorizontalTextAlignment.Right);
 
                 tt.SetCell(colCatName, row, "Category".Color(ConsoleColor.White));
                 for (int i = 0; i < qs.Length; i++)
@@ -127,6 +125,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
 
                 row++;
 
+                var numThrough = 0;
                 for (int i = 0; i < Math.Max(Contestants.Length, Categories.Length); i++)
                 {
                     ConsoleColor? bg = null;
@@ -145,8 +144,10 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                         tt.SetCell(colContSel, row, str);
                         tt.SetCell(colContName, row, Contestants[i].Name.Color(ConsoleColor.Yellow), background: bg);
                         tt.SetCell(colContScore, row, Contestants[i].Score.ToString().Color(ConsoleColor.Cyan), alignment: HorizontalTextAlignment.Right, background: bg);
-                        tt.SetCell(colContRank, row, (Contestants.Count(c => c.Score > Contestants[i].Score) + colContName).ToString().Color(ConsoleColor.Magenta), alignment: HorizontalTextAlignment.Right, background: bg);
-                        tt.SetCell(colContPasses, row, Contestants[i].Passes.ToString().Color(ConsoleColor.Red), alignment: HorizontalTextAlignment.Right, background: bg);
+                        var rank = Contestants.Count(c => c.Score > Contestants[i].Score) + 1;
+                        if (rank <= NumContestantsNeeded)
+                            numThrough++;
+                        tt.SetCell(colContRank, row, rank.ToString().Color(rank <= NumContestantsNeeded ? ConsoleColor.Magenta : ConsoleColor.DarkMagenta), alignment: HorizontalTextAlignment.Right, background: bg);
                     }
 
                     if (i < Categories.Length)
@@ -165,6 +166,9 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
 
                     row++;
                 }
+                tt.SetCell(colContRank, row, "{0}/{1}".Color(numThrough == NumContestantsNeeded ? ConsoleColor.White : ConsoleColor.DarkGray).Fmt(numThrough, NumContestantsNeeded), alignment: HorizontalTextAlignment.Right);
+                row++;
+
                 return "{0}\n\nTotal remaining points: {1/Magenta}".Color(ConsoleColor.White).Fmt(
                     tt.ToColoredString(),
                     totalRemainingPoints
