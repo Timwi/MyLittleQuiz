@@ -1,37 +1,46 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using RT.Util.Consoles;
+using RT.Util.Dialogs;
+using RT.Util.ExtensionMethods;
+using RT.Util.Serialization;
 
 namespace QuizGameEngine.Quizzes.MyLittleQuiz
 {
-    public sealed class Round3_SetPoker_Play : QuizStateBase
+    public class Round3_SetPoker_Play : Round3_SetPoker_PlayBase
     {
-        public Round3Data Data { get; private set; }
+        public int Bid { get; private set; }
 
-        public Round3_SetPoker_Play(Round3Data data)
+        public Round3_SetPoker_Play(Round3Data data, int bid, string[] answersGiven = null, bool[] answersCorrect = null)
+            : base(data, answersGiven, answersCorrect)
         {
-            Data = data;
+            Bid = bid;
         }
 
-        public override IEnumerable<Transition> Transitions
+        private Round3_SetPoker_Play() { }  // for Classify
+
+        public override Round3_SetPoker_PlayBase GiveAnswer(string answer, bool correct)
         {
-            get { throw new NotImplementedException(); }
+            return new Round3_SetPoker_Play(Data, Bid, AnswersGiven.Concat(answer).ToArray(), AnswersCorrect.Concat(correct).ToArray());
         }
 
-        public override RT.Util.Consoles.ConsoleColoredString Describe
+        public override ConsoleColoredString Describe
         {
-            get { throw new NotImplementedException(); }
+            get
+            {
+                return "Current Set: {0/Yellow}".Color(ConsoleColor.Cyan).Fmt(CurrentSet.Name);
+            }
         }
 
         public override string JsMethod
         {
-            get { throw new NotImplementedException(); }
+            get { return "r3_play"; }
         }
 
         public override object JsParameters
         {
-            get { throw new NotImplementedException(); }
+            get { return new { answers = AnswersGiven, correct = AnswersCorrect }; }
         }
     }
 }

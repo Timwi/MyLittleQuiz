@@ -480,7 +480,7 @@ namespace QuizGameEngine
 
                 bool insertAtBottom = false;
 
-                switch (keyName(keyInfo.Key, keyInfo.Modifiers).ToString())
+                switch (KeyName(keyInfo.Key, keyInfo.Modifiers).ToString())
                 {
                     case "UpArrow":
                         if (selStart > 0)
@@ -670,7 +670,7 @@ namespace QuizGameEngine
             return Activator.CreateInstance(typeof(KeyValuePair<,>).MakeGenericType(keyType, valueType), new object[] { kvpDyn.Key, kvpDyn.Value });
         }
 
-        private static ConsoleColoredString keyName(ConsoleKey key, ConsoleModifiers modifiers)
+        public static ConsoleColoredString KeyName(ConsoleKey key, ConsoleModifiers modifiers)
         {
             var parts = new List<ConsoleColoredString>();
             if (modifiers.HasFlag(ConsoleModifiers.Control))

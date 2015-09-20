@@ -24,7 +24,11 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         {
             get
             {
-                if (Data.SetIndex >= 0 && Data.SetIndex < Data.QuizData.Round3Sets.Length)
+                if (Data.TeamA.Score > 1 || Data.TeamB.Score > 1)
+                    yield return Transition.Simple(ConsoleKey.N, "Next round: Sequences",
+                        () => new Round4_Start(new Round4Data((Data.TeamA.Score > 1 ? Data.TeamA : Data.TeamB).ContestantNames)));
+
+                else if (Data.SetIndex >= 0 && Data.SetIndex < Data.QuizData.Round3Sets.Length)
                     yield return Transition.Simple(ConsoleKey.S, "Show set: " + Data.QuizData.Round3Sets[Data.SetIndex].Name,
                         () => new Round3_SetPoker_ShowSet(Data));
             }
@@ -35,7 +39,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             get
             {
                 return "{0/White}\nTeam A: {1/Cyan}\nTeam B: {2/Cyan}".Color(ConsoleColor.Yellow)
-                    .Fmt("Score:", Data.TeamA.HasPoint ? 1 : 0, Data.TeamB.HasPoint ? 1 : 0);
+                    .Fmt("Score:", Data.TeamA.Score, Data.TeamB.Score);
             }
         }
 

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using RT.Util.Consoles;
 using RT.Util.Dialogs;
 using RT.Util.ExtensionMethods;
+using RT.Util.Text;
 
 namespace QuizGameEngine
 {
@@ -116,16 +118,7 @@ namespace QuizGameEngine
 
         public static Transition SelectIndex<T>(ConsoleKey key, string name, T[] selection, Func<int, TransitionResult> executor) where T : IToConsoleColoredString
         {
-            return new Transition(key, name, () =>
-            {
-                var selected = Program.ConsoleSelect(Enumerable.Range(0, selection.Length).Cast<int?>(), index => "({0}) {1}".Color(ConsoleColor.White).Fmt(index.Value + 1, selection[index.Value].ToConsoleColoredString()));
-                if (selected == null)
-                    return null;
-                var transition = executor(selected.Value);
-                if (transition != null && transition.UndoLine == null)
-                    transition = new TransitionResult(transition.State, name, transition.JsMethod, transition.JsParameters);
-                return transition;
-            });
+            return Select(key, name, selection.Select((s, i) => new { Obj = s, Index = i }), inf => inf.Obj.ToConsoleColoredString(), inf => executor(inf.Index));
         }
 
         public static Transition SelectIndex<T>(ConsoleKey key, string name, T[] selection, Func<int, QuizStateBase> executor) where T : IToConsoleColoredString
@@ -136,6 +129,78 @@ namespace QuizGameEngine
         public static Transition SelectIndex<T>(ConsoleKey key, string name, T[] selection, Action<int> executor) where T : IToConsoleColoredString
         {
             return SelectIndex(key, name, selection, index => { executor(index); return (TransitionResult) null; });
+        }
+
+        public static Transition Find<T>(ConsoleKey key, string name, IEnumerable<T> options, Func<T, ConsoleColoredString> describe, Func<T, TransitionResult> executor)
+        {
+            return new Transition(key, name, () =>
+            {
+                var words = new List<string> { "" };
+                var input = options.Select(obj => new { Obj = obj, Describe = describe(obj) }).ToArray();
+
+                while (true)
+                {
+                    Console.Clear();
+                    Console.WriteLine();
+                    Console.WriteLine();
+
+                    var dic = new Dictionary<string, T>();
+                    if (words.Count > 0 && !string.IsNullOrWhiteSpace(words[0]))
+                    {
+                        var results = input.Where(inf => words.All(w => inf.Describe.ToString().ToLowerInvariant().Contains(w.ToLowerInvariant())))
+                            .OrderByDescending(inf => words.Where(w => !string.IsNullOrWhiteSpace(w)).Sum(w => Regex.Matches(inf.Describe.ToString(), @"\b{0}|{0}\b".Fmt(Regex.Escape(w)), RegexOptions.IgnoreCase).Count))
+                            .Select(inf => inf.Obj)
+                            .Take(22)
+                            .ToArray();
+                        var tt = new TextTable { ColumnSpacing = 2 };
+                        for (int i = 0; i < results.Length.ClipMax(21); i++)
+                        {
+                            var keyname = Program.KeyName(
+                                i == 0 ? ConsoleKey.Enter : (ConsoleKey) (ConsoleKey.D0 + ((i - 1) % 10)),
+                                i < 11 ? 0 : ConsoleModifiers.Shift);
+                            dic[keyname.ToString()] = results[i];
+                            tt.SetCell(0, i, keyname, alignment: HorizontalTextAlignment.Right);
+                            tt.SetCell(1, i, describe(results[i]));
+                        }
+                        if (results.Length > 21)
+                            tt.SetCell(1, 21, "(there’s more)".Color(ConsoleColor.Red));
+                        tt.WriteToConsole();
+                    }
+
+                    Console.CursorTop = 0;
+                    ConsoleUtil.Write("Find words: ".Color(ConsoleColor.Cyan) + words.JoinString(" ").Color(ConsoleColor.Yellow));
+                    var keyInfo = Console.ReadKey(true);
+                    var keyName = Program.KeyName(keyInfo.Key, keyInfo.Modifiers).ToString();
+                    Console.Clear();
+
+                    if (keyName == "Escape")
+                        return null;
+                    if (dic.ContainsKey(keyName))
+                        return executor(dic[keyName]);
+
+                    if (keyInfo.KeyChar == ' ')
+                        words.Add("");
+                    else if (keyName == "Backspace")
+                    {
+                        if (string.IsNullOrWhiteSpace(words[words.Count - 1]))
+                            words.RemoveAt(words.Count - 1);
+                        else
+                            words[words.Count - 1] = words[words.Count - 1].Remove(words[words.Count - 1].Length - 1);
+                    }
+                    else
+                        words[words.Count - 1] += keyInfo.KeyChar;
+                }
+            });
+        }
+
+        public static Transition Find<T>(ConsoleKey key, string name, IEnumerable<T> options, Func<T, ConsoleColoredString> describe, Func<T, QuizStateBase> executor)
+        {
+            return Find(key, name, options, describe, obj => resultFromState(executor(obj), name));
+        }
+
+        public static Transition Find<T>(ConsoleKey key, string name, IEnumerable<T> options, Func<T, ConsoleColoredString> describe, Action<T> executor)
+        {
+            return Find(key, name, options, describe, obj => { executor(obj); return (TransitionResult) null; });
         }
 
         public TransitionResult Execute()

@@ -1,27 +1,26 @@
 ﻿using System;
 using RT.Util.Consoles;
 using RT.Util.ExtensionMethods;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using RT.Util.Serialization;
 
 namespace QuizGameEngine.Quizzes.MyLittleQuiz
 {
-    public sealed class Round3Team : ICloneable,IToConsoleColoredString
+    public sealed class Round3Team : ICloneable, IToConsoleColoredString
     {
+        [ClassifyNotNull]
         public string[] ContestantNames { get; private set; }
-        public bool HasPoint { get; private set; }
+        public int Score { get; private set; }
         public Round3Team(string[] contestantNames)
         {
             ContestantNames = contestantNames;
-            HasPoint = false;
+            Score = 0;
         }
 
         private Round3Team() { }    // for Classify
 
-        public Round3Team ScorePoint()
+        public Round3Team IncScore()
         {
-            return this.ApplyToClone(r3t => { r3t.HasPoint = true; });
+            return this.ApplyToClone(r3t => { r3t.Score++; });
         }
 
         public object Clone()
@@ -32,7 +31,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         public ConsoleColoredString ToConsoleColoredString()
         {
             return "{0/Yellow} contestants".Color(ConsoleColor.DarkYellow).Fmt(ContestantNames.Length) +
-                (HasPoint ? " (1 point)".Color(ConsoleColor.Green) : null);
+                (Score > 0 ? " ({0} points)".Color(ConsoleColor.Green).Fmt(Score) : null);
         }
     }
 }

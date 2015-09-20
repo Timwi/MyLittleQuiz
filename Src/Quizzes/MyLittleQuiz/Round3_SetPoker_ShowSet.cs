@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using RT.Util.Consoles;
+using RT.Util.Dialogs;
 
 namespace QuizGameEngine.Quizzes.MyLittleQuiz
 {
@@ -24,7 +25,21 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         {
             get
             {
-                yield return Transition.Simple(ConsoleKey.P, "Play", () => Data.SetIndex == 2 ? (QuizStateBase) new Round3_SetPoker_PlayTieBreaker(Data) : new Round3_SetPoker_Play(Data));
+                if (Data.SetIndex == 2)
+                    yield return Transition.Simple(ConsoleKey.P, "Play tie breaker round", () => new Round3_SetPoker_PlayTieBreaker(Data));
+                else
+                    yield return Transition.Simple(ConsoleKey.P, "Play", () =>
+                    {
+                        var bidStr = "";
+                        while (true)
+                        {
+                            if ((bidStr = InputBox.GetLine("Bid?", bidStr, "Enter bid")) == null)
+                                return null;
+                            int bid;
+                            if (int.TryParse(bidStr, out bid))
+                                return new Round3_SetPoker_Play(Data, bid);
+                        }
+                    });
             }
         }
 
@@ -34,8 +49,8 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             {
                 return "{0/White}\nTeam A: {1/Cyan}\nTeam B: {2/Cyan}\n\n{3/White} {4/Magenta}\n\n{5/Green}".Color(ConsoleColor.Yellow).Fmt(
                     /* 0 */ "Score:",
-                    /* 1 */ Data.TeamA.HasPoint ? 1 : 0,
-                    /* 2 */ Data.TeamB.HasPoint ? 1 : 0,
+                    /* 1 */ Data.TeamA.Score,
+                    /* 2 */ Data.TeamB.Score,
                     /* 3 */ "Current set:",
                     /* 4 */ Data.QuizData.Round3Sets[Data.SetIndex].Name,
                     /* 5 */ Data.SetIndex == 2 ? "Tie Breaker" : "Regular");

@@ -29,5 +29,23 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         {
             return MemberwiseClone();
         }
+
+        public Round3Data TeamAWins()
+        {
+            return this.ApplyToClone(r3d =>
+            {
+                r3d.TeamA = TeamA.IncScore();
+                r3d.SetIndex++;
+            });
+        }
+
+        public Round3Data TeamBWins()
+        {
+            return this.ApplyToClone(r3d =>
+            {
+                r3d.TeamB = TeamB.IncScore();
+                r3d.SetIndex++;
+            });
+        }
     }
 }
