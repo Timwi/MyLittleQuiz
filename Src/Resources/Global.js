@@ -1,7 +1,7 @@
 ﻿$.fn.addClassDelay = function (cls, delay)
 {
     var t = this;
-    window.setTimeout(function () { t.addClass(cls); }, delay);
+    window.setTimeout(function () { t.addClass(cls); }, delay || 100);
     return t;
 };
 

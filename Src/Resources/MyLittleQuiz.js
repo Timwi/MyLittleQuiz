@@ -12,7 +12,7 @@ $(function ()
 
     function twoColumnLayout(id, divClassName, num, nameFnc, fnc)
     {
-        var c = $('<div class="two-col">').attr('id', id).appendTo(content).addClassDelay('in', 100);
+        var c = $('<div class="two-col">').attr('id', id).appendTo(content).addClassDelay('in');
         if (divClassName !== null)
             c.addClass(divClassName);
         var c1 = $('<div class="col col-1 static">').appendTo(c);
@@ -75,7 +75,7 @@ $(function ()
             qa.data('type', q[':type']);
 
             var qdecor = $('<div class="decor">').text('?');
-            var qdiv = $('<div class="question qa">').addClassDelay('in', 100).append(qdecor);
+            var qdiv = $('<div class="question qa">').addClassDelay('in').append(qdecor);
 
             var adecor = $('<div class="decor">').text('✗');
             var adiv = $('<div class="answer qa">').append(adecor);
@@ -160,7 +160,7 @@ $(function ()
                     div.addClass('wrong');
             }
             findBestValue(100, function (fs) { c.css('font-size', fs + 'px'); return c.height() < content.height() ? -1 : 1; });
-            $('.contestant').addClassDelay('in', 100);
+            $('.contestant').addClassDelay('in');
         },
 
         r1_select: function (p)
@@ -170,8 +170,8 @@ $(function ()
 
             var c = p.contestants[p.selected];
             var span = $('<span class="inner">').text(c.Name);
-            var div = $('<div class="r1-contestant away static" id="r1-contestant-name">').append(span).appendTo(content).addClassDelay('in', 100);
-            $('<div class="r1-contestant away" id="r1-contestant-roll">').text(c.Roll).appendTo(content).addClassDelay('in', 100);
+            var div = $('<div class="r1-contestant away static" id="r1-contestant-name">').append(span).appendTo(content).addClassDelay('in');
+            $('<div class="r1-contestant away" id="r1-contestant-roll">').text(c.Roll).appendTo(content).addClassDelay('in');
 
             if (span.width() > div.width())
                 span.css('transform', 'scale(' + (div.width() / span.width()) + ', 1)');
@@ -238,5 +238,62 @@ $(function ()
                 .addClass('selected');
         },
         //#endregion
+
+        //#region ROUND 3 (Set Poker)
+        r3_showContestants: function (p)
+        {
+            clearScreen();
+
+            $('#r3-contestants').remove();
+            var div = $('<div id="r3-contestants" class="r3-display static away"></div>').appendTo(content).addClassDelay('in');
+
+            for (var i = 0; i < p.contestants.length; i++)
+                div.append($('<div class="contestant"></div>')
+                    .css('transition-delay', (i*.1) + 's')
+                    .append($('<div class="inner"></div>')
+                        .append($('<span class="name"></span>').text(p.contestants[i]))));
+
+            findBestValue(100, function (fs) { div.css('font-size', fs + 'px'); return div.outerHeight() < content.height() ? -1 : 1; });
+
+            $('#r3-contestants>.contestant').each(function()
+            {
+                var inner = $(this).find('.inner');
+                var name = inner.find('.name');
+                if (name.outerWidth() > inner.outerWidth())
+                    inner.css('transform', 'scaleX(' + (inner.outerWidth()/name.outerWidth()) + ')');
+            });
+        },
+
+        r3_showTeams: function (p)
+        {
+            clearScreen();
+
+            $('#r3-teams').remove();
+            var div = $('<div id="r3-teams" class="r3-display static away"></div>').appendTo(content).addClassDelay('in');
+
+            for (var i = 0; i < p.teamA.ContestantNames.length; i++)
+                div.append($('<div class="contestant team-a"></div>')
+                    .css('transition-delay', (i*.1) + 's')
+                    .append($('<div class="inner"></div>')
+                        .append($('<span class="name"></span>').text(p.teamA.ContestantNames[i]))));
+            for (var i = 0; i < p.teamB.ContestantNames.length; i++)
+                div.append($('<div class="contestant team-b"></div>')
+                    .css('transition-delay', ((i+4)*.1) + 's')
+                    .append($('<div class="inner"></div>')
+                        .append($('<span class="name"></span>').text(p.teamB.ContestantNames[i]))));
+
+            div.append($('<div class="score-box team-a"></div>').append($('<div class="score">').text('0')));
+            div.append($('<div class="score-box team-b"></div>').append($('<div class="score">').text('0')));
+
+            findBestValue(100, function (fs) { div.css('font-size', fs + 'px'); return div.outerHeight() < content.height() ? -1 : 1; });
+
+            $('#r3-contestants>.contestant').each(function()
+            {
+                var inner = $(this).find('.inner');
+                var name = inner.find('.name');
+                if (name.outerWidth() > inner.outerWidth())
+                    inner.css('transform', 'scaleX(' + (inner.outerWidth()/name.outerWidth()) + ')');
+            });
+        },
     };
 });

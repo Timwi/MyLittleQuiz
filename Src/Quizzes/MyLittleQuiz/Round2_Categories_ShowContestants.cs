@@ -39,8 +39,9 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
 
                 yield return listContestantsTransition;
 
-                yield return Transition.Simple(ConsoleKey.N, "Go to next round", () =>
-                    new Round3_SetPoker_MakeTeams(Data.QuizData, Data.Contestants.OrderByDescending(c => c.Score).Take(Data.NumContestantsNeeded).Select(c => c.Name).ToArray()));
+                yield return Transition.Simple(ConsoleKey.N, "Go to next round", () => 
+                    new Round3_SetPoker_MakeTeams(Data.QuizData, 
+                        Data.Contestants.OrderByDescending(c => c.Score).Take(Data.NumContestantsNeeded).Select(c => c.Name).ToArray()));
             }
         }
 
