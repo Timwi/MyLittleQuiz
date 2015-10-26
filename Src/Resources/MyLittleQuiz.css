@@ -576,7 +576,7 @@ body {
             #content .r3-display .contestant.team-b {
                 margin-right: 6em;
                 margin-left: 1em;
-                background: #7b2;
+                background: #582;
             }
 
         #content .r3-display .contestant.team-a + .contestant.team-b {
@@ -613,7 +613,7 @@ body {
                 bottom: 0;
                 width: 5em;
                 top: 50%;
-                background: #7b2;
+                background: #582;
                 transition-delay: .5s;
             }
                 #content .r3-display.in .score-box.team-b {
@@ -629,3 +629,11 @@ body {
                 right: 0;
                 transform: translateY(-50%);
             }
+
+    #content #r3-set .set {
+        top: 5%;
+        right: 10%;
+        left: 10%;
+        bottom: 5%;
+        border-radius: 100%;
+    }
