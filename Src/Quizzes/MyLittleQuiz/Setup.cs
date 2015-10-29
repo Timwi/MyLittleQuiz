@@ -66,6 +66,8 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
 
                 if (Contestants.Count > 0)
                     yield return Transition.Simple(ConsoleKey.S, "Start Round: Elimination Round", () => new Round1_Elimination(new Round1Data(Data, Contestants)));
+                if (Contestants.Count == 6)
+                    yield return Transition.Simple(ConsoleKey.T, "DEBUG: Start Round 3: Set Poker", () => new Round3_SetPoker_MakeTeams(Data, Contestants.Select(c => c.Name).ToArray()));
             }
         }
 

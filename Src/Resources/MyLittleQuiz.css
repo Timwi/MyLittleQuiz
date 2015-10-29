@@ -579,9 +579,9 @@ body {
                 background: #582;
             }
 
-        #content .r3-display .contestant.team-a + .contestant.team-b {
-            margin-top: .8em;
-        }
+            #content .r3-display .contestant.team-a + .contestant.team-b {
+                margin-top: .8em;
+            }
 
         #content .r3-display.in .contestant {
             opacity: 1;
@@ -597,6 +597,7 @@ body {
             position: absolute;
             transition: left ease-out .4s, right ease-out .4s;
         }
+
             #content .r3-display .score-box.team-a {
                 top: 0;
                 left: -6em;
@@ -605,35 +606,60 @@ body {
                 background: #d82;
                 transition-delay: .1s;
             }
-                #content .r3-display.in .score-box.team-a {
-                    left: 0;
-                }
-            #content .r3-display .score-box.team-b {
-                right: -6em;
-                bottom: 0;
-                width: 5em;
-                top: 50%;
-                background: #582;
-                transition-delay: .5s;
-            }
-                #content .r3-display.in .score-box.team-b {
-                    right: 0;
-                }
 
-            #content .r3-display .score-box .score {
-                position: absolute;
-                font-size: 300%;
-                text-align: center;
-                top: 50%;
-                left: 0;
-                right: 0;
-                transform: translateY(-50%);
-            }
+        #content .r3-display.in .score-box.team-a {
+            left: 0;
+        }
 
-    #content #r3-set .set {
+        #content .r3-display .score-box.team-b {
+            right: -6em;
+            bottom: 0;
+            width: 5em;
+            top: 50%;
+            background: #582;
+            transition-delay: .5s;
+        }
+
+        #content .r3-display.in .score-box.team-b {
+            right: 0;
+        }
+
+        #content .r3-display .score-box .score {
+            position: absolute;
+            font-size: 300%;
+            text-align: center;
+            top: 50%;
+            left: 0;
+            right: 0;
+            transform: translateY(-50%);
+        }
+
+    #content #r3-set {
         top: 5%;
         right: 10%;
         left: 10%;
         bottom: 5%;
         border-radius: 100%;
+        background: #008;
+        opacity: 0;
+        transform: scale(.1);
+        transition: opacity linear .3s,transform ease-out .3s;
     }
+
+        #content #r3-set.in {
+            opacity: 1;
+            transform: none;
+        }
+
+        #content #r3-set.out {
+            opacity: 0;
+        }
+
+        #content #r3-set .name {
+            padding: .5em 2em;
+            top: 50%;
+            left: 0;
+            right: 0;
+            transform: translateY(-50%);
+            text-align: center;
+        }

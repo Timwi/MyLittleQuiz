@@ -16,6 +16,8 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         public Round3Team TeamB { get; private set; }
         public int SetIndex { get; private set; }
 
+        public Round3Set CurrentSet { get { return QuizData.Round3Sets[SetIndex]; } }
+
         public Round3Data(QuizData data, string[] teamA, string[] teamB)
         {
             QuizData = data;

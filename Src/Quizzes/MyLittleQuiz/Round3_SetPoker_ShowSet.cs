@@ -52,19 +52,19 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                     /* 1 */ Data.TeamA.Score,
                     /* 2 */ Data.TeamB.Score,
                     /* 3 */ "Current set:",
-                    /* 4 */ Data.QuizData.Round3Sets[Data.SetIndex].Name,
+                    /* 4 */ Data.CurrentSet.Name,
                     /* 5 */ Data.SetIndex == 2 ? "Tie Breaker" : "Regular");
             }
         }
 
         public override string JsMethod
         {
-            get { return "r3_showTeams"; }
+            get { return "r3_showSet"; }
         }
 
         public override object JsParameters
         {
-            get { return new { teamA = Data.TeamA, teamB = Data.TeamB }; }
+            get { return new { set = Data.CurrentSet.Name }; }
         }
     }
 }

@@ -249,36 +249,36 @@ $(function ()
 
             for (var i = 0; i < p.contestants.length; i++)
                 div.append($('<div class="contestant"></div>')
-                    .css('transition-delay', (i*.1) + 's')
+                    .css('transition-delay', (i * .1) + 's')
                     .append($('<div class="inner"></div>')
                         .append($('<span class="name"></span>').text(p.contestants[i]))));
 
             findBestValue(100, function (fs) { div.css('font-size', fs + 'px'); return div.outerHeight() < content.height() ? -1 : 1; });
 
-            $('#r3-contestants>.contestant').each(function()
+            $('#r3-contestants>.contestant').each(function ()
             {
                 var inner = $(this).find('.inner');
                 var name = inner.find('.name');
                 if (name.outerWidth() > inner.outerWidth())
-                    inner.css('transform', 'scaleX(' + (inner.outerWidth()/name.outerWidth()) + ')');
+                    inner.css('transform', 'scaleX(' + (inner.outerWidth() / name.outerWidth()) + ')');
             });
         },
 
         r3_showTeams: function (p)
         {
+            $('#r3-teams').remove();
             clearScreen();
 
-            $('#r3-teams').remove();
             var div = $('<div id="r3-teams" class="r3-display static away"></div>').appendTo(content).addClassDelay('in');
 
             for (var i = 0; i < p.teamA.ContestantNames.length; i++)
                 div.append($('<div class="contestant team-a"></div>')
-                    .css('transition-delay', (i*.1) + 's')
+                    .css('transition-delay', (i * .1) + 's')
                     .append($('<div class="inner"></div>')
                         .append($('<span class="name"></span>').text(p.teamA.ContestantNames[i]))));
             for (var i = 0; i < p.teamB.ContestantNames.length; i++)
                 div.append($('<div class="contestant team-b"></div>')
-                    .css('transition-delay', ((i+4)*.1) + 's')
+                    .css('transition-delay', ((i + 4) * .1) + 's')
                     .append($('<div class="inner"></div>')
                         .append($('<span class="name"></span>').text(p.teamB.ContestantNames[i]))));
 
@@ -287,13 +287,23 @@ $(function ()
 
             findBestValue(100, function (fs) { div.css('font-size', fs + 'px'); return div.outerHeight() < content.height() ? -1 : 1; });
 
-            $('#r3-contestants>.contestant').each(function()
+            $('#r3-contestants>.contestant').each(function ()
             {
                 var inner = $(this).find('.inner');
                 var name = inner.find('.name');
                 if (name.outerWidth() > inner.outerWidth())
-                    inner.css('transform', 'scaleX(' + (inner.outerWidth()/name.outerWidth()) + ')');
+                    inner.css('transform', 'scaleX(' + (inner.outerWidth() / name.outerWidth()) + ')');
             });
+        },
+
+        r3_showSet: function (p)
+        {
+            $('#r3-set').remove();
+            clearScreen();
+
+            var div = $('<div id="r3-set" class="away">').appendTo(content).addClassDelay('in');
+            var inner = $('<div class="name static">').appendTo(div).html(p.set);
+            findBestValue(100, function (fs) { div.css('font-size', fs + 'px'); return inner.outerHeight() < div.outerHeight() ? -1 : 1; });
         },
     };
 });

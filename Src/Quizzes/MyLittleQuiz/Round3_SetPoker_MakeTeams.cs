@@ -38,7 +38,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             get
             {
                 foreach (var transition in UnassignedContestants.Select((cont, index) =>
-                    Transition.Simple((ConsoleKey) (ConsoleKey.A + index), "Assign {0} to Team A".Fmt(cont), () => AssignContestantToTeamA(index))))
+                    Transition.Simple((ConsoleKey) (ConsoleKey.A + index), "Assign {0} to Team A".Fmt(cont), () => AssignContestantToTeamA(index).NoTransition())))
                     yield return transition;
 
                 if (TeamA.Length == UnassignedContestants.Length)
