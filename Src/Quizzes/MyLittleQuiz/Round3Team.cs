@@ -8,11 +8,11 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
     public sealed class Round3Team : ICloneable, IToConsoleColoredString
     {
         [ClassifyNotNull]
-        public string[] ContestantNames { get; private set; }
+        public ContestantAndScore[] Contestants { get; private set; }
         public int Score { get; private set; }
-        public Round3Team(string[] contestantNames)
+        public Round3Team(ContestantAndScore[] contestants)
         {
-            ContestantNames = contestantNames;
+            Contestants = contestants;
             Score = 0;
         }
 
@@ -30,7 +30,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
 
         public ConsoleColoredString ToConsoleColoredString()
         {
-            return "{0/Yellow} contestants".Color(ConsoleColor.DarkYellow).Fmt(ContestantNames.Length) +
+            return "{0/Yellow} contestants".Color(ConsoleColor.DarkYellow).Fmt(Contestants.Length) +
                 (Score > 0 ? " ({0} points)".Color(ConsoleColor.Green).Fmt(Score) : null);
         }
     }

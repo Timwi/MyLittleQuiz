@@ -31,19 +31,17 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         [EditorLabel("Round 3 (Set Poker): Sets")]
         public Round3Set[] Round3Sets { get; private set; }
 
-        // Round 4: Sequences
-
-        // Round 5: Sudden Death
+        // Round 4: Final/Sudden Death
         [ClassifyNotNull]
-        [EditorLabel("Round 5 (Sudden Death): Questions")]
-        public QuestionBase[] Round5Questions { get; private set; }
+        [EditorLabel("Round 4 (Final): Questions")]
+        public QuestionBase[] Round4Questions { get; private set; }
 
         public QuizData()
         {
             Round1Questions = new Dictionary<Difficulty, QuestionBase[]>();
             Round2Categories = new Round2Category[0];
             Round3Sets = new Round3Set[0];
-            Round5Questions = new QuestionBase[0];
+            Round4Questions = new QuestionBase[0];
         }
     }
 }

@@ -282,8 +282,8 @@ $(function ()
                     .append($('<div class="inner"></div>')
                         .append($('<span class="name"></span>').text(p.teamB.ContestantNames[i]))));
 
-            div.append($('<div class="score-box team-a"></div>').append($('<div class="score">').text('0')));
-            div.append($('<div class="score-box team-b"></div>').append($('<div class="score">').text('0')));
+            div.append($('<div class="score-box team-a"></div>').append($('<div class="score">').text(p.teamA.Score)));
+            div.append($('<div class="score-box team-b"></div>').append($('<div class="score">').text(p.teamB.Score)));
 
             findBestValue(100, function (fs) { div.css('font-size', fs + 'px'); return div.outerHeight() < content.height() ? -1 : 1; });
 

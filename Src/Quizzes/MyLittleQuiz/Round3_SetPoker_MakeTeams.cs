@@ -10,16 +10,16 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
     public sealed class Round3_SetPoker_MakeTeams : QuizStateBase
     {
         public QuizData QuizData { get; private set; }
-        public string[] TeamA { get; private set; }
-        public string[] UnassignedContestants { get; private set; }
+        public ContestantAndScore[] TeamA { get; private set; }
+        public ContestantAndScore[] UnassignedContestants { get; private set; }
 
-        public Round3_SetPoker_MakeTeams(QuizData quizData, string[] contestants)
+        public Round3_SetPoker_MakeTeams(QuizData quizData, ContestantAndScore[] contestants)
         {
             if (contestants == null)
                 throw new ArgumentNullException("contestants");
 
             QuizData = quizData;
-            TeamA = new string[0];
+            TeamA = new ContestantAndScore[0];
             UnassignedContestants = contestants;
         }
         private Round3_SetPoker_MakeTeams() { } // for Classify
