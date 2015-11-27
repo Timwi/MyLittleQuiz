@@ -663,3 +663,17 @@ body {
             transform: translateY(-50%);
             text-align: center;
         }
+
+    #content #r3-play {
+        top: 0;
+        left: 0;
+        right: 0;
+        padding: 1em 2em;
+    }
+
+        #content #r3-play .ans {
+            border-radius: 2em;
+            background: #3a0;
+            padding: .2em 1.5em;
+            text-align: center;
+        }

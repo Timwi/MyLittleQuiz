@@ -38,7 +38,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             get
             {
                 foreach (var transition in UnassignedContestants.Select((cont, index) =>
-                    Transition.Simple((ConsoleKey) (ConsoleKey.A + index), "Assign {0} to Team A".Fmt(cont), () => AssignContestantToTeamA(index).NoTransition())))
+                    Transition.Simple(ConsoleKey.A + index, "Assign {0} to Team A".Fmt(cont.Name), () => AssignContestantToTeamA(index).NoTransition())))
                     yield return transition;
 
                 if (TeamA.Length == UnassignedContestants.Length)
@@ -52,7 +52,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             {
                 return "{0/White}\n{1/Yellow}".Color(null).Fmt(
                     "Team A:",
-                    TeamA.JoinString("\n"));
+                    TeamA.Select(c => c.Name).JoinString("\n"));
             }
         }
 

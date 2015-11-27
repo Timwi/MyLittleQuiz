@@ -29,7 +29,12 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         {
             get
             {
-                return "Current Set: {0/Yellow}".Color(ConsoleColor.Cyan).Fmt(CurrentSet.Name);
+                return "Current set: {0/Yellow}\nAnswers so far:\n{1}\nGot {2/Cyan}/{3/Yellow}".Color(ConsoleColor.White).Fmt(
+                    /* {0} */ CurrentSet.Name,
+                    /* {1} */ AnswersGiven.Select((a, i) => a.Color(AnswersCorrect[i] ? ConsoleColor.Green : ConsoleColor.Red) + "\n").JoinColoredString(),
+                    /* {2} */ AnswersCorrect.Count(c => c),
+                    /* {3} */ Bid
+                );
             }
         }
 
@@ -40,7 +45,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
 
         public override object JsParameters
         {
-            get { return new { answers = AnswersGiven, correct = AnswersCorrect }; }
+            get { return new { answers = AnswersGiven, correct = AnswersCorrect, bid = Bid }; }
         }
     }
 }

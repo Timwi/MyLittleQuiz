@@ -251,7 +251,7 @@ $(function ()
                 div.append($('<div class="contestant"></div>')
                     .css('transition-delay', (i * .1) + 's')
                     .append($('<div class="inner"></div>')
-                        .append($('<span class="name"></span>').text(p.contestants[i]))));
+                        .append($('<span class="name"></span>').text(p.contestants[i].Name))));
 
             findBestValue(100, function (fs) { div.css('font-size', fs + 'px'); return div.outerHeight() < content.height() ? -1 : 1; });
 
@@ -271,16 +271,16 @@ $(function ()
 
             var div = $('<div id="r3-teams" class="r3-display static away"></div>').appendTo(content).addClassDelay('in');
 
-            for (var i = 0; i < p.teamA.ContestantNames.length; i++)
+            for (var i = 0; i < p.teamA.Contestants.length; i++)
                 div.append($('<div class="contestant team-a"></div>')
                     .css('transition-delay', (i * .1) + 's')
                     .append($('<div class="inner"></div>')
-                        .append($('<span class="name"></span>').text(p.teamA.ContestantNames[i]))));
-            for (var i = 0; i < p.teamB.ContestantNames.length; i++)
+                        .append($('<span class="name"></span>').text(p.teamA.Contestants[i].Name))));
+            for (var i = 0; i < p.teamB.Contestants.length; i++)
                 div.append($('<div class="contestant team-b"></div>')
                     .css('transition-delay', ((i + 4) * .1) + 's')
                     .append($('<div class="inner"></div>')
-                        .append($('<span class="name"></span>').text(p.teamB.ContestantNames[i]))));
+                        .append($('<span class="name"></span>').text(p.teamB.Contestants[i].Name))));
 
             div.append($('<div class="score-box team-a"></div>').append($('<div class="score">').text(p.teamA.Score)));
             div.append($('<div class="score-box team-b"></div>').append($('<div class="score">').text(p.teamB.Score)));
@@ -304,6 +304,23 @@ $(function ()
             var div = $('<div id="r3-set" class="away">').appendTo(content).addClassDelay('in');
             var inner = $('<div class="name static">').appendTo(div).html(p.set);
             findBestValue(100, function (fs) { div.css('font-size', fs + 'px'); return inner.outerHeight() < div.outerHeight() ? -1 : 1; });
+        },
+
+        r3_play: function (p)
+        {
+            if (p.answers.length < 1)
+                return;
+
+            $('#r3-play').remove();
+            clearScreen();
+
+            var div = $('<div id="r3-play" class="away static">').appendTo(content);
+            for (var i = 0; i < p.answers.length; i++)
+            {
+                $('<div class="ans ' + (p.correct[i] ? 'correct' : 'wrong') + '">')
+                    .append($('<div class="answer">').append($('<span class="inner">').text(p.answers[i])))
+                    .appendTo(div);
+            }
         },
     };
 });
