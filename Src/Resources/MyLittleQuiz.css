@@ -676,4 +676,27 @@ body {
             background: #3a0;
             padding: .2em 1.5em;
             text-align: center;
+            margin: .5em;
         }
+
+            #content #r3-play .ans.invisible {
+                visibility: hidden;
+            }
+
+        #content #r3-bid {
+            position: absolute;
+            right: 3vw;
+            bottom: 2vh;
+            font-size: 20vh;
+            width: 1.2em;
+            height: 1.2em;
+            border-radius: 50%;
+            background: #d82;
+        }
+
+            #content #r3-bid .number {
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+            }

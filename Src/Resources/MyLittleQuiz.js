@@ -311,16 +311,25 @@ $(function ()
             if (p.answers.length < 1)
                 return;
 
-            $('#r3-play').remove();
+            $('#r3-play,#r3-bid').remove();
             clearScreen();
 
             var div = $('<div id="r3-play" class="away static">').appendTo(content);
+            content.append($('<div id="r3-bid" class="bid">').append($('<span class="number">').text(p.remaining)));
             for (var i = 0; i < p.answers.length; i++)
             {
-                $('<div class="ans ' + (p.correct[i] ? 'correct' : 'wrong') + '">')
+                $('<div class="ans">')
                     .append($('<div class="answer">').append($('<span class="inner">').text(p.answers[i])))
                     .appendTo(div);
             }
+            for (i = p.answers.length; i < 10; i++)
+            {
+                $('<div class="ans invisible">')
+                    .append($('<div class="answer">').append($('<span class="inner">').text('Wg')))
+                    .appendTo(div);
+            }
+
+            findBestValue(100, function (fs) { div.css('font-size', fs + 'px'); return div.outerHeight() < content.height() ? -1 : 1; });
         },
     };
 });

@@ -45,7 +45,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
 
         public override object JsParameters
         {
-            get { return new { answers = AnswersGiven, correct = AnswersCorrect, bid = Bid }; }
+            get { return new { answers = CorrectAnswersGiven.ToArray(), remaining = Bid - CorrectAnswersGiven.Count() }; }
         }
     }
 }
