@@ -23,7 +23,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         {
             get
             {
-                yield return Transition.Simple(ConsoleKey.Q, "Ask {0} a question".Fmt(Data.Contestants[Data.WhoseTurn].Name), () => new Round4_Final_Q(Data));
+                yield return Transition.Simple(ConsoleKey.Q, "Ask {0} the next question".Fmt(Data.Contestants[Data.WhoseTurn].Name), () => new Round4_Final_Q(Data));
             }
         }
 

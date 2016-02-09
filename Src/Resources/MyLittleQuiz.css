@@ -656,7 +656,7 @@ body {
         }
 
         #content #r3-set .name {
-            padding: .5em 2em;
+            padding: 0;
             top: 50%;
             left: 0;
             right: 0;
@@ -668,35 +668,60 @@ body {
         top: 0;
         left: 0;
         right: 0;
-        padding: 1em 2em;
+        transition: opacity linear .5s;
+        border-spacing: 1em 0;
+        width: 100%;
     }
+
+        #content #r3-play.out {
+            opacity: 0;
+        }
 
         #content #r3-play .ans {
             border-radius: 2em;
-            background: #3a0;
-            padding: .2em 1.5em;
+            background: #ba0;
+            padding: .1em 1.5em;
             text-align: center;
-            margin: .5em;
+            margin: .5em 0;
+            overflow: hidden;
         }
+
+            #content #r3-play td:first-child .ans {
+                background: #3a0;
+            }
 
             #content #r3-play .ans.invisible {
                 visibility: hidden;
             }
 
-        #content #r3-bid {
-            position: absolute;
+            #content #r3-play .ans .answer .inner {
+                white-space: nowrap;
+            }
+
+    #content #r3-bid {
+        position: absolute;
+        right: -50vw;
+        bottom: 2vh;
+        font-size: 20vh;
+        width: 1.2em;
+        height: 1.2em;
+        border-radius: 50%;
+        background: #d82;
+        transition: right ease-in-out .7s;
+        transition-delay: .2s;
+    }
+
+        #content #r3-bid.in {
             right: 3vw;
-            bottom: 2vh;
-            font-size: 20vh;
-            width: 1.2em;
-            height: 1.2em;
-            border-radius: 50%;
-            background: #d82;
         }
 
-            #content #r3-bid .number {
-                position: absolute;
-                left: 50%;
-                top: 50%;
-                transform: translate(-50%, -50%);
-            }
+        #content #r3-bid.out {
+            right: -50vw;
+        }
+
+        #content #r3-bid .number {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }

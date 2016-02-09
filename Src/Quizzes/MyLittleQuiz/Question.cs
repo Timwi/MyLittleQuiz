@@ -15,16 +15,16 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         public abstract string QuestionFullText { get; }
         public abstract string AnswerFullText { get; }
         public abstract IEnumerable<Tuple<ConsoleKey, string, object>> CorrectAnswerInfos { get; }
-        public ConsoleColoredString ToConsoleColoredString() { return (Check ? "! ".Color(ConsoleColor.Red) : "") + toConsoleColoredString(); }
+        public ConsoleColoredString ToConsoleColoredString() { return (Check ? "[CHECK!] ".Color(ConsoleColor.Red) : "") + toConsoleColoredString(); }
         protected abstract ConsoleColoredString toConsoleColoredString();
 
         public ConsoleColoredString Describe(object answer)
         {
             return "{0/White}\n{1/Cyan}\n\n{2/White}\n{3/Green}{4}".Color(null).Fmt(
                 /* 0 */ "Question:",
-                /* 1 */ QuestionFullText.WordWrap(ConsoleUtil.WrapToWidth(), 4).JoinColoredString(Environment.NewLine),
-                /* 2 */ "Answer(s):",
-                /* 3 */ AnswerFullText.WordWrap(ConsoleUtil.WrapToWidth(), 4).JoinColoredString(Environment.NewLine),
+                /* 1 */ QuestionFullText.WordWrap(ConsoleUtil.WrapToWidth()).JoinColoredString(Environment.NewLine),
+                /* 2 */ "Answer:",
+                /* 3 */ AnswerFullText.WordWrap(ConsoleUtil.WrapToWidth()).JoinColoredString(Environment.NewLine),
                 /* 4 */ answer == null ? null : "\n\nAnswer given".Color(answer.Equals(false) ? ConsoleColor.Red : ConsoleColor.Green)
             );
         }

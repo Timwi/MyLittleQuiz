@@ -335,15 +335,11 @@ namespace QuizGameEngine
             }).ToArray());
 
             // Dummy value; will be overwritten
-            var editables = getEditables(Enumerable.Empty<FieldInfo>());
+            var rawEditables = getEditables(Enumerable.Empty<FieldInfo>());
+            var filter = "";
 
             while (true)
             {
-                if (editables.Length == 0)
-                    selStart = 0;
-                else
-                    selStart = selStart.Clip(0, editables.Length - 1);
-
                 var isCollection = false;
                 var isDictionary = false;
                 Type keyType = null, valueType = null;
@@ -354,7 +350,7 @@ namespace QuizGameEngine
                     keyType = genericArguments[0];
                     valueType = genericArguments[1];
 
-                    editables = ((IEnumerable) obj).Cast<dynamic>().Select(kvp => new
+                    rawEditables = ((IEnumerable) obj).Cast<dynamic>().Select(kvp => new
                     {
                         Label = (string) kvp.Key.ToString(),
                         DeclaredType = valueType,
@@ -368,7 +364,7 @@ namespace QuizGameEngine
                     isCollection = true;
                     valueType = type.IsArray ? type.GetElementType() : genericArguments[0];
 
-                    editables = ((IEnumerable) obj).Cast<dynamic>().Select((elem, index) => new
+                    rawEditables = ((IEnumerable) obj).Cast<dynamic>().Select((elem, index) => new
                     {
                         Label = index.ToString(),
                         DeclaredType = valueType,
@@ -378,30 +374,43 @@ namespace QuizGameEngine
                     }).ToArray();
                 }
                 else
-                    editables = getEditables(type.GetAllFields());
+                    rawEditables = getEditables(type.GetAllFields());
 
-                Console.Clear();
-                ConsoleUtil.WriteLine(path.Select(p => p.Color(ConsoleColor.White)).JoinColoredString(" ▶ ".Color(ConsoleColor.Green)).ColorBackground(ConsoleColor.DarkGreen));
-                ConsoleUtil.WriteLine(type.FullName.Color(ConsoleColor.DarkGreen));
-                if (genericType != typeof(Dictionary<,>) && genericType != typeof(List<>) && !(obj is ICloneable) && !(obj is Array))
-                    ConsoleUtil.WriteLine("NOT CLONEABLE".Color(ConsoleColor.Yellow, ConsoleColor.Red));
-                Console.WriteLine();
+                var editables = filter.Length == 0 ? rawEditables : rawEditables.Where(inf => filter.Split(' ').All(w => ((object) inf.GetValue()).ToUsefulString().ToString().ContainsNoCase(w))).ToArray();
 
-                var t = new TextTable { ColumnSpacing = 2 };
-                for (int i = 0; i < editables.Length; i++)
+                if (editables.Length == 0)
+                    selStart = 0;
+                else
+                    selStart = selStart.Clip(0, editables.Length - 1);
+
+                if (!Console.KeyAvailable)
                 {
-                    var editable = editables[i];
-                    var value = (object) editable.GetValue();
-                    var selected = i >= selStart && i < selStart + selLength;
+                    Console.Clear();
+                    ConsoleUtil.WriteLine(path.Select(p => p.Color(ConsoleColor.White)).JoinColoredString(" ▶ ".Color(ConsoleColor.Green)).ColorBackground(ConsoleColor.DarkGreen));
+                    ConsoleUtil.WriteLine(type.FullName.Color(ConsoleColor.DarkGreen));
+                    if (genericType != typeof(Dictionary<,>) && genericType != typeof(List<>) && !(obj is ICloneable) && !(obj is Array))
+                        ConsoleUtil.WriteLine("NOT CLONEABLE".Color(ConsoleColor.Yellow, ConsoleColor.Red));
+                    if (filter.Length > 0)
+                        ConsoleUtil.WriteLine("Filter: {0/White+DarkBlue}".Color(ConsoleColor.Yellow).Fmt(filter));
+                    Console.WriteLine();
 
-                    if (i == (selIsTop ? selStart : selStart + selLength - 1))
-                        t.SetCell(0, i, "▶");
-                    t.SetCell(1, i, editable.Label);
-                    t.SetCell(2, i, value == null ? "<null>".Color(ConsoleColor.DarkGray) : value.ToUsefulString());
-                    if (selected)
-                        t.SetRowBackground(i, ConsoleColor.DarkBlue);
+                    var t = new TextTable { ColumnSpacing = 2 };
+                    for (int i = 0; i < editables.Length; i++)
+                    {
+                        var editable = editables[i];
+                        var value = (object) editable.GetValue();
+                        var valueStr = value == null ? "<null>".Color(ConsoleColor.DarkGray) : value.ToUsefulString();
+                        var selected = i >= selStart && i < selStart + selLength;
+
+                        if (i == (selIsTop ? selStart : selStart + selLength - 1))
+                            t.SetCell(0, i, "▶");
+                        t.SetCell(1, i, editable.Label);
+                        t.SetCell(2, i, valueStr);
+                        if (selected)
+                            t.SetRowBackground(i, ConsoleColor.DarkBlue);
+                    }
+                    t.WriteToConsole();
                 }
-                t.WriteToConsole();
 
                 var addElement = Ut.Lambda((int index) =>
                 {
@@ -453,35 +462,78 @@ namespace QuizGameEngine
                     }
                     else if (type.IsArray)
                     {
-                        ret = Enumerable.Range(selStart, selLength).Select(i => obj[i]).ToArray();
+                        ret = Enumerable.Range(selStart, selLength).Select(i => obj[editables[i].Key]).ToArray();
+                        var indexes = Enumerable.Range(selStart, selLength).Select(i => (int) editables[i].Key).ToArray();
                         if (delete)
                         {
                             copyEnsured = true;
-                            obj = Extensions.RemoveIndexes(obj, selStart, selLength);
+                            obj = Extensions.RemoveIndexes(obj, indexes);
                             setValue(obj);
                         }
                     }
-                    else
+                    else    // collection
                     {
-                        ret = Enumerable.Range(selStart, selLength).Select(i => obj[i]).ToArray();
+                        ret = Enumerable.Range(selStart, selLength).Select(i => obj[editables[i].Key]).ToArray();
+                        var indexes = Enumerable.Range(selStart, selLength).Select(i => (int) editables[i].Key).ToArray();
                         if (delete)
                         {
                             ensureCopy();
-                            for (int i = 0; i < selLength; i++)
-                                obj.RemoveAt(selStart);
+                            Array.Sort(indexes);
+                            for (int i = indexes.Length - 1; i >= 0; i--)
+                                obj.RemoveAt(indexes[i]);
                         }
                     }
                     return ret;
                 });
 
                 var keyInfo = Console.ReadKey(true);
-                if ((keyInfo.Key == ConsoleKey.Escape || keyInfo.Key == ConsoleKey.Backspace) && keyInfo.Modifiers == 0)
+                if ((keyInfo.Key == ConsoleKey.Escape) && keyInfo.Modifiers == 0)
                     break;
 
                 bool insertAtBottom = false;
 
-                switch (KeyName(keyInfo.Key, keyInfo.Modifiers).ToString())
+                var keyName = KeyName(keyInfo.Key, keyInfo.Modifiers).ToString();
+                switch (keyName)
                 {
+                    case "A":
+                    case "B":
+                    case "C":
+                    case "D":
+                    case "E":
+                    case "F":
+                    case "G":
+                    case "H":
+                    case "I":
+                    case "J":
+                    case "K":
+                    case "L":
+                    case "M":
+                    case "N":
+                    case "O":
+                    case "P":
+                    case "Q":
+                    case "R":
+                    case "S":
+                    case "T":
+                    case "U":
+                    case "V":
+                    case "W":
+                    case "X":
+                    case "Y":
+                    case "Z":
+                        filter += keyName;
+                        break;
+
+                    case "Spacebar":
+                        if (filter.Length > 0 && filter.Last() != ' ')
+                            filter += " ";
+                        break;
+
+                    case "Backspace":
+                        if (filter.Length > 0)
+                            filter = filter.Substring(0, filter.Length - 1);
+                        break;
+
                     case "UpArrow":
                         if (selStart > 0)
                             selStart--;
@@ -576,14 +628,20 @@ namespace QuizGameEngine
                             Edit(value, path.Concat(editables[selStart].Label).ToArray(), editables[selStart].DeclaredType, editables[selStart].SetValue);
                         break;
 
-                    case "A":
-                        if (isCollection || isDictionary)
-                            addElement(editables.Length);
-                        break;
-
                     case "Insert":
-                        if ((isCollection || isDictionary) && selLength == 1)
-                            addElement(selStart);
+                        if (!isCollection && !isDictionary)
+                            break;
+                        var ix = 0;
+                        if (rawEditables.Length != 0)
+                        {
+                            var resultInf = ConsoleSelect(
+                                new[] { new { Index = selStart, Label = "Insert here" }, new { Index = rawEditables.Length, Label = "Insert at bottom" } },
+                                inf => inf.Label.Color(ConsoleColor.Green));
+                            if (resultInf == null)
+                                break;
+                            ix = resultInf.Index;
+                        }
+                        addElement(ix);
                         break;
 
                     case "Ctrl+X":
@@ -611,15 +669,22 @@ namespace QuizGameEngine
                             {
                                 var arr = ClassifyJson.Deserialize<object[]>(JsonValue.Parse(Clipboard.GetText()));
                                 var index = insertAtBottom ? (type.IsArray ? obj.Length : obj.Count) : selStart;
+                                var can = true;
                                 if (isDictionary)
                                 {
                                     if (arr.Any(o => getCompatibleKeyValuePair(keyType, valueType, o) == null))
-                                        goto cannot;
+                                        can = false;
                                 }
                                 else // isCollection
                                 {
                                     if (arr.Any(o => !valueType.IsAssignableFrom(o.GetType())))
-                                        goto cannot;
+                                        can = false;
+                                }
+
+                                if (!can)
+                                {
+                                    DlgMessage.Show("The value(s) from the clipboard cannot be used in this context.", DlgType.Error);
+                                    break;
                                 }
 
                                 foreach (dynamic o in arr)
@@ -646,8 +711,15 @@ namespace QuizGameEngine
                         }
                         break;
 
-                        cannot:
-                        DlgMessage.Show("The value(s) from the clipboard cannot be used in this context.", DlgType.Error);
+                    case "Ctrl+I":
+                        if (selLength == 1 && editables[selStart].DeclaredType == typeof(string))
+                        {
+                            var val = (string) editables[selStart].GetValue();
+                            if (val.StartsWith("<i>") && val.EndsWith("</i>"))
+                                editables[selStart].SetValue(val.Substring(3, val.Length - 7));
+                            else
+                                editables[selStart].SetValue("<i>{0}</i>".Fmt(val));
+                        }
                         break;
                 }
             }
@@ -693,9 +765,8 @@ namespace QuizGameEngine
 
             if (type.IsAbstract)
             {
-                Console.Clear();
                 var availableTypes = type.Assembly.GetTypes().Where(t => !t.IsAbstract && type.IsAssignableFrom(t)).ToArray();
-                type = ConsoleSelect(availableTypes, t => t.Name);
+                type = ConsoleSelect(availableTypes, t => t.Name.Color(ConsoleColor.Green));
                 if (type == null)
                     return null;
             }
@@ -716,7 +787,7 @@ namespace QuizGameEngine
             }
 
             Tuple<ConsoleColoredString, object> ret;
-            return selections.TryGetValue(Program.ReadKey().Key, out ret) ? ret.Item2 : null;
+            return selections.TryGetValue(ReadKey().Key, out ret) ? ret.Item2 : null;
         }
 
         public static object GetConsoleSelectionFull(Dictionary<ConsoleKey, Tuple<ConsoleColoredString, object>> selections)
@@ -735,15 +806,15 @@ namespace QuizGameEngine
         {
             var dic = new Dictionary<ConsoleKey, Tuple<ConsoleColoredString, object>>();
             var curDic = dic;
-            var curKey = ConsoleKey.A;
+            var curKey = ConsoleKey.D1;
             foreach (var obj in objs)
             {
-                if (curKey == ConsoleKey.Z)
+                if (curKey > ConsoleKey.D9)
                 {
                     var newDic = new Dictionary<ConsoleKey, Tuple<ConsoleColoredString, object>>();
-                    curDic[curKey] = new Tuple<ConsoleColoredString, object>("more...".Color(ConsoleColor.Magenta), newDic);
+                    curDic[ConsoleKey.M] = new Tuple<ConsoleColoredString, object>("more...".Color(ConsoleColor.Magenta), newDic);
                     curDic = newDic;
-                    curKey = ConsoleKey.A;
+                    curKey = ConsoleKey.D0;
                 }
 
                 curDic[curKey] = new Tuple<ConsoleColoredString, object>(describe(obj), obj);

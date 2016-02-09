@@ -26,7 +26,10 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             get
             {
                 if (Data.SetIndex == 2)
-                    yield return Transition.Simple(ConsoleKey.P, "Play tie breaker round", () => new Round3_SetPoker_PlayTieBreaker(Data));
+                {
+                    yield return Transition.Simple(ConsoleKey.A, "Play tie breaker; Team A starts", () => new Round3_SetPoker_PlayTieBreaker(Data, new string[0], true));
+                    yield return Transition.Simple(ConsoleKey.B, "Play tie breaker; Team B starts", () => new Round3_SetPoker_PlayTieBreaker(Data, new string[0], false));
+                }
                 else
                     yield return Transition.Simple(ConsoleKey.P, "Play", () =>
                     {

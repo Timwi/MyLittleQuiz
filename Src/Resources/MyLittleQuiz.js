@@ -311,25 +311,75 @@ $(function ()
             if (p.answers.length < 1)
                 return;
 
+            var alreadyFontSize = null;
+            if ($('#r3-play').length)
+                alreadyFontSize = parseFloat($('#r3-play').css('font-size'));
+
             $('#r3-play,#r3-bid').remove();
             clearScreen();
 
-            var div = $('<div id="r3-play" class="away static">').appendTo(content);
-            content.append($('<div id="r3-bid" class="bid">').append($('<span class="number">').text(p.remaining)));
-            for (var i = 0; i < p.answers.length; i++)
+            var div = $('<table id="r3-play" class="away static">').appendTo(content);
+            if ('remaining' in p)
+                content.append($('<div id="r3-bid" class="away static">').append($('<span class="number">').text(p.remaining)).addClassDelay('in'));
+
+            var num = p.bid || 5;
+            if (num < 5)
+                num = 5;
+            if (p.tie && num < 10)
+                num = 10;
+            if (num < p.answers.length)
+                num = p.answers.length;
+
+            var prevTr = null;
+            for (var i = 0; i < num; i++)
             {
-                $('<div class="ans">')
-                    .append($('<div class="answer">').append($('<span class="inner">').text(p.answers[i])))
-                    .appendTo(div);
-            }
-            for (i = p.answers.length; i < 10; i++)
-            {
-                $('<div class="ans invisible">')
-                    .append($('<div class="answer">').append($('<span class="inner">').text('Wg')))
-                    .appendTo(div);
+                if (!p.tie || (i % 2 == 0))
+                    prevTr = $('<tr>').appendTo(div);
+
+                var td = $('<td>').append(
+                    $('<div class="ans' + (i < p.answers.length ? '' : ' invisible') + '">').data('index', i).append(
+                        $('<div class="answer">').append(
+                            $('<span class="inner">').html(i < p.answers.length ? p.answers[i] : 'Wg'))));
+                if (!p.tie || p.teamAStarted)
+                    td.appendTo(prevTr);
+                else
+                    td.prependTo(prevTr);
             }
 
-            findBestValue(100, function (fs) { div.css('font-size', fs + 'px'); return div.outerHeight() < content.height() ? -1 : 1; });
+            var fontSize = findBestValue(100, function (fs)
+            {
+                div.css('font-size', fs + 'px');
+                if (div.outerHeight() > content.height() || div.outerWidth() > content.width())
+                    return 1;
+                var elems = $('#r3-play .ans');
+                for (var i = 0; i < elems.length; i++)
+                    if ($(elems[i]).find('.inner').width() > $(elems[i]).find('.answer').width())
+                        return 1;
+                return -1;
+            });
+            //if (alreadyFontSize !== null && alreadyFontSize !== fontSize)
+            //{
+            //    div.css('font-size', alreadyFontSize + 'px');
+            //    div.animate({ 'font-size': fontSize }, 3000);
+            //}
+
+            var elem = $('#r3-play .ans').filter(function (_, e) { return $(e).data('index') === p.answers.length - 1 });
+            var width = elem.width();
+            var height = elem.outerHeight();
+            elem.removeClass('invisible').css({ width: '0%', height: height + 'px', opacity: 0 });
+            var inner = elem.find('.answer');
+            inner.css({ width: width + 'px' });
+
+            elem.animate({ opacity: 1 }, { duration: 700, queue: false });
+            elem.animate({ width: '100%' }, {
+                duration: 1000,
+                queue: false,
+                done: function ()
+                {
+                    elem.css({ width: '', height: '' });
+                    inner.css({ width: '' });
+                }
+            });
         },
     };
 });

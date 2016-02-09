@@ -103,7 +103,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                     for (int j = 0; j < cols; j++)
                         tt.SetCell(j + 2, i, j >= Answers[i].Length ? "?".Color(ConsoleColor.Blue) : Answers[i][j] ? "✓".Color(ConsoleColor.Green) : "✗".Color(ConsoleColor.Magenta));
                 }
-                return tt.ToColoredString();
+                return tt.ToColoredString() + "\n\n" + (CurrentQuestion == null ? "NO MORE QUESTIONS".Color(ConsoleColor.Red) : CurrentQuestion.Describe(AnswerObject));
             }
         }
 

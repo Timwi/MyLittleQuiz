@@ -12,27 +12,27 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
     {
         public int Bid { get; private set; }
 
-        public Round3_SetPoker_Play(Round3Data data, int bid, string[] answersGiven = null, bool[] answersCorrect = null)
-            : base(data, answersGiven, answersCorrect)
+        public Round3_SetPoker_Play(Round3Data data, int bid, string[] answersGiven = null)
+            : base(data, answersGiven)
         {
             Bid = bid;
         }
 
         private Round3_SetPoker_Play() { }  // for Classify
 
-        public override Round3_SetPoker_PlayBase GiveAnswer(string answer, bool correct)
+        public override Round3_SetPoker_PlayBase GiveAnswer(string answer)
         {
-            return new Round3_SetPoker_Play(Data, Bid, AnswersGiven.Concat(answer).ToArray(), AnswersCorrect.Concat(correct).ToArray());
+            return new Round3_SetPoker_Play(Data, Bid, AnswersGiven.Concat(answer).ToArray());
         }
 
         public override ConsoleColoredString Describe
         {
             get
             {
-                return "Current set: {0/Yellow}\nAnswers so far:\n{1}\nGot {2/Cyan}/{3/Yellow}".Color(ConsoleColor.White).Fmt(
+                return "Current set: {0/Yellow}\nCorrect answers so far:\n{1}\nGot {2/Cyan}/{3/Yellow}".Color(ConsoleColor.White).Fmt(
                     /* {0} */ CurrentSet.Name,
-                    /* {1} */ AnswersGiven.Select((a, i) => a.Color(AnswersCorrect[i] ? ConsoleColor.Green : ConsoleColor.Red) + "\n").JoinColoredString(),
-                    /* {2} */ AnswersCorrect.Count(c => c),
+                    /* {1} */ AnswersGiven.Select((a, i) => a.Color(ConsoleColor.Green) + "\n").JoinColoredString(),
+                    /* {2} */ AnswersGiven.Length,
                     /* {3} */ Bid
                 );
             }
@@ -45,7 +45,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
 
         public override object JsParameters
         {
-            get { return new { answers = CorrectAnswersGiven.ToArray(), remaining = Bid - CorrectAnswersGiven.Count() }; }
+            get { return new { tie = false, answers = AnswersGiven, bid = Bid, remaining = Bid - AnswersGiven.Length }; }
         }
     }
 }

@@ -8,7 +8,7 @@ using RT.Util.Text;
 
 namespace QuizGameEngine.Quizzes.MyLittleQuiz
 {
-    public sealed class Round2Data : ICloneable
+    public sealed class Round2Data : ICloneable, IClassifyObjectProcessor
     {
         public QuizData QuizData { get; private set; }
         public Round2Contestant[] Contestants { get; private set; }
@@ -179,6 +179,16 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         public object Clone()
         {
             return MemberwiseClone();
+        }
+
+        public void BeforeSerialize()
+        {
+        }
+
+        public void AfterDeserialize()
+        {
+            if (QuestionsUsed.Length != QuizData.Round2Categories.Length)
+                QuestionsUsed = QuizData.Round2Categories.Select((cat, ci) => cat.Questions.Select((q, qi) => ci >= QuestionsUsed.Length || qi >= QuestionsUsed[ci].Length ? false : QuestionsUsed[ci][qi]).ToArray()).ToArray();
         }
     }
 }

@@ -30,12 +30,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                 });
 
                 if (Data.SelectedContestant != null)
-                {
-                    var difficulty = Data.Contestants[Data.SelectedContestant.Value].NumCorrect > 0 ? Difficulty.Medium : Difficulty.Easy;
-                    if (difficulty == Difficulty.Easy && Data.Questions.ContainsKey(difficulty) && Data.Questions[difficulty].Length == Data.QuestionIndex[difficulty])
-                        difficulty = Difficulty.Medium;
-                    yield return Transition.Simple(ConsoleKey.Q, "Ask question ({0})".Fmt(difficulty), () => new Round1_Elimination_Q(Data.AskQuestion(difficulty)));
-                }
+                    yield return Transition.Simple(ConsoleKey.Q, "Ask the question", () => new Round1_Elimination_Q(Data));
             }
         }
 

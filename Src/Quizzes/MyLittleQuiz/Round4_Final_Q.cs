@@ -21,14 +21,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         {
             get
             {
-                return "{5}\n\n{0/White}\n{1/Cyan}\n\n{2/White}\n{3/Green}{4}".Color(null).Fmt(
-                    /* 0 */ "Question:",
-                    /* 1 */ CurrentQuestion.QuestionFullText.WordWrap(ConsoleUtil.WrapToWidth(), 4).JoinColoredString(Environment.NewLine),
-                    /* 2 */ "Answer(s):",
-                    /* 3 */ CurrentQuestion.AnswerFullText.WordWrap(ConsoleUtil.WrapToWidth(), 4).JoinColoredString(Environment.NewLine),
-                    /* 4 */ Data.AnswerObject == null ? null : "\n\nAnswer given".Color(Data.AnswerObject.Equals(false) ? ConsoleColor.Red : ConsoleColor.Green),
-                    /* 5 */ Data.Describe
-                );
+                return Data.Describe;
             }
         }
 

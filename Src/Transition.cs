@@ -118,7 +118,42 @@ namespace QuizGameEngine
 
         public static Transition SelectIndex<T>(ConsoleKey key, string name, T[] selection, Func<int, TransitionResult> executor) where T : IToConsoleColoredString
         {
-            return Select(key, name, selection.Select((s, i) => new { Obj = s, Index = i }), inf => inf.Obj.ToConsoleColoredString(), inf => executor(inf.Index));
+            return new Transition(key, name, () =>
+            {
+                for (int i = 0; i < selection.Length; i++)
+                    ConsoleUtil.WriteLine("{0}: {1}".Color(ConsoleColor.White).Fmt(i + 1, selection[i].ToConsoleColoredString()));
+
+                ConsoleUtil.Write("Enter index: ".Color(ConsoleColor.Yellow));
+                var str = "";
+                while (true)
+                {
+                    var k = Console.ReadKey(true);
+                    if (k.Key >= ConsoleKey.D0 && k.Key <= ConsoleKey.D9)
+                    {
+                        str += (char) (k.Key - ConsoleKey.D0 + '0');
+                        ConsoleUtil.Write(k.KeyChar.ToString());
+                    }
+                    else if (k.Key == ConsoleKey.Backspace && str.Length > 0)
+                    {
+                        str = str.Substring(0, str.Length - 1);
+                        Console.CursorLeft--;
+                        Console.Write(" ");
+                        Console.CursorLeft--;
+                    }
+                    else if (k.Key == ConsoleKey.Escape)
+                        return null;
+                    else if (k.Key == ConsoleKey.Enter)
+                        break;
+                }
+                int index;
+                if (!int.TryParse(str, out index) || index >= selection.Length)
+                    return null;
+
+                var transition = executor(index - 1);
+                if (transition != null && transition.UndoLine == null)
+                    transition = new TransitionResult(transition.State, name, transition.JsMethod, transition.JsParameters);
+                return transition;
+            });
         }
 
         public static Transition SelectIndex<T>(ConsoleKey key, string name, T[] selection, Func<int, QuizStateBase> executor) where T : IToConsoleColoredString
@@ -182,10 +217,10 @@ namespace QuizGameEngine
                         words.Add("");
                     else if (keyName == "Backspace")
                     {
-                        if (string.IsNullOrWhiteSpace(words[words.Count - 1]))
-                            words.RemoveAt(words.Count - 1);
-                        else
+                        if (!string.IsNullOrWhiteSpace(words[words.Count - 1]))
                             words[words.Count - 1] = words[words.Count - 1].Remove(words[words.Count - 1].Length - 1);
+                        else if (words.Count > 1)
+                            words.RemoveAt(words.Count - 1);
                     }
                     else
                         words[words.Count - 1] += keyInfo.KeyChar;

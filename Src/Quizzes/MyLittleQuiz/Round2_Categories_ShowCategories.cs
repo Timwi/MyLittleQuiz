@@ -28,8 +28,8 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                 else if (Data.SelectedCategory == null)
                 {
                     yield return Transition.Simple(ConsoleKey.S, "Show scores", () => new Round2_Categories_ShowContestants(Data));
-                    yield return Transition.SelectIndex(ConsoleKey.C, "Select a category", Data.QuizData.Round2Categories,
-                        index => new Round2_Categories_ShowCategories(Data.SelectCategory(index)).With("r2_selectCat", new { selected = index }));
+                    yield return Transition.Select(ConsoleKey.C, "Select a category", Data.QuizData.Round2Categories, cat => cat.Name.Color(ConsoleColor.Yellow),
+                        cat => Data.Categories.IndexOf(cat).Apply(index => new Round2_Categories_ShowCategories(Data.SelectCategory(index)).With("r2_selectCat", new { selected = index })));
                     yield return Transition.Simple(ConsoleKey.P, "Pass", () => new Round2_Categories_ShowCategories(Data.Pass()).NoTransition());
                 }
                 else

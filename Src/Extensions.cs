@@ -23,19 +23,25 @@ namespace QuizGameEngine
             return newArray;
         }
 
-        public static T[] RemoveIndexes<T>(this T[] array, int index, int length)
+        public static T[] RemoveIndexes<T>(this T[] array, int[] indexes)
         {
             if (array == null)
                 throw new ArgumentNullException("array");
-            if (index < 0 || index > array.Length)
-                throw new ArgumentOutOfRangeException("index", "Index out of bounds.");
-            if (length < 0 || index + length > array.Length)
-                throw new ArgumentOutOfRangeException("length", "Length cannot be negative or out of bounds.");
-            var newArray = new T[array.Length - length];
-            if (index > 0)
-                Array.Copy(array, 0, newArray, 0, index);
-            if (index + length < array.Length)
-                Array.Copy(array, index + length, newArray, index, array.Length - index - length);
+            if (indexes.Any(ix => ix < 0 || ix >= array.Length))
+                throw new ArgumentOutOfRangeException("indexes", "Index out of bounds.");
+            var newArray = new T[array.Length - indexes.Length];
+            var curOld = 0;
+            var curNew = 0;
+            Array.Sort(indexes);
+            for (int i = 0; i < indexes.Length; i++)
+            {
+                if (indexes[i] > curOld)
+                    Array.Copy(array, curOld, newArray, curNew, indexes[i] - curOld);
+                curNew += indexes[i] - curOld;
+                curOld = indexes[i] + 1;
+            }
+            if (curOld < array.Length)
+                Array.Copy(array, curOld, newArray, curNew, array.Length - curOld);
             return newArray;
         }
 
@@ -79,7 +85,7 @@ namespace QuizGameEngine
 
         public static TransitionResult With(this QuizStateBase state, string jsMethod, object jsParams = null)
         {
-            return new TransitionResult(state, null, jsMethod, jsParams);
+            return new TransitionResult(state, null, jsMethod, jsParams ?? state.JsParameters);
         }
 
         public static TransitionResult NoTransition(this QuizStateBase state)
@@ -105,6 +111,8 @@ namespace QuizGameEngine
 
         public static ConsoleColoredString ToUsefulString(this object obj)
         {
+            if (obj == null)
+                return "<null>".Color(ConsoleColor.DarkGray);
             if (obj is IToConsoleColoredString)
                 return ((IToConsoleColoredString) obj).ToConsoleColoredString();
             if (obj is string)
