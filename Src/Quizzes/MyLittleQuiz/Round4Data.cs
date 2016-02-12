@@ -19,7 +19,9 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         public ContestantAndScore[] Contestants { get; private set; } = new ContestantAndScore[0];
         [ClassifyNotNull]
         public bool[][] Answers { get; private set; } = new bool[0][];
-        public int QuestionIndex { get; private set; }
+        [ClassifyNotNull]
+        public int[] QuestionsTaken { get; private set; } = new int[0];
+        public int CurrentQuestionIndex { get; private set; }
         [ClassifyIgnoreIfDefault]
         public object AnswerObject { get; private set; }
 
@@ -28,8 +30,16 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             QuizData = quizData;
             Contestants = contestants;
             Answers = Ut.NewArray(contestants.Length, i => new bool[0]);
-            QuestionIndex = 0;
+            chooseQuestion();
             AnswerObject = null;
+        }
+
+        private void chooseQuestion()
+        {
+            var available = Enumerable.Range(0, Questions.Length).Except(QuestionsTaken).ToArray();
+            if (available.Length == 0)
+                CurrentQuestionIndex = 0;
+            CurrentQuestionIndex = available[Rnd.Next(0, available.Length)];
         }
 
         private Round4Data() { }    // for Classify
@@ -40,7 +50,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         }
 
         public QuestionBase[] Questions { get { return QuizData.Round4Questions; } }
-        public QuestionBase CurrentQuestion { get { return QuizData.Round4Questions[QuestionIndex]; } }
+        public QuestionBase CurrentQuestion { get { return QuizData.Round4Questions[CurrentQuestionIndex]; } }
 
         public int WhoseTurn
         {
@@ -70,7 +80,8 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             return this.ApplyToClone(r4c =>
             {
                 r4c.AnswerObject = null;
-                r4c.QuestionIndex = QuestionIndex + 1;
+                r4c.QuestionsTaken = QuestionsTaken.Concat(CurrentQuestionIndex).ToArray();
+                r4c.chooseQuestion();
             });
         }
 
@@ -99,11 +110,12 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                         tt.SetCell(0, i, "out".Color(ConsoleColor.Red));
                     else if (i == whoseTurn)
                         tt.SetCell(0, i, "▶".Color(ConsoleColor.Yellow));
-                    tt.SetCell(1, i, Contestants[i].Name.Color(ConsoleColor.White));
+                    tt.SetCell(1, i, Contestants[i].Score.ToString().Color(ConsoleColor.DarkYellow), alignment: HorizontalTextAlignment.Right);
+                    tt.SetCell(2, i, Contestants[i].Name.Color(ConsoleColor.White));
                     for (int j = 0; j < cols; j++)
-                        tt.SetCell(j + 2, i, j >= Answers[i].Length ? "?".Color(ConsoleColor.Blue) : Answers[i][j] ? "✓".Color(ConsoleColor.Green) : "✗".Color(ConsoleColor.Magenta));
+                        tt.SetCell(j + 3, i, j >= Answers[i].Length ? "?".Color(ConsoleColor.Blue) : Answers[i][j] ? "✓".Color(ConsoleColor.Green) : "✗".Color(ConsoleColor.Magenta));
                 }
-                return tt.ToColoredString() + "\n\n" + (CurrentQuestion == null ? "NO MORE QUESTIONS".Color(ConsoleColor.Red) : CurrentQuestion.Describe(AnswerObject));
+                return tt.ToColoredString() + "\n\n" + (QuestionsTaken.Length >= Questions.Length ? "NO MORE QUESTIONS".Color(ConsoleColor.Red) : "{0/Yellow} questions left.\n\n{1}".Color(ConsoleColor.Green).Fmt(Questions.Length - QuestionsTaken.Length, CurrentQuestion.Describe(AnswerObject)));
             }
         }
 

@@ -14,7 +14,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         public Round4_Final_Q(Round4Data data) { Data = data; }
         private Round4_Final_Q() { }    // for Classify
 
-        public override QuestionBase CurrentQuestion { get { return Data.QuizData.Round4Questions[Data.QuestionIndex]; } }
+        public override QuestionBase CurrentQuestion { get { return Data.CurrentQuestion; } }
         public override QuizStateBase GiveAnswer(object answer) { return new Round4_Final_Q(Data.GiveAnswer(answer)); }
 
         public override ConsoleColoredString Describe

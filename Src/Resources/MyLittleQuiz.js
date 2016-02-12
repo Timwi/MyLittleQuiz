@@ -286,6 +286,7 @@ $(function ()
             div.append($('<div class="score-box team-b"></div>').append($('<div class="score">').text(p.teamB.Score)));
 
             findBestValue(100, function (fs) { div.css('font-size', fs + 'px'); return div.outerHeight() < content.height() ? -1 : 1; });
+            div.css({ bottom: 0 });
 
             $('#r3-contestants>.contestant').each(function ()
             {
@@ -322,12 +323,10 @@ $(function ()
             if ('remaining' in p)
                 content.append($('<div id="r3-bid" class="away static">').append($('<span class="number">').text(p.remaining)).addClassDelay('in'));
 
-            var num = p.bid || 5;
-            if (num < 5)
-                num = 5;
-            if (p.tie && num < 10)
-                num = 10;
-            if (num < p.answers.length)
+            var num = p.tie ? 10 : 5;
+            if (num < p.answers.length + 1 && (p.remaining > 0 || p.tie))
+                num = p.answers.length + 1;
+            else if (num < p.answers.length)
                 num = p.answers.length;
 
             var prevTr = null;
@@ -339,7 +338,7 @@ $(function ()
                 var td = $('<td>').append(
                     $('<div class="ans' + (i < p.answers.length ? '' : ' invisible') + '">').data('index', i).append(
                         $('<div class="answer">').append(
-                            $('<span class="inner">').html(i < p.answers.length ? p.answers[i] : 'Wg'))));
+                            $('<span class="inner">').html(i < p.answers.length ? p.answers[i] : p.answers[0]))));
                 if (!p.tie || p.teamAStarted)
                     td.appendTo(prevTr);
                 else
@@ -357,11 +356,11 @@ $(function ()
                         return 1;
                 return -1;
             });
-            //if (alreadyFontSize !== null && alreadyFontSize !== fontSize)
-            //{
-            //    div.css('font-size', alreadyFontSize + 'px');
-            //    div.animate({ 'font-size': fontSize }, 3000);
-            //}
+            if (alreadyFontSize != null && alreadyFontSize != fontSize)
+            {
+                div.css('font-size', alreadyFontSize + 'px');
+                div.animate({ fontSize: fontSize }, { duration: 2000, queue: false });
+            }
 
             var elem = $('#r3-play .ans').filter(function (_, e) { return $(e).data('index') === p.answers.length - 1 });
             var width = elem.width();
@@ -381,5 +380,12 @@ $(function ()
                 }
             });
         },
+        //#endregion
+
+        //#region ROUND 4 (Final/Sudden Death)
+        r4_showContestants: function (p)
+        {
+        },
+        //#endregion
     };
 });

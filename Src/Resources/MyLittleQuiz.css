@@ -671,6 +671,7 @@ body {
         transition: opacity linear .5s;
         border-spacing: 1em 0;
         width: 100%;
+        table-layout: fixed;
     }
 
         #content #r3-play.out {
@@ -682,7 +683,7 @@ body {
             background: #ba0;
             padding: .1em 1.5em;
             text-align: center;
-            margin: .5em 0;
+            margin: .2em 0;
             overflow: hidden;
         }
 

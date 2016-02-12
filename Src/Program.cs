@@ -188,10 +188,12 @@ namespace QuizGameEngine
 
                     if (transitionResult.JsMethod != null)
                     {
-                        var json = ClassifyJson.Serialize(transitionResult.JsParameters);
+                        var prms = ClassifyJson.Serialize(transitionResult.JsParameters);
+                        if (prms.ContainsKey(":fulltype"))
+                            prms.Remove(":fulltype");
                         lock (Sockets)
                             foreach (var socket in Sockets)
-                                socket.SendLoggedMessage(new JsonDict { { "method", transitionResult.JsMethod }, { "params", json } });
+                                socket.SendLoggedMessage(new JsonDict { { "method", transitionResult.JsMethod }, { "params", prms } });
                     }
 
                     needSave = true;

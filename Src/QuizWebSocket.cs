@@ -38,7 +38,12 @@ namespace QuizGameEngine
                 // Because of concurrency, make sure we access Program.Quiz.CurrentState only once.
                 var state = Program.Quiz.CurrentState;
                 if (state.JsMethod != null)
-                    SendLoggedMessage(new JsonDict { { "method", state.JsMethod }, { "params", ClassifyJson.Serialize(state.JsParameters) } });
+                {
+                    var prms = ClassifyJson.Serialize(state.JsParameters);
+                    if (prms.ContainsKey(":fulltype"))
+                        prms.Remove(":fulltype");
+                    SendLoggedMessage(new JsonDict { { "method", state.JsMethod }, { "params", prms } });
+                }
             }
             base.onTextMessageReceived(msg);
         }
