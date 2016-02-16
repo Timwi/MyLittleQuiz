@@ -3,9 +3,12 @@ $(function ()
 {
     var content = $('#content');
 
-    function clearScreen()
+    function clearScreen(except)
     {
-        $('.away').removeClass('in').addClass('out');
+        var consider = $('.away');
+        if (except)
+            consider = consider.not(except);
+        consider.removeClass('in').addClass('out');
         if (!$('#background').length)
             $('<div id="background">').prependTo(content);
     }
@@ -385,6 +388,58 @@ $(function ()
         //#region ROUND 4 (Final/Sudden Death)
         r4_showContestants: function (p)
         {
+            clearScreen('#r4-contestants');
+
+            var div = $('#r4-contestants');
+            if (!div.length)
+                div = $('<div id="r4-contestants" class="static away">')
+                    .append('<table>')
+                    .appendTo(content);
+            var table = div.find('table');
+
+            var rows = p.answers.length;
+            var trs = div.find('tr');
+            for (var i = Math.max(rows, trs.length) - 1; i >= 0; i--)
+            {
+                if (i >= rows.length)
+                    $(trs.get(i)).remove();
+                else if (i >= trs.length)
+                    $('<tr>').appendTo(table);
+            }
+            trs = div.find('tr');
+
+            var cols = p.minAnswers;
+            for (var i = 0; i < p.answers.length; i++)
+                if (p.answers[i].length > cols)
+                    cols = p.answers[i].length;
+            cols++; // contestant names
+
+            for (var i = 0; i < trs.length; i++)
+            {
+                var tr = $(trs.get(i));
+                var tds = tr.find('td');
+                for (var j = Math.max(cols, tds.length) - 1; j >= 0; j--)
+                {
+                    if (j >= cols.length)
+                        $(tds.get(j)).remove();
+                    else if (j >= tds.length)
+                        $('<td>').appendTo(tr);
+                }
+            }
+
+            for (var i = 0; i < rows; i++)
+            {
+                var tr = $(trs.get(i));
+                var tds = tr.find('td');
+                for (var j = 0; j < cols; j++)
+                {
+                    var td = $(tds.get(j));
+                    if (j === 0)
+                        td.text(p.contestants[i].Name);
+                    else
+                        td.addClass(j - 1 >= p.answers[i].length ? 'none' : p.answers[i][j - 1] ? 'correct' : 'wrong');
+                }
+            }
         },
         //#endregion
     };

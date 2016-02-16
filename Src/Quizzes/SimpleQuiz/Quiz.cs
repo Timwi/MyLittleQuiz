@@ -8,8 +8,6 @@ namespace QuizGameEngine.Quizzes.SimpleQuiz
 {
     public sealed class Quiz : QuizBase
     {
-        public override byte[] Css { get { return Resources.SimpleQuizCss; } }
-        public override byte[] Js { get { return Resources.SimpleQuizJs; } }
         public override string CssJsFilename { get { return "SimpleQuiz"; } }
 
         public Quiz(Tuple<string, string>[] questions)

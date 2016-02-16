@@ -79,23 +79,14 @@ namespace QuizGameEngine
             Quiz = ClassifyJson.DeserializeFile<QuizBase>(_dataFile);
             _logFile = cmd.LogFile;
 
-            var getResourceHandler = Ut.Lambda((Func<byte[], HttpResponse> function, byte[] resource, string filename) =>
-            {
-                return Ut.Lambda((HttpRequest req) =>
-                {
-                    if (cmd.ResourcePath == null)
-                        return function(resource);
-                    return function(File.ReadAllBytes(Path.Combine(cmd.ResourcePath, filename)));
-                });
-            });
-
             Server = new HttpServer(24567);
             var resolver = new UrlResolver(
                 new UrlMapping(path: "/", specificPath: true, handler: handle),
-                new UrlMapping(path: "/jquery", specificPath: true, handler: getResourceHandler(d => HttpResponse.JavaScript(d), Resources.JQuery, "jquery-2.1.4.js")),
-                new UrlMapping(path: "/js1", specificPath: true, handler: getResourceHandler(d => HttpResponse.JavaScript(d), Quiz.Js, Quiz.CssJsFilename + ".js")),
-                new UrlMapping(path: "/js2", specificPath: true, handler: getResourceHandler(d => HttpResponse.JavaScript(d), Resources.GlobalJs, "Global.js")),
-                new UrlMapping(path: "/css", specificPath: true, handler: getResourceHandler(d => HttpResponse.Css(d), Quiz.Css, Quiz.CssJsFilename + ".css")),
+                new UrlMapping(path: "/jquery", specificPath: true, handler: req => HttpResponse.File(Path.Combine(cmd.ResourcePath, "jquery-2.1.4.js"), "text/javascript; charset=utf-8", ifModifiedSince: req.Headers.IfModifiedSince)),
+                new UrlMapping(path: "/js1", specificPath: true, handler: req => HttpResponse.File(Path.Combine(cmd.ResourcePath, Quiz.CssJsFilename, Quiz.CssJsFilename + ".js"), "text/javascript; charset=utf-8", ifModifiedSince: req.Headers.IfModifiedSince)),
+                new UrlMapping(path: "/js2", specificPath: true, handler: req => HttpResponse.File(Path.Combine(cmd.ResourcePath, "Global.js"), "text/javascript; charset=utf-8", ifModifiedSince: req.Headers.IfModifiedSince)),
+                new UrlMapping(path: "/css", specificPath: true, handler: req => HttpResponse.File(Path.Combine(cmd.ResourcePath, Quiz.CssJsFilename, Quiz.CssJsFilename + ".css"), "text/css; charset=utf-8", ifModifiedSince: req.Headers.IfModifiedSince)),
+                new UrlMapping(path: "/files", handler: new FileSystemHandler(cmd.ResourcePath).Handle),
                 new UrlMapping(path: "/socket", specificPath: true, handler: webSocket));
             if (cmd.ResourcePath != null)
             {

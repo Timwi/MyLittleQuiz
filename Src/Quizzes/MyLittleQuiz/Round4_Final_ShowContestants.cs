@@ -36,7 +36,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
 
         public override object JsParameters
         {
-            get { return new { contestants = Data.Contestants, answers = Data.Answers }; }
+            get { return new { contestants = Data.Contestants, answers = Data.Answers, minAnswers = Data.QuizData.Round4MinQuestions }; }
         }
     }
 }

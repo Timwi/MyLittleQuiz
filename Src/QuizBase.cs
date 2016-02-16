@@ -55,8 +55,6 @@ namespace QuizGameEngine
 
         public string RedoLine { get { return _redo.Count == 0 ? null : _redo.Peek().Item2; } }
 
-        public abstract byte[] Css { get; }
-        public abstract byte[] Js { get; }
         public abstract string CssJsFilename { get; }
     }
 }

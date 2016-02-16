@@ -12,8 +12,6 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
 {
     public sealed class Round4Data : ICloneable
     {
-        public const int MinQuestions = 5;
-
         public QuizData QuizData { get; private set; }
         [ClassifyNotNull]
         public ContestantAndScore[] Contestants { get; private set; } = new ContestantAndScore[0];
@@ -100,8 +98,8 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             {
                 var whoseTurn = WhoseTurn;
                 var tt = new TextTable { ColumnSpacing = 2 };
-                var cols = Math.Max(MinQuestions, Answers.Max(a => a.Length));
-                if (Answers[0].Length >= MinQuestions && whoseTurn == 0)
+                var cols = Math.Max(QuizData.Round4MinQuestions, Answers.Max(a => a.Length));
+                if (Answers[0].Length >= QuizData.Round4MinQuestions && whoseTurn == 0)
                     cols++;
                 var cOut = ContestantsOutOfGame;
                 for (int i = 0; i < Contestants.Length; i++)
@@ -123,7 +121,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         {
             get
             {
-                var numQuestions = Answers[0].Length.ClipMin(MinQuestions);
+                var numQuestions = Answers[0].Length.ClipMin(QuizData.Round4MinQuestions);
                 var potentialPoints = Answers.Select(ans => ans.Count(b => b) + (numQuestions - ans.Length).ClipMin(0)).ToArray();
                 var maxPoints = Answers.Select(a => a.Count(b => b)).Max();
                 return potentialPoints.SelectIndexWhere(pp => pp < maxPoints).ToArray();

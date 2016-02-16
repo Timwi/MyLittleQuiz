@@ -37,7 +37,6 @@ body {
         left: 0;
         right: 0;
         bottom: 0;
-        background: #004;
     }
 
     #content #r1-contestants {
@@ -726,3 +725,22 @@ body {
             top: 50%;
             transform: translate(-50%, -50%);
         }
+
+    #content #r4-contestants {
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+
+        #content #r4-contestants table {
+            empty-cells: show;
+            background: #444;
+        }
+
+            #content #r4-contestants table td {
+                border: 2px solid red;
+                min-width: 1.3em;
+                line-height: 1em;
+                padding: .2em .5em;
+                text-align: right;
+            }
