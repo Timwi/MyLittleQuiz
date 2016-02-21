@@ -15,6 +15,8 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         public Round2_Categories_Q(Round2Data data) { Data = data; }
         private Round2_Categories_Q() { } // for Classify
 
+        protected override string Round { get { return "r2"; } }
+
         public override QuestionBase CurrentQuestion { get { return Data.Categories[Data.SelectedCategory.Value].Questions[Data.SelectedQuestion.Value]; } }
         public override QuizStateBase GiveAnswer(object answer) { return new Round2_Categories_Q(Data.GiveAnswer(answer)); }
 

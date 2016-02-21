@@ -14,6 +14,8 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         public Round4_Final_Q(Round4Data data) { Data = data; }
         private Round4_Final_Q() { }    // for Classify
 
+        protected override string Round { get { return "r4"; } }
+
         public override QuestionBase CurrentQuestion { get { return Data.CurrentQuestion; } }
         public override QuizStateBase GiveAnswer(object answer) { return new Round4_Final_Q(Data.GiveAnswer(answer)); }
 
@@ -67,7 +69,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                 {
                     question = CurrentQuestion,
                     answer = Data.AnswerObject,
-                    round = "r1"
+                    round = "r4"
                 };
             }
         }

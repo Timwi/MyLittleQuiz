@@ -64,6 +64,44 @@ $(function ()
             });
     }
 
+    function r4_addBackground(div, iwidth, height, hue, positionTop)
+    {
+        var owidth = div.outerWidth();
+        var lf = owidth/2 - iwidth/2;
+        var llf = lf - height/4;
+        var rg = lf + iwidth;
+        var rrg = rg + height/4;
+        var strw = height/100;
+        var svg = '';
+        svg +=  '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 -'+strw+' '+owidth+' '+(height+strw)+'">';
+        svg +=      '<defs>';
+        svg +=          '<linearGradient id="lg">';
+        svg +=              '<stop offset="0"   style="stop-color:hsl('+hue+', 33%, 20%);stop-opacity:1;" />';
+        svg +=              '<stop offset="0.2" style="stop-color:hsl('+hue+', 15%, 47%);stop-opacity:1;" />';
+        svg +=              '<stop offset="0.3" style="stop-color:hsl('+hue+', 25%, 73%);stop-opacity:1;" />';
+        svg +=              '<stop offset="0.9" style="stop-color:hsl('+hue+', 99%, 07%);stop-opacity:1;" />';
+        svg +=              '<stop offset="1"   style="stop-color:hsl('+hue+', 50%, 13%);stop-opacity:1;" />';
+        svg +=          '</linearGradient>';
+        svg +=          '<linearGradient xlink:href="#lg" id="lqh" x1="0" y1="0" x2=".1" y2="1" />';
+        svg +=      '</defs>';
+        svg +=      '<line x1="0" y1="'+(height/2-strw/2)+'" x2="'+owidth+'" y2="'+(height/2-strw/2)+'" stroke="hsl('+hue+', 17%, 40%)" stroke-width="'+strw+'" />';
+        svg +=      '<line x1="0" y1="'+(height/2+strw/2)+'" x2="'+owidth+'" y2="'+(height/2+strw/2)+'" stroke="hsl('+hue+', 50%, 13%)" stroke-width="'+strw+'" />';
+        svg +=      '<path style="fill:url(#lqh)" d="M '+lf+',0 '+rg+',0 '+rrg+','+(height/2)+' '+rg+','+height+' '+lf+','+height+' '+llf+','+(height/2)+' z" />';
+        svg +=      '<line x1="'+llf+'" y1="'+(height/2)+'" x2="'+lf+'"  y2="0"              stroke="hsl('+hue+', 25%, 73%)" stroke-width="'+strw+'" />';
+        svg +=      '<line x1="'+lf+'"  y1="0"              x2="'+rg+'"  y2="0"              stroke="hsl('+hue+', 16%, 40%)" stroke-width="'+strw+'" />';
+        svg +=      '<line x1="'+rg+'"  y1="0"              x2="'+rrg+'" y2="'+(height/2)+'" stroke="hsl('+hue+', 33%, 20%)" stroke-width="'+strw+'" />';
+        svg +=      '<line x1="'+rrg+'" y1="'+(height/2)+'" x2="'+rg+'"  y2="'+height+'"     stroke="hsl('+hue+', 99%, 07%)" stroke-width="'+strw+'" />';
+        svg +=      '<line x1="'+rg+'"  y1="'+height+'"     x2="'+lf+'"  y2="'+height+'"     stroke="hsl('+hue+', 50%, 09%)" stroke-width="'+strw+'" />';
+        svg +=      '<line x1="'+lf+'"  y1="'+height+'"     x2="'+llf+'" y2="'+(height/2)+'" stroke="hsl('+hue+', 20%, 33%)" stroke-width="'+strw+'" />';
+        svg +=  '</svg>';
+        div.css({
+            'background-image': "url('data:image/svg+xml," + svg.replace(/#/g, '%23') + "')",
+            'background-repeat': 'no-repeat',
+            'background-position': positionTop ? '50% 0%' : '50% 50%',
+            'background-size': 'fit'
+        });
+    }
+
     transitions = {
 
         //#region QUESTION/ANSWER (showQ, showA, showQA)
@@ -81,20 +119,22 @@ $(function ()
             var qdiv = $('<div class="question qa">').addClassDelay('in').append(qdecor);
 
             var adecor = $('<div class="decor">').text('✗');
-            var adiv = $('<div class="answer qa">').append(adecor);
+            var adiv = $('<div class="answer qa invisible">').append(adecor);
+
+            var qtext, atext;
 
             switch (q[':type'])
             {
                 case 'SimpleQuestion':
-                    qdiv.append($('<div class="text">').html(q.QuestionText));
-                    adiv.append($('<div class="text">').html(q.Answer));
+                    qtext = $('<div class="text">').html(q.QuestionText).appendTo(qdiv);
+                    atext = $('<div class="text">').html(q.Answer).appendTo(adiv);
                     break;
 
                 case 'NOfQuestion':
-                    qdiv.append($('<div class="text">').html(q.QuestionText));
-                    var ul = $('<ul class="text">').appendTo(adiv);
+                    qtext = $('<div class="text">').html(q.QuestionText).appendTo(qdiv);
+                    atext = $('<ul class="text">').appendTo(adiv);
                     for (var i = 0; i < q.Answers.length; i++)
-                        ul.append($('<li>').css('transition-delay', (i / 4) + 's').addClass('opt-' + i).append($('<div class="inner">').append($('<span class="inner">').html(q.Answers[i]))));
+                        atext.append($('<li>').css('transition-delay', (i / 4) + 's').addClass('opt-' + i).append($('<div class="inner">').append($('<span class="inner">').html(q.Answers[i]))));
                     break;
             }
 
@@ -104,9 +144,12 @@ $(function ()
             findBestValue(20, function (fs) { qa.css('font-size', fs + 'px'); return qa.outerHeight() < content.height() ? -1 : 1; });
 
             // Question “?” decor
-            findBestValue(20, function (fs) { qdecor.css('font-size', fs + 'px'); return qdecor.outerHeight() < qdiv.outerHeight() ? -1 : 1; });
+            findBestValue(20, function (fs) { qdecor.css('font-size', fs + 'px'); return qdecor.outerHeight() < qdiv.height() ? -1 : 1; });
             // Answer “✗”/“✓” decor
-            findBestValue(20, function (fs) { adecor.css('font-size', fs + 'px'); return adecor.outerHeight() < adiv.outerHeight() ? -1 : 1; });
+            findBestValue(20, function (fs) { adecor.css('font-size', fs + 'px'); return adecor.outerHeight() < adiv.height() ? -1 : 1; });
+
+            if (p.round === 'r4')
+                r4_addBackground(qdiv, qtext.innerWidth(), qtext.innerHeight(), 240);
         },
 
         showA: function (p)
@@ -119,9 +162,15 @@ $(function ()
             if (':value' in a)
                 a = a[':value'];
 
-            $('#qa .answer').addClass(a === false ? 'wrong in' : 'correct in');
+            $('#qa .answer').addClass(a === false ? 'wrong in' : 'correct in').removeClass('invisible');
             if (a !== false)
                 $('#qa .answer .decor').text('✓');
+
+            if (p.round === 'r4')
+            {
+                var atext = $('#qa .answer .text');
+                r4_addBackground($('div.qa.answer'), atext.innerWidth(), atext.innerHeight(), a === false ? 0 : 110);
+            }
 
             switch (qa.data('type'))
             {
@@ -388,13 +437,13 @@ $(function ()
         //#region ROUND 4 (Final/Sudden Death)
         r4_showContestants: function (p)
         {
-            clearScreen('#r4-contestants');
+            $('#r4-contestants').remove();
+            clearScreen();
 
-            var div = $('#r4-contestants');
-            if (!div.length)
-                div = $('<div id="r4-contestants" class="static away">')
+            var div = $('<div id="r4-contestants" class="static away">')
                     .append('<table>')
-                    .appendTo(content);
+                    .appendTo(content)
+                    .addClassDelay('in');
             var table = div.find('table');
 
             var rows = p.answers.length;
@@ -440,6 +489,13 @@ $(function ()
                         td.addClass(j - 1 >= p.answers[i].length ? 'none' : p.answers[i][j - 1] ? 'correct' : 'wrong');
                 }
             }
+
+            findBestValue(100, function (fs) {
+                div.css('font-size', fs + 'px');
+                return div.outerHeight() < content.height()/3 ? -1 : 1;
+            });
+
+            r4_addBackground(div, table.outerWidth(), table.outerHeight(), 30, true);
         },
         //#endregion
     };

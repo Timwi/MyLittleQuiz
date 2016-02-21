@@ -23,7 +23,9 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                 .Select(answerInfo => Transition.Simple(
                     answerInfo.Item1,
                     "Answer: " + answerInfo.Item2,
-                    () => GiveAnswer(answerInfo.Item3).With("showA", new { answer = answerInfo.Item3 })));
+                    () => GiveAnswer(answerInfo.Item3).With("showA", new { answer = answerInfo.Item3, round = Round })));
         }
+
+        protected abstract string Round { get; }
     }
 }

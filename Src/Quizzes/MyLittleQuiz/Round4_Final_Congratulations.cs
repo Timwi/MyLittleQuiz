@@ -4,7 +4,7 @@ using RT.Util.Consoles;
 
 namespace QuizGameEngine.Quizzes.MyLittleQuiz
 {
-    public sealed class Round4_Final_Congratulations : MyLittleQuizStateBase
+    public sealed class Round4_Final_Congratulations : QuizStateBase
     {
         public Round4Data Data { get; private set; }
 
@@ -14,14 +14,6 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         }
 
         private Round4_Final_Congratulations() { }    // for Classify
-
-        public override QuestionBase CurrentQuestion
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
 
         public override IEnumerable<Transition> Transitions
         {
@@ -53,11 +45,6 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             {
                 throw new NotImplementedException();
             }
-        }
-
-        public override QuizStateBase GiveAnswer(object answer)
-        {
-            throw new NotImplementedException();
         }
     }
 }

@@ -10,7 +10,7 @@ using RT.Util.Serialization;
 
 namespace QuizGameEngine.Quizzes.MyLittleQuiz
 {
-    public sealed class QuizData
+    public sealed class QuizData : IClassifyObjectProcessor
     {
         // Round 1: Elimination
         [ClassifyNotNull]
@@ -38,5 +38,26 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
 
         [EditorLabel("Round 4 (Final): Best of n")]
         public int Round4MinQuestions { get; private set; } = 5;
+
+        public void BeforeSerialize() { }
+
+        private static string _secret = "MLP:FiMSweetAppleAcres";
+        public void AfterDeserialize()
+        {
+            //var encrypt = Ut.Lambda((string s) => s.Select((c, i) => c <= 32 || c >= 127 ? c : (char) ((c - 33 + _secret[i % _secret.Length] - 33) % (127 - 33) + 33)).JoinString().HtmlEscape(true, true));
+            //var decrypt = Ut.Lambda((string s) =>
+            //{
+            //    var dec = s.Select((c, i) => c <= 32 || c >= 127 ? c : (char) ((c - 33 - (_secret[i % _secret.Length] - 33)) % (127 - 33) + 33)).JoinString();
+            //    return dec.Replace("&lt;", "<").Replace("&gt;", ">").Replace("&amp;", "&");
+            //});
+
+            //foreach (var q in Round4Questions.OfType<SimpleQuestion>())
+            //{
+            //    q.QuestionText = encrypt(q.QuestionText);
+            //    q.Answer = encrypt(q.Answer);
+            //}
+
+            //Round3Sets = Round3Sets.Select(set => new Round3Set(encrypt(set.Name), set.Answers.Select(encrypt).ToArray())).ToArray();
+        }
     }
 }

@@ -14,6 +14,8 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         public Round1_Elimination_Q(Round1Data data) { Data = data; }
         private Round1_Elimination_Q() { }    // for Classify
 
+        protected override string Round { get { return "r1"; } }
+
         public override QuestionBase CurrentQuestion { get { return Data.CurrentDifficulty.NullOr(cd => Data.CurrentQuestionIndex.NullOr(cqi => Data.Questions[cd][cqi])); } }
         public override QuizStateBase GiveAnswer(object answer) { return new Round1_Elimination_Q(Data.GiveAnswer(answer)); }
 
