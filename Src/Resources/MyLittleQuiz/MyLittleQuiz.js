@@ -71,16 +71,16 @@ $(function ()
         var llf = lf - height/4;
         var rg = lf + iwidth;
         var rrg = rg + height/4;
-        var strw = height/100;
+        var strw = content.height()/250;
         var svg = '';
         svg +=  '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 -'+strw+' '+owidth+' '+(height+strw)+'">';
         svg +=      '<defs>';
         svg +=          '<linearGradient id="lg">';
         svg +=              '<stop offset="0"   style="stop-color:hsl('+hue+', 33%, 20%);stop-opacity:1;" />';
         svg +=              '<stop offset="0.2" style="stop-color:hsl('+hue+', 15%, 47%);stop-opacity:1;" />';
-        svg +=              '<stop offset="0.3" style="stop-color:hsl('+hue+', 25%, 73%);stop-opacity:1;" />';
-        svg +=              '<stop offset="0.9" style="stop-color:hsl('+hue+', 99%, 07%);stop-opacity:1;" />';
-        svg +=              '<stop offset="1"   style="stop-color:hsl('+hue+', 50%, 13%);stop-opacity:1;" />';
+        svg +=              '<stop offset="0.3" style="stop-color:hsl('+hue+', 17%, 60%);stop-opacity:1;" />';
+        svg +=              '<stop offset="0.9" style="stop-color:hsl('+hue+', 50%, 13%);stop-opacity:1;" />';
+        svg +=              '<stop offset="1"   style="stop-color:hsl('+hue+', 33%, 20%);stop-opacity:1;" />';
         svg +=          '</linearGradient>';
         svg +=          '<linearGradient xlink:href="#lg" id="lqh" x1="0" y1="0" x2=".1" y2="1" />';
         svg +=      '</defs>';
@@ -89,9 +89,9 @@ $(function ()
         svg +=      '<path style="fill:url(#lqh)" d="M '+lf+',0 '+rg+',0 '+rrg+','+(height/2)+' '+rg+','+height+' '+lf+','+height+' '+llf+','+(height/2)+' z" />';
         svg +=      '<line x1="'+llf+'" y1="'+(height/2)+'" x2="'+lf+'"  y2="0"              stroke="hsl('+hue+', 25%, 73%)" stroke-width="'+strw+'" />';
         svg +=      '<line x1="'+lf+'"  y1="0"              x2="'+rg+'"  y2="0"              stroke="hsl('+hue+', 16%, 40%)" stroke-width="'+strw+'" />';
-        svg +=      '<line x1="'+rg+'"  y1="0"              x2="'+rrg+'" y2="'+(height/2)+'" stroke="hsl('+hue+', 33%, 20%)" stroke-width="'+strw+'" />';
-        svg +=      '<line x1="'+rrg+'" y1="'+(height/2)+'" x2="'+rg+'"  y2="'+height+'"     stroke="hsl('+hue+', 99%, 07%)" stroke-width="'+strw+'" />';
-        svg +=      '<line x1="'+rg+'"  y1="'+height+'"     x2="'+lf+'"  y2="'+height+'"     stroke="hsl('+hue+', 50%, 09%)" stroke-width="'+strw+'" />';
+        svg +=      '<line x1="'+rg+'"  y1="0"              x2="'+rrg+'" y2="'+(height/2)+'" stroke="hsl('+hue+', 25%, 27%)" stroke-width="'+strw+'" />';
+        svg +=      '<line x1="'+rrg+'" y1="'+(height/2)+'" x2="'+rg+'"  y2="'+height+'"     stroke="hsl('+hue+', 50%, 13%)" stroke-width="'+strw+'" />';
+        svg +=      '<line x1="'+rg+'"  y1="'+height+'"     x2="'+lf+'"  y2="'+height+'"     stroke="hsl('+hue+', 50%, 13%)" stroke-width="'+strw+'" />';
         svg +=      '<line x1="'+lf+'"  y1="'+height+'"     x2="'+llf+'" y2="'+(height/2)+'" stroke="hsl('+hue+', 20%, 33%)" stroke-width="'+strw+'" />';
         svg +=  '</svg>';
         div.css({
@@ -162,9 +162,8 @@ $(function ()
             if (':value' in a)
                 a = a[':value'];
 
-            $('#qa .answer').addClass(a === false ? 'wrong in' : 'correct in').removeClass('invisible');
-            if (a !== false)
-                $('#qa .answer .decor').text('✓');
+            $('#qa .answer').removeClass('invisible wrong correct').addClass(a === false ? 'wrong in' : 'correct in');
+            $('#qa .answer .decor').text(a === false ? '✗' : '✓');
 
             if (p.round === 'r4')
             {
