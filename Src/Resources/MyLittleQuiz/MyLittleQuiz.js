@@ -3,12 +3,10 @@ $(function ()
 {
     var content = $('#content');
 
-    function clearScreen(except)
+    function clearScreen()
     {
-        var consider = $('.away');
-        if (except)
-            consider = consider.not(except);
-        consider.removeClass('in').addClass('out');
+        $('.away.out').remove();
+        $('.away').removeClass('in').addClass('out');
         if (!$('#background').length)
             $('<div id="background">').prependTo(content);
     }
@@ -116,10 +114,10 @@ $(function ()
             qa.data('type', q[':type']);
 
             var qdecor = $('<div class="decor">').text('?');
-            var qdiv = $('<div class="question qa">').addClassDelay('in').append(qdecor);
+            var qdiv = $('<div class="question qa '+p.round+'-style away">').addClassDelay('in', 500).append(qdecor);
 
             var adecor = $('<div class="decor">').text('✗');
-            var adiv = $('<div class="answer qa invisible">').append(adecor);
+            var adiv = $('<div class="answer qa '+p.round+'-style away invisible">').append(adecor);
 
             var qtext, atext;
 
@@ -128,13 +126,6 @@ $(function ()
                 case 'SimpleQuestion':
                     qtext = $('<div class="text">').html(q.QuestionText).appendTo(qdiv);
                     atext = $('<div class="text">').html(q.Answer).appendTo(adiv);
-                    break;
-
-                case 'NOfQuestion':
-                    qtext = $('<div class="text">').html(q.QuestionText).appendTo(qdiv);
-                    atext = $('<ul class="text">').appendTo(adiv);
-                    for (var i = 0; i < q.Answers.length; i++)
-                        atext.append($('<li>').css('transition-delay', (i / 4) + 's').addClass('opt-' + i).append($('<div class="inner">').append($('<span class="inner">').html(q.Answers[i]))));
                     break;
             }
 
@@ -174,12 +165,6 @@ $(function ()
             switch (qa.data('type'))
             {
                 case 'SimpleQuestion':
-                    break;
-
-                case 'NOfQuestion':
-                    if (a !== false)
-                        for (var i = 0; i < a.length; i++)
-                            $('#qa .answer .text li.opt-' + a[i]).addClass('sel');
                     break;
             }
         },
@@ -293,9 +278,9 @@ $(function ()
         //#region ROUND 3 (Set Poker)
         r3_showContestants: function (p)
         {
+            $('#r3-contestants').remove();
             clearScreen();
 
-            $('#r3-contestants').remove();
             var div = $('<div id="r3-contestants" class="r3-display static away"></div>').appendTo(content).addClassDelay('in');
 
             for (var i = 0; i < p.contestants.length; i++)
@@ -440,21 +425,22 @@ $(function ()
             clearScreen();
 
             var div = $('<div id="r4-contestants" class="static away">')
-                    .append('<table>')
-                    .appendTo(content)
-                    .addClassDelay('in');
-            var table = div.find('table');
+                        .appendTo(content);
+            var innerDiv = $('<div class="r4-style away">')
+                        .appendTo(div)
+                        .addClassDelay('in', 500);
+            var table = $('<table>').appendTo(innerDiv);
 
             var rows = p.answers.length;
             var trs = div.find('tr');
             for (var i = Math.max(rows, trs.length) - 1; i >= 0; i--)
             {
-                if (i >= rows.length)
+                if (i >= rows)
                     $(trs.get(i)).remove();
                 else if (i >= trs.length)
                     $('<tr>').appendTo(table);
             }
-            trs = div.find('tr');
+            trs = table.find('tr');
 
             var cols = p.minAnswers;
             for (var i = 0; i < p.answers.length; i++)
@@ -468,12 +454,17 @@ $(function ()
                 var tds = tr.find('td');
                 for (var j = Math.max(cols, tds.length) - 1; j >= 0; j--)
                 {
-                    if (j >= cols.length)
+                    if (j >= cols)
                         $(tds.get(j)).remove();
                     else if (j >= tds.length)
                         $('<td>').appendTo(tr);
                 }
             }
+
+            var turn = 0;
+            for (var i = 1; turn === 0 && i < p.answers.length; i++)
+                if (p.answers[i].length < p.answers[0].length)
+                    turn = i;
 
             for (var i = 0; i < rows; i++)
             {
@@ -484,6 +475,8 @@ $(function ()
                     var td = $(tds.get(j));
                     if (j === 0)
                         td.text(p.contestants[i].Name);
+                    else if (i === turn && j-1 === p.answers[i].length)
+                        td.addClass('turn');
                     else
                         td.addClass(j - 1 >= p.answers[i].length ? 'none' : p.answers[i][j - 1] ? 'correct' : 'wrong');
                 }
@@ -494,7 +487,7 @@ $(function ()
                 return div.outerHeight() < content.height()/3 ? -1 : 1;
             });
 
-            r4_addBackground(div, table.outerWidth(), table.outerHeight(), 30, true);
+            r4_addBackground(innerDiv, table.outerWidth(), table.outerHeight(), 30, true);
         },
         //#endregion
     };

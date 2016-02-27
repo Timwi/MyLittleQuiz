@@ -1,10 +1,7 @@
 ﻿using System;
-using RT.Util.ExtensionMethods;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using RT.Util.Consoles;
-using RT.Util.Serialization;
+using RT.Util.ExtensionMethods;
 
 namespace QuizGameEngine.Quizzes.MyLittleQuiz
 {
@@ -29,11 +26,8 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
 
         public override ConsoleColoredString Describe { get { return Data.Describe; } }
 
-        public override string JsMethod
-        {
-            get { return "r4_showContestants"; }
-        }
-
+        public override string JsMethod { get { return "r4_showContestants"; } }
+        public override string JsMusic { get { return @"/files/MyLittleQuiz/Music4.ogg"; } }
         public override object JsParameters
         {
             get { return new { contestants = Data.Contestants, answers = Data.Answers, minAnswers = Data.QuizData.Round4MinQuestions }; }

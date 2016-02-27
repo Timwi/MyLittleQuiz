@@ -83,14 +83,14 @@ namespace QuizGameEngine
             return newArray;
         }
 
-        public static TransitionResult With(this QuizStateBase state, string jsMethod, object jsParams = null)
+        public static TransitionResult With(this QuizStateBase state, string jsMethod, object jsParams = null, string jsMusic = null)
         {
-            return new TransitionResult(state, null, jsMethod, jsParams ?? state.JsParameters);
+            return new TransitionResult(state, null, jsMethod, jsParams ?? state.JsParameters, jsMusic ?? state.JsMusic);
         }
 
         public static TransitionResult NoTransition(this QuizStateBase state)
         {
-            return new TransitionResult(state, null, null, null);
+            return new TransitionResult(state);
         }
 
         public static IEnumerable<T> Repeat<T>(this T obj, int times)

@@ -8,6 +8,7 @@
 $(function ()
 {
     var socket;
+    var currentMusic = null;
 
     function newSocket()
     {
@@ -32,6 +33,39 @@ $(function ()
                     transitions[data.method](data.params);
                 else
                     console.log('Undefined transition method: ' + data.method);
+            }
+            if ('music' in data && data.music !== currentMusic)
+            {
+                var prevMusic = $('#music');
+                if (prevMusic.length)
+                {
+                    prevMusic.data('cancel', true);
+                    prevMusic.attr('id', '');
+                    var fadeOutCounter = 10;
+                    var fadeOutIntervalId = window.setInterval(function()
+                    {
+                        fadeOutCounter--;
+                        prevMusic[0].volume = fadeOutCounter/10;
+                        if (fadeOutCounter === 0)
+                        {
+                            window.clearInterval(fadeOutIntervalId);
+                            prevMusic.remove();
+                        }
+                    }, 100);
+                }
+
+                currentMusic = data.music;
+                var newMusic = $('<audio id="music" src="'+currentMusic+'">').appendTo(document.body);
+                newMusic[0].volume = 0;
+                newMusic[0].play();
+                var fadeInCounter = 0;
+                var fadeInIntervalId = window.setInterval(function()
+                {
+                    fadeInCounter++;
+                    if (fadeInCounter === 10 || newMusic.data('cancel'))
+                        window.clearInterval(fadeInIntervalId);
+                    newMusic[0].volume = fadeInCounter/10;
+                }, 100);
             }
         };
     }

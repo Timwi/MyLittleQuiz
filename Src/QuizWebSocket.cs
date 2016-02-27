@@ -42,7 +42,7 @@ namespace QuizGameEngine
                     var prms = ClassifyJson.Serialize(state.JsParameters);
                     if (prms.ContainsKey(":fulltype"))
                         prms.Remove(":fulltype");
-                    SendLoggedMessage(new JsonDict { { "method", state.JsMethod }, { "params", prms } });
+                    SendLoggedMessage(new JsonDict { { "method", state.JsMethod }, { "params", prms }, { "music", state.JsMusic } });
                 }
             }
             base.onTextMessageReceived(msg);

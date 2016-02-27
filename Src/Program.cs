@@ -102,7 +102,7 @@ namespace QuizGameEngine
                 Console.Clear();
                 ConsoleUtil.WriteLine(Quiz.UndoLine == null ? null : "← Undo: {0/Gray}".Color(ConsoleColor.Magenta).Fmt(Quiz.UndoLine));
                 ConsoleUtil.WriteLine(Quiz.RedoLine == null ? null : "→ Redo: {0/Gray}".Color(ConsoleColor.Green).Fmt(Quiz.RedoLine));
-                ConsoleUtil.WriteLine(Quiz.CurrentState.GetType().Name.Color(ConsoleColor.DarkYellow), align: HorizontalTextAlignment.Right);
+                ConsoleUtil.WriteLine("{0/DarkYellow} · {1/DarkGreen} · {2/DarkMagenta}".Color(ConsoleColor.DarkGray).Fmt(Quiz.CurrentState.GetType().Name, Quiz.CurrentState.JsMethod ?? "(no method)", Quiz.CurrentState.JsMusic ?? "(no music)"), align: HorizontalTextAlignment.Right);
                 ConsoleUtil.WriteLine(Quiz.CurrentState.Describe);
                 Console.WriteLine();
 
@@ -148,7 +148,7 @@ namespace QuizGameEngine
                             goto default;
                         Quiz = ClassifyJson.DeserializeFile<QuizBase>(_dataFile);
                         needSave = true;
-                        transitionResult = new TransitionResult(Quiz.CurrentState, null, Quiz.CurrentState.JsMethod, Quiz.CurrentState.JsParameters);
+                        transitionResult = new TransitionResult(Quiz.CurrentState, null, Quiz.CurrentState.JsMethod, Quiz.CurrentState.JsParameters, Quiz.CurrentState.JsMusic);
                         break;
 
                     case ConsoleKey.E:
@@ -177,14 +177,15 @@ namespace QuizGameEngine
                     if (transitionResult.State != null && transitionUndoLine != null)
                         Quiz.Transition(transitionResult.State, transitionUndoLine);
 
-                    if (transitionResult.JsMethod != null)
+                    if (transitionResult.JsMethod != null || transitionResult.JsMusic != null)
                     {
                         var prms = ClassifyJson.Serialize(transitionResult.JsParameters);
                         if (prms.ContainsKey(":fulltype"))
                             prms.Remove(":fulltype");
+                        var dict = new JsonDict { { "method", transitionResult.JsMethod }, { "params", prms }, { "music", transitionResult.JsMusic } };
                         lock (Sockets)
                             foreach (var socket in Sockets)
-                                socket.SendLoggedMessage(new JsonDict { { "method", transitionResult.JsMethod }, { "params", prms } });
+                                socket.SendLoggedMessage(dict);
                     }
 
                     needSave = true;

@@ -1,4 +1,9 @@
-﻿* {
+﻿@font-face {
+    font-family: 'Celestia';
+    src: url('/files/MyLittleQuiz/Celestia.ttf') format('truetype');
+}
+
+* {
     box-sizing: border-box;
     position: absolute;
 }
@@ -11,6 +16,7 @@ body {
     background: black;
     color: white;
     cursor: none;
+    font-family: 'Celestia', 'Celestia Redux', 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
 .static * {
@@ -29,7 +35,6 @@ body {
     top: 0;
     width: 100vw;
     height: 100vh;
-    font-family: 'Celestia Redux', 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
     #content #background {
@@ -175,7 +180,7 @@ body {
         }
 
         #content #qa .qa.answer.invisible {
-            opacity: 0;
+            visibility: hidden;
         }
 
         #content #qa .qa .text {
@@ -741,43 +746,6 @@ body {
             transform: translate(-50%, -50%);
         }
 
-    #content #r4-contestants {
-        left: 0;
-        right: 0;
-        bottom: -50vh;
-        text-align: center;
-        transition: bottom ease-out 1s;
-    }
-
-        #content #r4-contestants.in {
-            bottom: 0;
-        }
-
-        #content #r4-contestants.out {
-            bottom: -50vh;
-        }
-
-        #content #r4-contestants table {
-            empty-cells: show;
-            display: inline-block;
-            border-spacing: .25em .4em;
-        }
-
-            #content #r4-contestants table td {
-                border: 2px solid rgba(255, 255, 255, .3);
-                border-top: 2px solid rgba(0, 0, 0, .9);
-                border-left: 2px solid rgba(0, 0, 0, .9);
-                min-width: 1.3em;
-                line-height: 1em;
-                background: rgba(0, 0, 0, .7);
-                background-clip: padding-box;
-            }
-
-                #content #r4-contestants table td:first-child {
-                    text-align: right;
-                    padding: .2em .5em;
-                }
-
     #content #qa.r4 {
         padding: 0;
     }
@@ -816,3 +784,69 @@ body {
             #content #qa.r4 .qa.answer {
                 padding: 5vh 15vw;
             }
+
+    #content .r4-style {
+        transform: perspective(100vw) rotate3d(1, 0, 0, -90deg);
+        transition: transform ease-in-out .8s, opacity linear .2s;
+        transition-delay: 0s, .6s;
+        opacity: 1;
+    }
+
+        #content .r4-style.in {
+            transform: perspective(100vw) rotate3d(1, 0, 0, 0deg);
+        }
+
+        #content .r4-style.out {
+            transform: perspective(100vw) rotate3d(1, 0, 0, 90deg);
+            opacity: 0;
+            transition: transform ease-in-out .4s, opacity linear .1s;
+            transition-delay: 0s, .3s;
+        }
+
+    #content #r4-contestants {
+        left: 0;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        text-align: center;
+    }
+
+        #content #r4-contestants table {
+            empty-cells: show;
+            display: inline-block;
+            border-spacing: .25em .4em;
+        }
+
+            #content #r4-contestants table td {
+                line-height: 1em;
+            }
+
+                #content #r4-contestants table td:not(:first-child) {
+                    border: .4vh solid rgba(255, 255, 255, .3);
+                    border-top: .4vh solid rgba(0, 0, 0, .9);
+                    border-left: .4vh solid rgba(0, 0, 0, .9);
+                    min-width: 1.3em;
+                    background: rgba(0, 0, 0, .7);
+                    background-clip: padding-box;
+                }
+
+                #content #r4-contestants table td:first-child {
+                    text-align: right;
+                    padding: .2em .5em;
+                    text-shadow: .4vh .4vh 0 rgba(0, 0, 0, .5);
+                }
+
+                #content #r4-contestants table td.none {
+                    background-color: rgba(0, 0, 0, .4);
+                }
+
+                #content #r4-contestants table td.turn {
+                    background-color: rgba(127, 0, 0, .5);
+                }
+
+                #content #r4-contestants table td.correct {
+                    background-image: url(/files/MyLittleQuiz/Horseshoe.svg);
+                    background-position: 50% 50%;
+                    background-repeat: no-repeat;
+                    background-size: contain;
+                }
