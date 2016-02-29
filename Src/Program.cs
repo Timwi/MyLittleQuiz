@@ -56,10 +56,10 @@ namespace QuizGameEngine
             }
             catch { }
 
-            CommandLine cmd;
+            QuizCmdLine cmd;
             try
             {
-                cmd = CommandLineParser.Parse<CommandLine>(args);
+                cmd = CommandLineParser.Parse<QuizCmdLine>(args);
             }
             catch (CommandLineParseException e)
             {
@@ -67,15 +67,19 @@ namespace QuizGameEngine
                 return 1;
             }
 
-            var start = cmd.QuizCmd as QuizCmdStart;
+            var start = cmd as QuizCmdStart;
             if (start != null)
             {
-                ClassifyJson.SerializeToFile(start.Quiz.StartState, start.OutputFile);
+                ClassifyJson.SerializeToFile(start.StartState, start.OutputFile);
                 ConsoleUtil.WriteLine("File saved.");
                 return 0;
             }
 
-            _dataFile = ((QuizCmdLoad) cmd.QuizCmd).File;
+            var load = cmd as QuizCmdLoad;
+            if (load == null)
+                throw new InvalidOperationException("Unrecognized command-line command.");
+
+            _dataFile = load.File;
             Quiz = ClassifyJson.DeserializeFile<QuizBase>(_dataFile);
             _logFile = cmd.LogFile;
 

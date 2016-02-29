@@ -12,7 +12,7 @@ using RT.Util.Serialization;
 namespace QuizGameEngine.Quizzes.SimpleQuiz
 {
     [CommandName("SimpleQuiz"), DocumentationLiteral("Simple quiz for testing.")]
-    public sealed class Cmd : StartQuizCmd, ICommandLineValidatable
+    sealed class Cmd : QuizCmdStart, ICommandLineValidatable
     {
         [IsPositional, IsMandatory, DocumentationRhoML("Specifies the path and filename to a file containing questions and answers, formatted as a JSON list containing two-element lists, each containing a question and its answer.")]
         public string QAFilePath;
