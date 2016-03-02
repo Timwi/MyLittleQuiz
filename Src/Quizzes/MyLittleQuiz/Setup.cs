@@ -65,7 +65,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                     });
 
                 if (Contestants.Count > 0)
-                    yield return Transition.Simple(ConsoleKey.S, "Start Round: Elimination Round", () => new Round1_Elimination(new Round1Data(Data, Contestants)));
+                    yield return Transition.Simple(ConsoleKey.S, "Start Round: Elimination Round", () => new Round1_Elimination(new Round1Data(Data, Contestants.ToArray().Shuffle())));
             }
         }
 
