@@ -30,7 +30,11 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
 
                 else if (Data.SetIndex >= 0 && Data.SetIndex < Data.QuizData.Round3Sets.Length)
                     yield return Transition.Simple(ConsoleKey.S, "Show set: " + Data.QuizData.Round3Sets[Data.SetIndex].Name,
-                        () => new Round3_SetPoker_ShowSet(Data));
+                        () => new Round3_SetPoker_ShowSet(Data.InitSet()));
+
+                if (Data.SetIndex > 0)
+                    yield return Transition.Simple(ConsoleKey.R, "Reveal remaining answers for previous set ({0})".Fmt(Data.QuizData.Round3Sets[Data.SetIndex - 1].Name),
+                        () => new Round3_SetPoker_Reveal(Data));
             }
         }
 

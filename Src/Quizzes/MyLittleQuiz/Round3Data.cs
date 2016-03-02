@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using RT.Util;
 using RT.Util.ExtensionMethods;
+using RT.Util.Serialization;
 
 namespace QuizGameEngine.Quizzes.MyLittleQuiz
 {
@@ -14,7 +10,12 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         public QuizData QuizData { get; private set; }
         public Round3Team TeamA { get; private set; }
         public Round3Team TeamB { get; private set; }
-        public int SetIndex { get; private set; }
+        public int SetIndex { get; private set; } = 0;
+
+        [ClassifyNotNull]
+        public string[] AnswersGiven { get; private set; } = new string[0];
+        [ClassifyIgnoreIfDefault]
+        public int WrongAnswers { get; private set; } = 0;
 
         public Round3Set CurrentSet { get { return QuizData.Round3Sets[SetIndex]; } }
 
@@ -23,13 +24,21 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             QuizData = data;
             TeamA = new Round3Team(teamA);
             TeamB = new Round3Team(teamB);
-            SetIndex = 0;
         }
         private Round3Data() { }    // for Classify
 
         public object Clone()
         {
             return MemberwiseClone();
+        }
+
+        public Round3Data InitSet()
+        {
+            return this.ApplyToClone(r3d =>
+            {
+                r3d.AnswersGiven = new string[0];
+                r3d.WrongAnswers = 0;
+            });
         }
 
         public Round3Data TeamAWins()
@@ -41,6 +50,11 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             });
         }
 
+        public Round3Data RemoveStrikes()
+        {
+            return this.ApplyToClone(r3d => { r3d.AnswersGiven = AnswersGiven.Subarray(0, AnswersGiven.Length - 2); });
+        }
+
         public Round3Data TeamBWins()
         {
             return this.ApplyToClone(r3d =>
@@ -48,6 +62,25 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                 r3d.TeamB = TeamB.IncScore();
                 r3d.SetIndex++;
             });
+        }
+
+        public Round3Data GiveCorrectAnswer(string answer)
+        {
+            return this.ApplyToClone(r3d =>
+            {
+                r3d.AnswersGiven = AnswersGiven.Concat(answer).ToArray();
+            });
+        }
+
+        public Round3Data GiveWrongAnswer(bool isTieBreak)
+        {
+            return this.ApplyToClone(r3d =>
+           {
+               if (isTieBreak)
+                   r3d.AnswersGiven = AnswersGiven.Concat(new string[] { null }).ToArray();
+               else
+                   r3d.WrongAnswers++;
+           });
         }
     }
 }

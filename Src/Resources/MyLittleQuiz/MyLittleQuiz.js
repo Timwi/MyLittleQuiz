@@ -3,10 +3,13 @@ $(function ()
 {
     var content = $('#content');
 
-    function clearScreen()
+    function clearScreen(except)
     {
         $('.away.out').remove();
-        $('.away').removeClass('in').addClass('out');
+        var consider = $('.away');
+        if (except)
+            consider = consider.not(except);
+        consider.removeClass('in').addClass('out');
         if (!$('#background').length)
             $('<div id="background">').prependTo(content);
     }
@@ -352,12 +355,26 @@ $(function ()
             if ($('#r3-play').length)
                 alreadyFontSize = parseFloat($('#r3-play').css('font-size'));
 
-            $('#r3-play,#r3-bid').remove();
-            clearScreen();
+            $('#r3-play').remove();
+            clearScreen('#r3-bid,#r3-strikes');
 
             var div = $('<table id="r3-play" class="away static">').appendTo(content);
             if ('remaining' in p)
-                content.append($('<div id="r3-bid" class="away static">').append($('<span class="number">').text(p.remaining)).addClassDelay('in'));
+            {
+                if (!$('#r3-bid').length)
+                    content.append($('<div id="r3-bid" class="away static">').append($('<span class="number">')).addClassDelay('in'));
+                $('#r3-bid .number').text(p.remaining);
+            }
+            if ('strikes' in p && p.strikes > 0)
+            {
+                if (!$('#r3-strikes').length)
+                    content.append($('<div id="r3-strikes" class="away static">').addClassDelay('in'));
+                var already = $('#r3-strikes .strike');
+                if (already.length > p.strikes)
+                    already.slice(p.strikes).remove();
+                for (var i = already.length; i < p.strikes; i++)
+                    $('#r3-strikes').append($('<span class="strike">').text('✗').addClassDelay('in'));
+            }
 
             var num = p.tie ? 10 : 5;
             if (num < p.answers.length + 1 && (p.remaining > 0 || p.tie))
@@ -372,9 +389,9 @@ $(function ()
                     prevTr = $('<tr>').appendTo(div);
 
                 var td = $('<td>').append(
-                    $('<div class="ans' + (i < p.answers.length ? '' : ' invisible') + '">').data('index', i).append(
+                    $('<div class="ans' + (i < p.answers.length ? ((p.answers[i] === null ? ' wrong' : '') + (i < p.answers.length - 1 ? ' in' : '')) : ' invisible') + '">').data('index', i).append(
                         $('<div class="answer">').append(
-                            $('<span class="inner">').html(i < p.answers.length ? p.answers[i] : p.answers[0]))));
+                            $('<span class="inner">').html(i < p.answers.length && p.answers[i] !== null ? p.answers[i] : p.answers[0]))));
                 if (!p.tie || p.teamAStarted)
                     td.appendTo(prevTr);
                 else
@@ -399,22 +416,66 @@ $(function ()
             }
 
             var elem = $('#r3-play .ans').filter(function (_, e) { return $(e).data('index') === p.answers.length - 1 });
-            var width = elem.width();
-            var height = elem.outerHeight();
-            elem.removeClass('invisible').css({ width: '0%', height: height + 'px', opacity: 0 });
-            var inner = elem.find('.answer');
-            inner.css({ width: width + 'px' });
+            if (p.answers[p.answers.length - 1] !== null)
+            {
+                var width = elem.width();
+                var height = elem.outerHeight();
+                elem.removeClass('invisible').css({ width: '0%', height: height + 'px', opacity: 0 });
+                var inner = elem.find('.answer');
+                inner.css({ width: width + 'px' });
 
-            elem.animate({ opacity: 1 }, { duration: 700, queue: false });
-            elem.animate({ width: '100%' }, {
-                duration: 1000,
-                queue: false,
-                done: function ()
+                elem.animate({ opacity: 1 }, { duration: 700, queue: false });
+                elem.animate({ width: '100%' }, {
+                    duration: 1000,
+                    queue: false,
+                    done: function ()
+                    {
+                        elem.css({ width: '', height: '' });
+                        inner.css({ width: '' });
+                    }
+                });
+            }
+            else
+                elem.removeClass('in').addClassDelay('in');
+        },
+
+        r3_reveal: function (p)
+        {
+            $('#r3-reveal').remove();
+            clearScreen();
+
+            var div = $('<div id="r3-reveal" class="static away">').appendTo(content).addClassDelay('in');
+            div.append($('<h1>').html(p.set));
+            var table = $('<table>').appendTo(div);
+
+            var bestFontSize = null;
+            var bestTr = null;
+            for (var cols = 1; cols <= 4; cols++)
+            {
+                var tr = $('<tr>').appendTo(table);
+                var itemsPerCol = Math.ceil(p.remaining.length / cols);
+                for (var col = 0; col < cols; col++)
                 {
-                    elem.css({ width: '', height: '' });
-                    inner.css({ width: '' });
+                    var td = $('<td>').appendTo(tr);
+                    for (var i = itemsPerCol * col; i < itemsPerCol * (col + 1) && i < p.remaining.length; i++)
+                        td.append($('<div>').html(p.remaining[i]));
                 }
-            });
+
+                var fontSize = findBestValue(100, function (fs)
+                {
+                    div.css('font-size', fs + 'px');
+                    return div.outerHeight() < content.height() ? -1 : 1;
+                });
+                if (bestFontSize === null || bestFontSize < fontSize)
+                {
+                    bestFontSize = fontSize;
+                    bestTr = tr;
+                }
+
+                table.empty();
+            }
+            div.css('font-size', bestFontSize + 'px');
+            table.append(bestTr);
         },
         //#endregion
 

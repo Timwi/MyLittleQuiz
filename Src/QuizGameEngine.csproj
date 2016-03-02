@@ -57,6 +57,7 @@
     <Compile Include="Quizzes\MyLittleQuiz\Cmd.cs" />
     <Compile Include="Quizzes\MyLittleQuiz\Contestant.cs" />
     <Compile Include="Quizzes\MyLittleQuiz\ContestantAndScore.cs" />
+    <Compile Include="Quizzes\MyLittleQuiz\Round3_SetPoker_Reveal.cs" />
     <Compile Include="Quizzes\MyLittleQuiz\Round4_Final_Congratulations.cs" />
     <Compile Include="Quizzes\MyLittleQuiz\Round4_Final_Q.cs" />
     <Compile Include="Quizzes\MyLittleQuiz\Round3_SetPoker_PlayBase.cs" />
