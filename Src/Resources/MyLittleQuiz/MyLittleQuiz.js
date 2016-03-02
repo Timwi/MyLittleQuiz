@@ -68,33 +68,33 @@ $(function ()
     function r4_addBackground(div, iwidth, height, hue, positionTop)
     {
         var owidth = div.outerWidth();
-        var lf = owidth/2 - iwidth/2;
-        var llf = lf - height/4;
+        var lf = owidth / 2 - iwidth / 2;
+        var llf = lf - height / 4;
         var rg = lf + iwidth;
-        var rrg = rg + height/4;
-        var strw = content.height()/250;
+        var rrg = rg + height / 4;
+        var strw = content.height() / 250;
         var svg = '';
-        svg +=  '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 -'+strw+' '+owidth+' '+(height+strw)+'">';
-        svg +=      '<defs>';
-        svg +=          '<linearGradient id="lg">';
-        svg +=              '<stop offset="0"   style="stop-color:hsl('+hue+', 33%, 20%);stop-opacity:1;" />';
-        svg +=              '<stop offset="0.2" style="stop-color:hsl('+hue+', 15%, 47%);stop-opacity:1;" />';
-        svg +=              '<stop offset="0.3" style="stop-color:hsl('+hue+', 17%, 60%);stop-opacity:1;" />';
-        svg +=              '<stop offset="0.9" style="stop-color:hsl('+hue+', 50%, 13%);stop-opacity:1;" />';
-        svg +=              '<stop offset="1"   style="stop-color:hsl('+hue+', 33%, 20%);stop-opacity:1;" />';
-        svg +=          '</linearGradient>';
-        svg +=          '<linearGradient xlink:href="#lg" id="lqh" x1="0" y1="0" x2=".1" y2="1" />';
-        svg +=      '</defs>';
-        svg +=      '<line x1="0" y1="'+(height/2-strw/2)+'" x2="'+owidth+'" y2="'+(height/2-strw/2)+'" stroke="hsl('+hue+', 17%, 40%)" stroke-width="'+strw+'" />';
-        svg +=      '<line x1="0" y1="'+(height/2+strw/2)+'" x2="'+owidth+'" y2="'+(height/2+strw/2)+'" stroke="hsl('+hue+', 50%, 13%)" stroke-width="'+strw+'" />';
-        svg +=      '<path style="fill:url(#lqh)" d="M '+lf+',0 '+rg+',0 '+rrg+','+(height/2)+' '+rg+','+height+' '+lf+','+height+' '+llf+','+(height/2)+' z" />';
-        svg +=      '<line x1="'+llf+'" y1="'+(height/2)+'" x2="'+lf+'"  y2="0"              stroke="hsl('+hue+', 25%, 73%)" stroke-width="'+strw+'" />';
-        svg +=      '<line x1="'+lf+'"  y1="0"              x2="'+rg+'"  y2="0"              stroke="hsl('+hue+', 16%, 40%)" stroke-width="'+strw+'" />';
-        svg +=      '<line x1="'+rg+'"  y1="0"              x2="'+rrg+'" y2="'+(height/2)+'" stroke="hsl('+hue+', 25%, 27%)" stroke-width="'+strw+'" />';
-        svg +=      '<line x1="'+rrg+'" y1="'+(height/2)+'" x2="'+rg+'"  y2="'+height+'"     stroke="hsl('+hue+', 50%, 13%)" stroke-width="'+strw+'" />';
-        svg +=      '<line x1="'+rg+'"  y1="'+height+'"     x2="'+lf+'"  y2="'+height+'"     stroke="hsl('+hue+', 50%, 13%)" stroke-width="'+strw+'" />';
-        svg +=      '<line x1="'+lf+'"  y1="'+height+'"     x2="'+llf+'" y2="'+(height/2)+'" stroke="hsl('+hue+', 20%, 33%)" stroke-width="'+strw+'" />';
-        svg +=  '</svg>';
+        svg += '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 -' + strw + ' ' + owidth + ' ' + (height + strw) + '">';
+        svg += '<defs>';
+        svg += '<linearGradient id="lg">';
+        svg += '<stop offset="0"   style="stop-color:hsl(' + hue + ', 33%, 20%);stop-opacity:1;" />';
+        svg += '<stop offset="0.2" style="stop-color:hsl(' + hue + ', 15%, 47%);stop-opacity:1;" />';
+        svg += '<stop offset="0.3" style="stop-color:hsl(' + hue + ', 17%, 60%);stop-opacity:1;" />';
+        svg += '<stop offset="0.9" style="stop-color:hsl(' + hue + ', 50%, 13%);stop-opacity:1;" />';
+        svg += '<stop offset="1"   style="stop-color:hsl(' + hue + ', 33%, 20%);stop-opacity:1;" />';
+        svg += '</linearGradient>';
+        svg += '<linearGradient xlink:href="#lg" id="lqh" x1="0" y1="0" x2=".1" y2="1" />';
+        svg += '</defs>';
+        svg += '<line x1="0" y1="' + (height / 2 - strw / 2) + '" x2="' + owidth + '" y2="' + (height / 2 - strw / 2) + '" stroke="hsl(' + hue + ', 17%, 40%)" stroke-width="' + strw + '" />';
+        svg += '<line x1="0" y1="' + (height / 2 + strw / 2) + '" x2="' + owidth + '" y2="' + (height / 2 + strw / 2) + '" stroke="hsl(' + hue + ', 50%, 13%)" stroke-width="' + strw + '" />';
+        svg += '<path style="fill:url(#lqh)" d="M ' + lf + ',0 ' + rg + ',0 ' + rrg + ',' + (height / 2) + ' ' + rg + ',' + height + ' ' + lf + ',' + height + ' ' + llf + ',' + (height / 2) + ' z" />';
+        svg += '<line x1="' + llf + '" y1="' + (height / 2) + '" x2="' + lf + '"  y2="0"              stroke="hsl(' + hue + ', 25%, 73%)" stroke-width="' + strw + '" />';
+        svg += '<line x1="' + lf + '"  y1="0"              x2="' + rg + '"  y2="0"              stroke="hsl(' + hue + ', 16%, 40%)" stroke-width="' + strw + '" />';
+        svg += '<line x1="' + rg + '"  y1="0"              x2="' + rrg + '" y2="' + (height / 2) + '" stroke="hsl(' + hue + ', 25%, 27%)" stroke-width="' + strw + '" />';
+        svg += '<line x1="' + rrg + '" y1="' + (height / 2) + '" x2="' + rg + '"  y2="' + height + '"     stroke="hsl(' + hue + ', 50%, 13%)" stroke-width="' + strw + '" />';
+        svg += '<line x1="' + rg + '"  y1="' + height + '"     x2="' + lf + '"  y2="' + height + '"     stroke="hsl(' + hue + ', 50%, 13%)" stroke-width="' + strw + '" />';
+        svg += '<line x1="' + lf + '"  y1="' + height + '"     x2="' + llf + '" y2="' + (height / 2) + '" stroke="hsl(' + hue + ', 20%, 33%)" stroke-width="' + strw + '" />';
+        svg += '</svg>';
         div.css({
             'background-image': "url('data:image/svg+xml," + svg.replace(/#/g, '%23') + "')",
             'background-repeat': 'no-repeat',
@@ -117,10 +117,10 @@ $(function ()
             qa.data('type', q[':type']);
 
             var qdecor = $('<div class="decor">').text('?');
-            var qdiv = $('<div class="question qa '+p.round+'-style away">').addClassDelay('in', 500).append(qdecor);
+            var qdiv = $('<div class="question qa ' + p.round + '-style away">').addClassDelay('in', 500).append(qdecor);
 
             var adecor = $('<div class="decor">').text('✗');
-            var adiv = $('<div class="answer qa '+p.round+'-style away invisible">').append(adecor);
+            var adiv = $('<div class="answer qa ' + p.round + '-style away invisible">').append(adecor);
 
             var qtext, atext;
 
@@ -536,16 +536,17 @@ $(function ()
                     var td = $(tds.get(j));
                     if (j === 0)
                         td.text(p.contestants[i].Name);
-                    else if (i === turn && j-1 === p.answers[i].length)
+                    else if (i === turn && j - 1 === p.answers[i].length)
                         td.addClass('turn');
                     else
                         td.addClass(j - 1 >= p.answers[i].length ? 'none' : p.answers[i][j - 1] ? 'correct' : 'wrong');
                 }
             }
 
-            findBestValue(100, function (fs) {
+            findBestValue(100, function (fs)
+            {
                 div.css('font-size', fs + 'px');
-                return div.outerHeight() < content.height()/3 ? -1 : 1;
+                return div.outerHeight() < content.height() / 3 ? -1 : 1;
             });
 
             r4_addBackground(innerDiv, table.outerWidth(), table.outerHeight(), 30, true);
