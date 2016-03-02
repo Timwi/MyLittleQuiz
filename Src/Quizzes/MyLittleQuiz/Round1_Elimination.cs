@@ -16,6 +16,20 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         public Round1_Elimination(Round1Data data) { Data = data; }
         private Round1_Elimination() { } // for Classify
 
+        public static QuizStateBase GetQuizState(Round1Data data)
+        {
+            var through = data.Contestants.Where(c => c.IsThrough).ToArray();
+            var throughAndRemaining = data.Contestants.Where(c => c.IsThrough || c.IsStillInGame).ToArray();
+            var nextRoundContestants =
+                through.Length == data.QuizData.Round1NumContestantsNeeded ? through :
+                throughAndRemaining.Length == data.QuizData.Round1NumContestantsNeeded ? throughAndRemaining : null;
+
+            if (nextRoundContestants != null)
+                return new Round2_Categories_ShowContestants(new Round2Data(data.QuizData, (Round2Contestant[]) nextRoundContestants.Select(c => new Round2Contestant(c.Name, 0)).ToArray().Shuffle()), noScores: true);
+
+            return new Round1_Elimination(data);
+        }
+
         public override IEnumerable<Transition> Transitions
         {
             get
@@ -30,7 +44,10 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                 });
 
                 if (Data.SelectedContestant != null)
+                {
                     yield return Transition.Simple(ConsoleKey.Q, "Ask the question", () => new Round1_Elimination_Q(Data));
+                    yield return Transition.Simple(ConsoleKey.D, "Disqualify", () => GetQuizState(Data.DisqualifySelectedContestant()));
+                }
             }
         }
 

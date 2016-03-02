@@ -27,18 +27,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         {
             get
             {
-                var wouldBe = Data.DismissQuestion();
-
-                var through = wouldBe.Contestants.Where(c => c.IsThrough).ToArray();
-                var throughAndRemaining = wouldBe.Contestants.Where(c => c.IsThrough || c.IsStillInGame).ToArray();
-                var nextRoundContestants =
-                    through.Length == wouldBe.NumContestantsNeeded ? through :
-                    throughAndRemaining.Length == wouldBe.NumContestantsNeeded ? throughAndRemaining : null;
-
-                if (nextRoundContestants != null)
-                    yield return Transition.Simple(ConsoleKey.Spacebar, "End of round congratulations", () => new Round2_Categories_ShowContestants(new Round2Data(Data.QuizData, (Round2Contestant[]) nextRoundContestants.Select(c => new Round2Contestant(c.Name, 0)).ToArray().Shuffle()), noScores: true));
-                else
-                    yield return Transition.Simple(ConsoleKey.Spacebar, "Dismiss question", () => new Round1_Elimination(wouldBe));
+                yield return Transition.Simple(ConsoleKey.Spacebar, "Dismiss question", () => Round1_Elimination.GetQuizState(Data.DismissQuestion()));
             }
         }
 

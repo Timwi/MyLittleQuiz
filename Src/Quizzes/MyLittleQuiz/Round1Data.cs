@@ -15,7 +15,6 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
     {
         public QuizData QuizData { get; private set; }
         public Round1Contestant[] Contestants { get; private set; }
-        public int NumContestantsNeeded { get; private set; }
         [ClassifyNotNull]
         public Dictionary<Difficulty, int[]> QuestionsTaken { get; private set; } = new Dictionary<Difficulty, int[]> { { Difficulty.Easy, new int[0] }, { Difficulty.Medium, new int[0] } };
         [ClassifyIgnoreIfDefault]
@@ -33,7 +32,6 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         {
             QuizData = quizData;
             Contestants = contestants.Select(c => new Round1Contestant(c.Name, c.Roll)).ToArray();
-            NumContestantsNeeded = 10;
             QuestionsTaken = new Dictionary<Difficulty, int[]> { { Difficulty.Easy, new int[0] }, { Difficulty.Medium, new int[0] } };
             SelectedContestant = null;
             CurrentDifficulty = null;
@@ -53,13 +51,13 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         {
             get
             {
-                var numOut = Contestants.Count(c => c.NumWrong > 1);
-                var numThrough = Contestants.Count(c => c.NumCorrect > 1);
-                var numRemaining = Contestants.Count(c => c.NumCorrect < 2 && c.NumWrong < 2);
+                var numOut = Contestants.Count(c => c.IsOut);
+                var numThrough = Contestants.Count(c => c.IsThrough);
+                var numRemaining = Contestants.Count(c => c.IsStillInGame);
 
                 return "{0/White}\n{1}\n{2}{3}\n\n{4/White}\n{5}{6}".Color(null).Fmt(
                     /* 0 */ "Contestants:",
-                    /* 1 */ Contestants.SelectIndexWhere(c => c.NumCorrect < 2 && c.NumWrong < 2).Select(i =>
+                    /* 1 */ Contestants.SelectIndexWhere(c => c.IsStillInGame).Select(i =>
                                     (i == SelectedContestant ? "[".Color(ConsoleColor.Cyan, ConsoleColor.DarkBlue) : null) +
                                     "•".Color(ConsoleColor.White, ConsoleColor.DarkGreen).Repeat(Contestants[i].NumCorrect).JoinColoredString() +
                                     "•".Color(ConsoleColor.Black, ConsoleColor.Red).Repeat(Contestants[i].NumWrong).JoinColoredString() +
@@ -68,7 +66,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                                     .JoinColoredString(" ")
                                     .WordWrap(ConsoleUtil.WrapToWidth(), 4)
                                     .JoinColoredString(Environment.NewLine),
-                    /* 2 */ "{0/Red} out, {1/Green} through, {2/Cyan} remaining, need {3/Yellow} more through or {4/Magenta} more out".Color(null).Fmt(numOut, numThrough, numRemaining, NumContestantsNeeded - numThrough, numThrough + numRemaining - NumContestantsNeeded),
+                    /* 2 */ "{0/Red} out, {1/Green} through, {2/Cyan} remaining, need {3/Yellow} more through or {4/Magenta} more out".Color(null).Fmt(numOut, numThrough, numRemaining, QuizData.Round1NumContestantsNeeded - numThrough, numThrough + numRemaining - QuizData.Round1NumContestantsNeeded),
                     /* 3 */ SelectedContestant == null ? null : "\n\n{0/White}\n{1/Green} {2/Red} {3/Yellow}".Color(null).Fmt("Selected contestant:", Contestants[SelectedContestant.Value].NumCorrect, Contestants[SelectedContestant.Value].NumWrong, Contestants[SelectedContestant.Value].Name),
                     /* 4 */ "Number of questions available:",
                     /* 5 */ Questions.Select(kvp => "{0/Cyan}: {1/Magenta}".Color(null).Fmt(kvp.Key, kvp.Value.Length - QuestionsTaken[kvp.Key].Length)).JoinColoredString("\n"),
@@ -93,6 +91,17 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             });
         }
 
+        public Round1Data DisqualifySelectedContestant()
+        {
+            return this.ApplyToClone(c =>
+            {
+                c.Contestants = Contestants.ReplaceIndex(SelectedContestant.Value, ct => ct.Disqualify());
+                c.SelectedContestant = null;
+                c.CurrentQuestionIndex = null;
+                c.CurrentDifficulty = null;
+            });
+        }
+
         public Round1Data GiveAnswer(object answerObj)
         {
             return this.ApplyToClone(c => { c.AnswerObject = answerObj; });
@@ -107,7 +116,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                 cl.QuestionsTaken[CurrentDifficulty.Value] = cl.QuestionsTaken[CurrentDifficulty.Value].Concat(CurrentQuestionIndex.Value).ToArray();
 
                 // Update the contestant’s score
-                cl.Contestants = Contestants.ReplaceIndex(cl.SelectedContestant.Value, c => c.IncScore(!AnswerObject.Equals(false)));
+                cl.Contestants = Contestants.ReplaceIndex(SelectedContestant.Value, c => c.IncScore(!AnswerObject.Equals(false)));
 
                 cl.SelectedContestant = null;
                 cl.CurrentDifficulty = null;
