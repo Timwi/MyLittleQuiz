@@ -39,7 +39,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                         new[] { "Very easy", "Easy", "Medium", "Hard", "Very hard" }
                             .Select((df, ix) => new { Index = ix, Difficulty = df, Taken = Data.QuestionsUsed[sel][ix] }),
                         qs => qs.Difficulty.Color(qs.Taken ? ConsoleColor.DarkYellow : ConsoleColor.Yellow) + (qs.Taken ? " (taken)".Color(ConsoleColor.DarkRed) : null),
-                        qs => new Round2_Categories_Q(Data.SelectQuestion(qs.Index)));
+                        qs => qs.Taken ? null : new Round2_Categories_Q(Data.SelectQuestion(qs.Index)));
                 }
                 yield return listContestantsTransition;
             }

@@ -147,7 +147,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                         var rank = Contestants.Count(c => c.Score > Contestants[i].Score) + 1;
                         if (rank <= NumContestantsNeeded)
                             numThrough++;
-                        tt.SetCell(colContRank, row, rank.ToString().Color(rank <= NumContestantsNeeded ? ConsoleColor.Magenta : ConsoleColor.DarkMagenta), alignment: HorizontalTextAlignment.Right, background: bg);
+                        tt.SetCell(colContRank, row, rank.ToString().Color(rank <= NumContestantsNeeded ? ConsoleColor.Magenta : ConsoleColor.DarkRed), alignment: HorizontalTextAlignment.Right, background: bg);
                     }
 
                     if (i < Categories.Length)
