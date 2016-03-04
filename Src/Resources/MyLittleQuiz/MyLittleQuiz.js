@@ -75,25 +75,25 @@ $(function ()
         var strw = content.height() / 250;
         var svg = '';
         svg += '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 -' + strw + ' ' + owidth + ' ' + (height + strw) + '">';
-        svg += '<defs>';
-        svg += '<linearGradient id="lg">';
-        svg += '<stop offset="0"   style="stop-color:hsl(' + hue + ', 33%, 20%);stop-opacity:1;" />';
-        svg += '<stop offset="0.2" style="stop-color:hsl(' + hue + ', 15%, 47%);stop-opacity:1;" />';
-        svg += '<stop offset="0.3" style="stop-color:hsl(' + hue + ', 17%, 60%);stop-opacity:1;" />';
-        svg += '<stop offset="0.9" style="stop-color:hsl(' + hue + ', 50%, 13%);stop-opacity:1;" />';
-        svg += '<stop offset="1"   style="stop-color:hsl(' + hue + ', 33%, 20%);stop-opacity:1;" />';
-        svg += '</linearGradient>';
-        svg += '<linearGradient xlink:href="#lg" id="lqh" x1="0" y1="0" x2=".1" y2="1" />';
-        svg += '</defs>';
-        svg += '<line x1="0" y1="' + (height / 2 - strw / 2) + '" x2="' + owidth + '" y2="' + (height / 2 - strw / 2) + '" stroke="hsl(' + hue + ', 17%, 40%)" stroke-width="' + strw + '" />';
-        svg += '<line x1="0" y1="' + (height / 2 + strw / 2) + '" x2="' + owidth + '" y2="' + (height / 2 + strw / 2) + '" stroke="hsl(' + hue + ', 50%, 13%)" stroke-width="' + strw + '" />';
-        svg += '<path style="fill:url(#lqh)" d="M ' + lf + ',0 ' + rg + ',0 ' + rrg + ',' + (height / 2) + ' ' + rg + ',' + height + ' ' + lf + ',' + height + ' ' + llf + ',' + (height / 2) + ' z" />';
-        svg += '<line x1="' + llf + '" y1="' + (height / 2) + '" x2="' + lf + '"  y2="0"              stroke="hsl(' + hue + ', 25%, 73%)" stroke-width="' + strw + '" />';
-        svg += '<line x1="' + lf + '"  y1="0"              x2="' + rg + '"  y2="0"              stroke="hsl(' + hue + ', 16%, 40%)" stroke-width="' + strw + '" />';
-        svg += '<line x1="' + rg + '"  y1="0"              x2="' + rrg + '" y2="' + (height / 2) + '" stroke="hsl(' + hue + ', 25%, 27%)" stroke-width="' + strw + '" />';
-        svg += '<line x1="' + rrg + '" y1="' + (height / 2) + '" x2="' + rg + '"  y2="' + height + '"     stroke="hsl(' + hue + ', 50%, 13%)" stroke-width="' + strw + '" />';
-        svg += '<line x1="' + rg + '"  y1="' + height + '"     x2="' + lf + '"  y2="' + height + '"     stroke="hsl(' + hue + ', 50%, 13%)" stroke-width="' + strw + '" />';
-        svg += '<line x1="' + lf + '"  y1="' + height + '"     x2="' + llf + '" y2="' + (height / 2) + '" stroke="hsl(' + hue + ', 20%, 33%)" stroke-width="' + strw + '" />';
+        svg += '    <defs>';
+        svg += '        <linearGradient id="lg">';
+        svg += '            <stop offset="0"   style="stop-color:hsl(' + hue + ', 33%, 20%);stop-opacity:1;" />';
+        svg += '            <stop offset="0.2" style="stop-color:hsl(' + hue + ', 15%, 47%);stop-opacity:1;" />';
+        svg += '            <stop offset="0.3" style="stop-color:hsl(' + hue + ', 17%, 60%);stop-opacity:1;" />';
+        svg += '            <stop offset="0.9" style="stop-color:hsl(' + hue + ', 50%, 13%);stop-opacity:1;" />';
+        svg += '            <stop offset="1"   style="stop-color:hsl(' + hue + ', 33%, 20%);stop-opacity:1;" />';
+        svg += '        </linearGradient>';
+        svg += '        <linearGradient xlink:href="#lg" id="lqh" x1="0" y1="0" x2=".1" y2="1" />';
+        svg += '    </defs>';
+        svg += '    <line x1="0" y1="' + (height / 2 - strw / 2) + '" x2="' + owidth + '" y2="' + (height / 2 - strw / 2) + '" stroke="hsl(' + hue + ', 17%, 40%)" stroke-width="' + strw + '" />';
+        svg += '    <line x1="0" y1="' + (height / 2 + strw / 2) + '" x2="' + owidth + '" y2="' + (height / 2 + strw / 2) + '" stroke="hsl(' + hue + ', 50%, 13%)" stroke-width="' + strw + '" />';
+        svg += '    <path style="fill:url(#lqh)" d="M ' + lf + ',0 ' + rg + ',0 ' + rrg + ',' + (height / 2) + ' ' + rg + ',' + height + ' ' + lf + ',' + height + ' ' + llf + ',' + (height / 2) + ' z" />';
+        svg += '    <line x1="' + llf + '" y1="' + (height / 2) + '" x2="' + lf + '" y2="0" stroke="hsl(' + hue + ', 25%, 73%)" stroke-width="' + strw + '" />';
+        svg += '    <line x1="' + lf + '" y1="0" x2="' + rg + '" y2="0" stroke="hsl(' + hue + ', 16%, 40%)" stroke-width="' + strw + '" />';
+        svg += '    <line x1="' + rg + '" y1="0" x2="' + rrg + '" y2="' + (height / 2) + '" stroke="hsl(' + hue + ', 25%, 27%)" stroke-width="' + strw + '" />';
+        svg += '    <line x1="' + rrg + '" y1="' + (height / 2) + '" x2="' + rg + '" y2="' + height + '" stroke="hsl(' + hue + ', 50%, 13%)" stroke-width="' + strw + '" />';
+        svg += '    <line x1="' + rg + '" y1="' + height + '" x2="' + lf + '" y2="' + height + '" stroke="hsl(' + hue + ', 50%, 13%)" stroke-width="' + strw + '" />';
+        svg += '    <line x1="' + lf + '" y1="' + height + '" x2="' + llf + '" y2="' + (height / 2) + '" stroke="hsl(' + hue + ', 20%, 33%)" stroke-width="' + strw + '" />';
         svg += '</svg>';
         div.css({
             'background-image': "url('data:image/svg+xml," + svg.replace(/#/g, '%23') + "')",
@@ -102,6 +102,13 @@ $(function ()
             'background-size': 'fit'
         });
     }
+
+    musics = {
+        music1: { url: '/files/MyLittleQuiz/Music1.ogg', fadeIn: 0, fadeOut: 1 },
+        music2: { url: '/files/MyLittleQuiz/Music2.ogg', fadeIn: 0, fadeOut: 1 },
+        music3: { url: '/files/MyLittleQuiz/Music3.ogg', fadeIn: 0, fadeOut: 1 },
+        music4: { url: '/files/MyLittleQuiz/Music4.ogg', fadeIn: 0, fadeOut: 1 },
+    };
 
     transitions = {
 

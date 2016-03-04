@@ -1,0 +1,7 @@
+﻿Number of samples of repeating segment:
+Round 1: 1472557
+Round 2: 1693440
+Round 3: 2822400
+Round 4: 3386880
+
+TODO: music volume

@@ -19,6 +19,12 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
 
         public Round3Set CurrentSet { get { return QuizData.Round3Sets[SetIndex]; } }
 
+        public bool MusicStarted { get; private set; }
+        public Round3Data StartMusic()
+        {
+            return this.ApplyToClone(c => { c.MusicStarted = true; });
+        }
+
         public Round3Data(QuizData data, ContestantAndScore[] teamA, ContestantAndScore[] teamB)
         {
             QuizData = data;
@@ -47,6 +53,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             {
                 r3d.TeamA = TeamA.IncScore();
                 r3d.SetIndex++;
+                r3d.MusicStarted = false;
             });
         }
 
@@ -61,6 +68,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             {
                 r3d.TeamB = TeamB.IncScore();
                 r3d.SetIndex++;
+                r3d.MusicStarted = false;
             });
         }
 

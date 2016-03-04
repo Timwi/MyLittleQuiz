@@ -26,6 +26,12 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         public Round2Category[] Categories { get { return QuizData.Round2Categories; } }
         public int NumContestantsNeeded { get { return QuizData.Round2NumContestantsNeeded; } }
 
+        public bool MusicStarted { get; private set; }
+        public Round2Data StartMusic()
+        {
+            return this.ApplyToClone(c => { c.MusicStarted = true; });
+        }
+
         public Round2Data(QuizData quizData, Round2Contestant[] contestants)
         {
             if (quizData == null)

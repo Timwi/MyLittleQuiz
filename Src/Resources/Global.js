@@ -40,32 +40,64 @@ $(function ()
                 if (prevMusic.length)
                 {
                     prevMusic.data('cancel', true);
+                    var fadeOutTime = prevMusic.data('fadeout');
                     prevMusic.attr('id', '');
-                    var fadeOutCounter = 10;
-                    var fadeOutIntervalId = window.setInterval(function()
+                    if (!fadeOutTime)
+                        prevMusic.remove();
+                    else
                     {
-                        fadeOutCounter--;
-                        prevMusic[0].volume = fadeOutCounter/10;
-                        if (fadeOutCounter === 0)
+                        var fiCounter = 100;
+                        for (var i = 1; i <= 100; i++)
                         {
-                            window.clearInterval(fadeOutIntervalId);
-                            prevMusic.remove();
+                            (function (i2)
+                            {
+                                window.setTimeout(function ()
+                                {
+                                    prevMusic[0].volume = (100 - i2) / 100;
+                                    fiCounter--;
+                                    if (fiCounter === 0)
+                                        prevMusic.remove();
+                                }, fadeOutTime * 10 * i2);
+                            })(i);
                         }
-                    }, 100);
+                    }
                 }
 
-                currentMusic = data.music;
-                var newMusic = $('<audio id="music" src="'+currentMusic+'">').appendTo(document.body);
-                newMusic[0].volume = 0;
-                newMusic[0].play();
-                var fadeInCounter = 0;
-                var fadeInIntervalId = window.setInterval(function()
+                if (!(data.music in musics))
+                    currentMusic = null;
+                else
                 {
-                    fadeInCounter++;
-                    if (fadeInCounter === 10 || newMusic.data('cancel'))
-                        window.clearInterval(fadeInIntervalId);
-                    newMusic[0].volume = fadeInCounter/10;
-                }, 100);
+                    currentMusic = data.music;
+                    var inf = musics[currentMusic];
+                    var newMusic = $('<audio id="music" src="' + inf.url + '">').appendTo(document.body);
+                    newMusic[0].volume = 0;
+                    newMusic[0].play();
+                    newMusic.data('fadeout', inf.fadeOut);
+
+                    // TODO: ability to specify music volume
+                    var fullVolume = 1;
+
+                    if (!inf.fadeIn)
+                        newMusic[0].volume = fullVolume;
+                    else
+                    {
+                        var foCounter = 100;
+                        for (var i = 1; i <= 100; i++)
+                        {
+                            (function (i2)
+                            {
+                                window.setTimeout(function ()
+                                {
+                                    foCounter--;
+                                    if (foCounter === 0)
+                                        newMusic[0].volume = fullVolume;
+                                    else
+                                        newMusic[0].volume = fullVolume * i2 / 100;
+                                }, inf.fadeIn * 10 * i2);
+                            })(i);
+                        }
+                    }
+                }
             }
         };
     }

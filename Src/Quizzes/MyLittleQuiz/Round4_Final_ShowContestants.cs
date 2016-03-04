@@ -27,7 +27,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         public override ConsoleColoredString Describe { get { return Data.Describe; } }
 
         public override string JsMethod { get { return "r4_showContestants"; } }
-        public override string JsMusic { get { return @"/files/MyLittleQuiz/Music4.ogg"; } }
+        public override string JsMusic { get { return Data.MusicStarted ? "music4" : null; } }
         public override object JsParameters
         {
             get { return new { contestants = Data.Contestants, answers = Data.Answers, minAnswers = Data.QuizData.Round4MinQuestions }; }

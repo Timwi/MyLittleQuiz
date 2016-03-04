@@ -61,7 +61,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         }
 
         public override string JsMethod { get { return Data.AnswerObject == null ? "showQ" : "showQA"; } }
-        public override string JsMusic { get { return @"/files/MyLittleQuiz/Music4.ogg"; } }
+        public override string JsMusic { get { return Data.MusicStarted ? "music4" : null; } }
         public override object JsParameters
         {
             get

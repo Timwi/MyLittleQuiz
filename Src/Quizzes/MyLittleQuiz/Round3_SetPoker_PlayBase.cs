@@ -55,9 +55,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             }
         }
 
-        public override string JsMethod
-        {
-            get { return "r3_play"; }
-        }
+        public override string JsMethod { get { return "r3_play"; } }
+        public override string JsMusic { get { return Data.MusicStarted ? "music3" : null; } }
     }
 }

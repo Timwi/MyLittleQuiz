@@ -60,14 +60,8 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             }
         }
 
-        public override string JsMethod
-        {
-            get { return "r3_showSet"; }
-        }
-
-        public override object JsParameters
-        {
-            get { return new { set = Data.CurrentSet.Name }; }
-        }
+        public override string JsMethod { get { return "r3_showSet"; } }
+        public override string JsMusic { get { return null; } }
+        public override object JsParameters { get { return new { set = Data.CurrentSet.Name }; } }
     }
 }

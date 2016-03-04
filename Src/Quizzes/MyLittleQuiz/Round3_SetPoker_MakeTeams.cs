@@ -57,6 +57,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         }
 
         public override string JsMethod { get { return "r3_showContestants"; } }
+        public override string JsMusic { get { return null; } }
         public override object JsParameters { get { return new { contestants = TeamA.Concat(UnassignedContestants).ToArray() }; } }
     }
 }

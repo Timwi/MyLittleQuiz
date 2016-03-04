@@ -32,6 +32,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         }
 
         public override string JsMethod { get { return Data.AnswerObject == null ? "showQ" : "showQA"; } }
+        public override string JsMusic { get { return Data.MusicStarted ? "music1" : null; } }
         public override object JsParameters
         {
             get

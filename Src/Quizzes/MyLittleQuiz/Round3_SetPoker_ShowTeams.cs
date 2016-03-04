@@ -1,9 +1,7 @@
 ﻿using System;
-using RT.Util.ExtensionMethods;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using RT.Util.Consoles;
+using RT.Util.ExtensionMethods;
 
 namespace QuizGameEngine.Quizzes.MyLittleQuiz
 {
@@ -47,11 +45,8 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             }
         }
 
-        public override string JsMethod
-        {
-            get { return "r3_showTeams"; }
-        }
-
+        public override string JsMethod { get { return "r3_showTeams"; } }
+        public override string JsMusic { get { return Data.MusicStarted ? "music3" : null; } }
         public override object JsParameters
         {
             get { return new { teamA = Data.TeamA, teamB = Data.TeamB }; }

@@ -60,6 +60,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         }
 
         public override string JsMethod { get { return Data.SelectedContestant == null ? "r1_showContestants" : "r1_select"; } }
+        public override string JsMusic { get { return Data.MusicStarted ? "music1" : null; } }
         public override object JsParameters
         {
             get

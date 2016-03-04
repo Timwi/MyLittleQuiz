@@ -23,6 +23,12 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         [ClassifyIgnoreIfDefault]
         public object AnswerObject { get; private set; }
 
+        public bool MusicStarted { get; private set; }
+        public Round4Data StartMusic()
+        {
+            return this.ApplyToClone(c => { c.MusicStarted = true; });
+        }
+
         public Round4Data(QuizData quizData, ContestantAndScore[] contestants)
         {
             QuizData = quizData;

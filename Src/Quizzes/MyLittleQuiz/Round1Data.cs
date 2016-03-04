@@ -26,6 +26,12 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         [ClassifyIgnoreIfDefault]
         public object AnswerObject { get; private set; }
 
+        public bool MusicStarted { get; private set; }
+        public Round1Data StartMusic()
+        {
+            return this.ApplyToClone(c => { c.MusicStarted = true; });
+        }
+
         public QuestionBase CurrentQuestion { get { return CurrentQuestionIndex.NullOr(cqi => CurrentDifficulty.NullOr(cd => Questions[cd][cqi])); } }
 
         public Round1Data(QuizData quizData, IEnumerable<Contestant> contestants)
@@ -36,6 +42,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             SelectedContestant = null;
             CurrentDifficulty = null;
             AnswerObject = null;
+            MusicStarted = false;
         }
 
         private Round1Data() { }    // for Classify

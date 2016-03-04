@@ -26,5 +26,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                 });
             }
         }
+
+        public override string JsMusic { get { return Data.MusicStarted ? "music2" : null; } }
     }
 }

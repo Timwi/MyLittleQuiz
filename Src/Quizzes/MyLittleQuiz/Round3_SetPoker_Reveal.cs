@@ -59,11 +59,8 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             }
         }
 
-        public override string JsMethod
-        {
-            get { return "r3_reveal"; }
-        }
-
+        public override string JsMethod { get { return "r3_reveal"; } }
+        public override string JsMusic { get { return null; } }
         public override object JsParameters
         {
             get
