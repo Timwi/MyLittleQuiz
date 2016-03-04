@@ -41,7 +41,7 @@ body {
     #content .contestants {
         top: 0;
         font-size: 10vh;
-        line-height: 1em;
+        line-height: 1;
     }
 
         #content .contestants.left {

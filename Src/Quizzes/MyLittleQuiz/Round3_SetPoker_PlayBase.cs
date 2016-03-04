@@ -31,9 +31,9 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
 
                 yield return Transition.Find(ConsoleKey.G, "Give a correct answer", remaining,
                     ans => ans.Color(ans == null ? ConsoleColor.Red : ConsoleColor.Green),
-                    ans => GiveCorrectAnswer(ans));
+                    ans => GiveCorrectAnswer(ans).With("r3_play_transition"));
 
-                yield return Transition.Simple(ConsoleKey.M, "Give a wrong answer", () => GiveWrongAnswer());
+                yield return Transition.Simple(ConsoleKey.M, "Give a wrong answer", () => GiveWrongAnswer().With("r3_play_transition"));
 
                 yield return Transition.Simple(ConsoleKey.L, "List {0} remaining correct answers".Fmt(remaining.Length), () =>
                 {

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using RT.Util.Consoles;
+using RT.Util.Text;
 
 namespace QuizGameEngine.Quizzes.MyLittleQuiz
 {
@@ -32,7 +33,29 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         {
             get
             {
-                return "Revealing set {0/Yellow}".Color(ConsoleColor.Green).Fmt(Data.QuizData.Round3Sets[Data.SetIndex - 1].Name);
+                var remaining = Data.QuizData.Round3Sets[Data.SetIndex - 1].Answers.Except(Data.AnswersGiven).ToArray();
+                TextTable bestTable = null;
+                int? bestWidth = null;
+                for (int cols = 1; cols <= 10; cols++)
+                {
+                    var tt = new TextTable { ColumnSpacing = 2 };
+                    var rows = (remaining.Length + cols - 1) / cols;
+                    var widths = new int[cols];
+                    for (int i = 0; i < remaining.Length; i++)
+                    {
+                        var col = i / rows;
+                        widths[col] = Math.Max(widths[col], remaining[i].Length);
+                        tt.SetCell(col, i % rows, remaining[i], noWrap: true);
+                    }
+                    var width = widths.Sum() + 2 * (cols - 1);
+                    if (bestWidth == null || (width < ConsoleUtil.WrapToWidth() && width > bestWidth.Value))
+                    {
+                        bestTable = tt;
+                        bestWidth = width;
+                    }
+                }
+
+                return "Revealing set {0/Yellow}:\n\n{1}".Color(ConsoleColor.Green).Fmt(Data.QuizData.Round3Sets[Data.SetIndex - 1].Name, bestTable);
             }
         }
 
@@ -46,7 +69,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             get
             {
                 var set = Data.QuizData.Round3Sets[Data.SetIndex - 1];
-                return new { set = set.Name, remaining = set.Answers.Except(Data.AnswersGiven).Order().ToArray() };
+                return new { set = set.Name, remaining = set.Answers.Except(Data.AnswersGiven).ToArray() };
             }
         }
     }

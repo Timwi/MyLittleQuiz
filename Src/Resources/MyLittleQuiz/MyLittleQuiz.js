@@ -346,7 +346,12 @@ $(function ()
             findBestValue(100, function (fs) { div.css('font-size', fs + 'px'); return inner.outerHeight() < div.outerHeight() ? -1 : 1; });
         },
 
-        r3_play: function (p)
+        r3_play_transition: function (p)
+        {
+            transitions.r3_play(p, true);
+        },
+
+        r3_play: function (p, doTransition)
         {
             if (p.answers.length < 1)
                 return;
@@ -415,28 +420,31 @@ $(function ()
                 div.animate({ fontSize: fontSize }, { duration: 2000, queue: false });
             }
 
-            var elem = $('#r3-play .ans').filter(function (_, e) { return $(e).data('index') === p.answers.length - 1 });
-            if (p.answers[p.answers.length - 1] !== null)
+            if (doTransition)
             {
-                var width = elem.width();
-                var height = elem.outerHeight();
-                elem.removeClass('invisible').css({ width: '0%', height: height + 'px', opacity: 0 });
-                var inner = elem.find('.answer');
-                inner.css({ width: width + 'px' });
+                var elem = $('#r3-play .ans').filter(function (_, e) { return $(e).data('index') === p.answers.length - 1 });
+                if (p.answers[p.answers.length - 1] !== null)
+                {
+                    var width = elem.width();
+                    var height = elem.outerHeight();
+                    elem.removeClass('invisible').css({ width: '0%', height: height + 'px', opacity: 0 });
+                    var inner = elem.find('.answer');
+                    inner.css({ width: width + 'px' });
 
-                elem.animate({ opacity: 1 }, { duration: 700, queue: false });
-                elem.animate({ width: '100%' }, {
-                    duration: 1000,
-                    queue: false,
-                    done: function ()
-                    {
-                        elem.css({ width: '', height: '' });
-                        inner.css({ width: '' });
-                    }
-                });
+                    elem.animate({ opacity: 1 }, { duration: 700, queue: false });
+                    elem.animate({ width: '100%' }, {
+                        duration: 1000,
+                        queue: false,
+                        done: function ()
+                        {
+                            elem.css({ width: '', height: '' });
+                            inner.css({ width: '' });
+                        }
+                    });
+                }
+                else
+                    elem.removeClass('in').addClassDelay('in');
             }
-            else
-                elem.removeClass('in').addClassDelay('in');
         },
 
         r3_reveal: function (p)
@@ -464,7 +472,11 @@ $(function ()
                 var fontSize = findBestValue(100, function (fs)
                 {
                     div.css('font-size', fs + 'px');
-                    return div.outerHeight() < content.height() ? -1 : 1;
+                    if (div.outerHeight() > content.height())
+                        return 1;
+                    if (table.outerWidth() > content.width())
+                        return 1;
+                    return -1;
                 });
                 if (bestFontSize === null || bestFontSize < fontSize)
                 {
@@ -485,11 +497,8 @@ $(function ()
             $('#r4-contestants').remove();
             clearScreen();
 
-            var div = $('<div id="r4-contestants" class="static away">')
-                        .appendTo(content);
-            var innerDiv = $('<div class="r4-style away">')
-                        .appendTo(div)
-                        .addClassDelay('in', 500);
+            var div = $('<div id="r4-contestants" class="static away">').appendTo(content);
+            var innerDiv = $('<div class="r4-style away">').appendTo(div).addClassDelay('in', 500);
             var table = $('<table>').appendTo(innerDiv);
 
             var rows = p.answers.length;
@@ -504,10 +513,17 @@ $(function ()
             trs = table.find('tr');
 
             var cols = p.minAnswers;
+            var allHave = true;
             for (var i = 0; i < p.answers.length; i++)
+            {
                 if (p.answers[i].length > cols)
                     cols = p.answers[i].length;
+                else if (p.answers[i].length < p.answers[0].length)
+                    allHave = false;
+            }
             cols++; // contestant names
+            if (allHave && cols >= p.minAnswers)
+                cols++;
 
             for (var i = 0; i < trs.length; i++)
             {
@@ -546,7 +562,11 @@ $(function ()
             findBestValue(100, function (fs)
             {
                 div.css('font-size', fs + 'px');
-                return div.outerHeight() < content.height() / 3 ? -1 : 1;
+                if (div.outerHeight() > content.height() / 3)
+                    return 1;
+                if (table.outerWidth() > content.width() * 4 / 5)
+                    return 1;
+                return -1;
             });
 
             r4_addBackground(innerDiv, table.outerWidth(), table.outerHeight(), 30, true);

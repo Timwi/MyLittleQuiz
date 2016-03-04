@@ -402,7 +402,7 @@ body {
             width: 1.5em;
             height: 1.2em;
             text-align: center;
-            line-height: 1.1em;
+            line-height: 1.1;
         }
 
     #content #r2-cats .r2-cat {
@@ -781,7 +781,7 @@ body {
         transition-delay: .8s;
         color: tomato;
         font-weight: bold;
-        line-height: 1em;
+        line-height: 1;
     }
 
         #content #r3-strikes.in {
@@ -825,6 +825,7 @@ body {
             text-align: center;
             margin: 0 0 .2em 0;
             font-weight: normal;
+            padding: 0 .25em;
         }
 
         #content #r3-reveal table {
@@ -834,6 +835,7 @@ body {
 
         #content #r3-reveal td {
             vertical-align: top;
+            white-space: nowrap;
         }
 
             #content #r3-reveal td div {
@@ -841,7 +843,7 @@ body {
                 border-radius: 1em;
                 margin: .1em;
                 text-align: center;
-                padding: 0 .1em;
+                padding: 0 .25em;
             }
 
     #content #qa.r4 {
@@ -916,7 +918,7 @@ body {
         }
 
             #content #r4-contestants table td {
-                line-height: 1em;
+                line-height: 1;
             }
 
                 #content #r4-contestants table td:not(:first-child) {
