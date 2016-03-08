@@ -1,11 +1,9 @@
 ﻿using System;
-using RT.Util.ExtensionMethods;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using RT.Util;
 using RT.Util.Consoles;
-using RT.Util.Serialization;
+using RT.Util.ExtensionMethods;
 
 namespace QuizGameEngine.Quizzes.MyLittleQuiz
 {
@@ -16,7 +14,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         public Round1_Elimination(Round1Data data) { Data = data; }
         private Round1_Elimination() { } // for Classify
 
-        public static QuizStateBase GetQuizState(Round1Data data)
+        public static TransitionResult TransitionTo(Round1Data data)
         {
             var through = data.Contestants.Where(c => c.IsThrough).ToArray();
             var throughAndRemaining = data.Contestants.Where(c => c.IsThrough || c.IsStillInGame).ToArray();
@@ -25,9 +23,10 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                 throughAndRemaining.Length == data.QuizData.Round1NumContestantsNeeded ? throughAndRemaining : null;
 
             if (nextRoundContestants != null)
-                return new Round2_Categories_ShowContestants(new Round2Data(data.QuizData, (Round2Contestant[]) nextRoundContestants.Select(c => new Round2Contestant(c.Name, 0)).ToArray().Shuffle()), noScores: true);
+                return new Round2_Categories_ShowContestants(new Round2Data(data.QuizData, (Round2Contestant[]) nextRoundContestants.Select(c => new Round2Contestant(c.Name, 0)).ToArray().Shuffle()), noScores: true)
+                    .With(jsJingle: Jingle.Tada.ToString());
 
-            return new Round1_Elimination(data);
+            return new Round1_Elimination(data).With();
         }
 
         public override IEnumerable<Transition> Transitions
@@ -45,8 +44,8 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
 
                 if (Data.SelectedContestant != null)
                 {
-                    yield return Transition.Simple(ConsoleKey.Q, "Ask the question", () => new Round1_Elimination_Q(Data));
-                    yield return Transition.Simple(ConsoleKey.D, "Disqualify", () => GetQuizState(Data.DisqualifySelectedContestant()));
+                    yield return Transition.Simple(ConsoleKey.Q, "Ask the question", () => new Round1_Elimination_Q(Data.StartMusic()));
+                    yield return Transition.Simple(ConsoleKey.D, "Disqualify", () => TransitionTo(Data.DisqualifySelectedContestant()));
                 }
             }
         }
@@ -59,17 +58,27 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             }
         }
 
+        public override string JsMusic { get { return Data.MusicStarted ? Music.Music1.ToString() : null; } }
         public override string JsMethod { get { return Data.SelectedContestant == null ? "r1_showContestants" : "r1_select"; } }
-        public override string JsMusic { get { return Data.MusicStarted ? "music1" : null; } }
+        public override string JsJingle { get { return Data.SelectedContestant == null ? null : Jingle.Swoosh.ToString(); } }
         public override object JsParameters
         {
             get
             {
-                return new
-                {
-                    contestants = Data.Contestants,
-                    selected = Data.SelectedContestant
-                };
+                if (Data.SelectedContestant == null)
+                    return new
+                    {
+                        contestants = Data.Contestants.Select((c, i) => new
+                        {
+                            Name = c.Name,
+                            Roll = c.Roll,
+                            Number = i + 1,
+                            HasCorrect = c.NumCorrect > 0,
+                            HasWrong = c.NumWrong > 0,
+                            Shown = c.IsStillInGame
+                        }).Where(inf => inf.Shown).ToArray()
+                    };
+                return new { contestant = Data.Contestants[Data.SelectedContestant.Value] };
             }
         }
     }

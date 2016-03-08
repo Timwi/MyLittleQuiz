@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using RT.Util;
 using RT.Util.Consoles;
-using RT.Util.ExtensionMethods;
 
 namespace QuizGameEngine.Quizzes.MyLittleQuiz
 {
@@ -17,22 +15,26 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         protected override string Round { get { return "r1"; } }
 
         public override QuestionBase CurrentQuestion { get { return Data.CurrentDifficulty.NullOr(cd => Data.CurrentQuestionIndex.NullOr(cqi => Data.Questions[cd][cqi])); } }
-        public override QuizStateBase GiveAnswer(object answer) { return new Round1_Elimination_Q(Data.GiveAnswer(answer)); }
+        public override TransitionResult GiveAnswer(bool correct)
+        {
+            return new Round1_Elimination_Q(Data.GiveAnswer(correct))
+                .With("showA", new { answer = correct, round = Round }, jsJingle: (correct ? Jingle.Round1CorrectAnswer : Jingle.Round1WrongAnswer).ToString());
+        }
 
         public override ConsoleColoredString Describe { get { return Data.Describe; } }
 
-        public override IEnumerable<Transition> Transitions { get { return Data.AnswerObject == null ? getAnswerTransitions() : transitionsAfterAnswer; } }
+        public override IEnumerable<Transition> Transitions { get { return Data.AnswerGiven == null ? getAnswerTransitions() : transitionsAfterAnswer; } }
 
         private IEnumerable<Transition> transitionsAfterAnswer
         {
             get
             {
-                yield return Transition.Simple(ConsoleKey.Spacebar, "Dismiss question", () => Round1_Elimination.GetQuizState(Data.DismissQuestion()));
+                yield return Transition.Simple(ConsoleKey.Spacebar, "Dismiss question", () => Round1_Elimination.TransitionTo(Data.DismissQuestion()));
             }
         }
 
-        public override string JsMethod { get { return Data.AnswerObject == null ? "showQ" : "showQA"; } }
-        public override string JsMusic { get { return Data.MusicStarted ? "music1" : null; } }
+        public override string JsMethod { get { return Data.AnswerGiven == null ? "showQ" : "showQA"; } }
+        public override string JsMusic { get { return Data.MusicStarted ? Music.Music1.ToString() : null; } }
         public override object JsParameters
         {
             get
@@ -40,7 +42,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                 return new
                 {
                     question = CurrentQuestion,
-                    answer = Data.AnswerObject,
+                    answer = Data.AnswerGiven,
                     round = "r1"
                 };
             }

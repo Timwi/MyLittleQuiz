@@ -27,6 +27,6 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             }
         }
 
-        public override string JsMusic { get { return Data.MusicStarted ? "music2" : null; } }
+        public override string JsMusic { get { return Data.MusicStarted ? Music.Music2.ToString() : null; } }
     }
 }

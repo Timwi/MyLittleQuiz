@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using RT.Util.Serialization;
 
 namespace QuizGameEngine
@@ -12,8 +9,7 @@ namespace QuizGameEngine
         protected QuizBase() { }    // for Classify
 
         [ClassifyNotNull]
-        protected QuizStateBase _currentState;
-        public QuizStateBase CurrentState { get { return _currentState; } }
+        public QuizStateBase CurrentState { get; protected set; }
 
         [ClassifyIgnoreIfDefault]
         public string UndoLine { get; private set; }
@@ -27,7 +23,7 @@ namespace QuizGameEngine
         {
             _redo.Clear();
             _undo.Push(Tuple.Create(CurrentState, UndoLine));
-            _currentState = newState;
+            CurrentState = newState;
             UndoLine = undoLine;
         }
 
@@ -37,7 +33,7 @@ namespace QuizGameEngine
                 return false;
             _redo.Push(Tuple.Create(CurrentState, UndoLine));
             var tup = _undo.Pop();
-            _currentState = tup.Item1;
+            CurrentState = tup.Item1;
             UndoLine = tup.Item2;
             return true;
         }
@@ -48,7 +44,7 @@ namespace QuizGameEngine
                 return false;
             _undo.Push(Tuple.Create(CurrentState, UndoLine));
             var tup = _redo.Pop();
-            _currentState = tup.Item1;
+            CurrentState = tup.Item1;
             UndoLine = tup.Item2;
             return true;
         }

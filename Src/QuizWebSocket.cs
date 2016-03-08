@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using RT.Servers;
+using RT.Util;
 using RT.Util.ExtensionMethods;
 using RT.Util.Json;
 using RT.Util.Serialization;
@@ -39,10 +40,14 @@ namespace QuizGameEngine
                 var state = Program.Quiz.CurrentState;
                 if (state.JsMethod != null)
                 {
-                    var prms = ClassifyJson.Serialize(state.JsParameters);
-                    if (prms.ContainsKey(":fulltype"))
-                        prms.Remove(":fulltype");
-                    SendLoggedMessage(new JsonDict { { "method", state.JsMethod }, { "params", prms }, { "music", state.JsMusic } });
+                    var prms = state.JsParameters.NullOr(p =>
+                    {
+                        var ret = ClassifyJson.Serialize(state.JsParameters);
+                        if (ret.ContainsKey(":fulltype"))
+                            ret.Remove(":fulltype");
+                        return ret;
+                    });
+                    SendLoggedMessage(new JsonDict { { "method", state.JsMethod }, { "params", prms }, { "music", state.JsMusic }, { "jingle", state.JsJingle } });
                 }
             }
             base.onTextMessageReceived(msg);

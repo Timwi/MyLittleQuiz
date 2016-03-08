@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using RT.Util.Consoles;
-using RT.Util.Dialogs;
 using RT.Util.ExtensionMethods;
-using RT.Util.Serialization;
 
 namespace QuizGameEngine.Quizzes.MyLittleQuiz
 {
@@ -25,9 +22,9 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             return new Round3_SetPoker_Play(Data.GiveCorrectAnswer(answer), Bid);
         }
 
-        public override Round3_SetPoker_PlayBase GiveWrongAnswer()
+        public override TransitionResult GiveWrongAnswer()
         {
-            return new Round3_SetPoker_Play(Data.GiveWrongAnswer(false), Bid);
+            return new Round3_SetPoker_Play(Data.GiveWrongAnswer(false), Bid).With("r3_play", jsJingle: Jingle.Round3WrongAnswer.ToString());
         }
 
         public override ConsoleColoredString Describe
@@ -44,11 +41,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             }
         }
 
-        public override string JsMethod
-        {
-            get { return "r3_play"; }
-        }
-
+        public override string JsMethod { get { return "r3_play"; } }
         public override object JsParameters
         {
             get { return new { tie = false, answers = Data.AnswersGiven, bid = Bid, remaining = Bid - Data.AnswersGiven.Length, strikes = Data.WrongAnswers }; }

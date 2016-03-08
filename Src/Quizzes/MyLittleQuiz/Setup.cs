@@ -21,6 +21,9 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         [ClassifyNotNull]
         public List<Contestant> DeletedContestants { get; private set; }
 
+        public Music? Music { get; private set; } = null;
+        public Jingle? Jingle { get; private set; } = null;
+
         [ClassifyNotNull]
         public QuizData Data = new QuizData();
 
@@ -66,6 +69,13 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
 
                 if (Contestants.Count > 0)
                     yield return Transition.Simple(ConsoleKey.S, "Start Round: Elimination Round", () => new Round1_Elimination(new Round1Data(Data, Contestants.ToArray().Shuffle())));
+
+                if (Music == null)
+                    yield return Transition.Select(ConsoleKey.M, "Set music", EnumStrong.GetValues<Music>(), m => m.ToString(), m => this.ApplyToClone(th => { th.Music = m; th.Jingle = null; }));
+                else
+                    yield return Transition.Simple(ConsoleKey.M, "Mute music", () => this.ApplyToClone(th => { th.Music = null; th.Jingle = null; }));
+
+                yield return Transition.Select(ConsoleKey.J, "Play jingle", EnumStrong.GetValues<Jingle>(), j => j.ToString(), j => this.ApplyToClone(th => { th.Jingle = j; }));
             }
         }
 
@@ -77,7 +87,9 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             }
         }
 
-        public override string JsMethod { get { return null; } }
+        public override string JsMethod { get { return "setup"; } }
         public override object JsParameters { get { return null; } }
+        public override string JsMusic { get { return Music?.ToString(); } }
+        public override string JsJingle { get { return Jingle?.ToString(); } }
     }
 }

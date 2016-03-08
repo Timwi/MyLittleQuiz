@@ -137,7 +137,7 @@ namespace QuizGameEngine
                     case ConsoleKey.Escape:
                         if (keyInfo.Modifiers != 0)
                             goto default;
-                        return 0;
+                        goto exit;
 
                     case ConsoleKey.Backspace:
                         if (
@@ -152,7 +152,7 @@ namespace QuizGameEngine
                             goto default;
                         Quiz = ClassifyJson.DeserializeFile<QuizBase>(_dataFile);
                         needSave = true;
-                        transitionResult = new TransitionResult(Quiz.CurrentState, null, Quiz.CurrentState.JsMethod, Quiz.CurrentState.JsParameters, Quiz.CurrentState.JsMusic);
+                        transitionResult = new TransitionResult(Quiz.CurrentState, null, Quiz.CurrentState.JsMethod, Quiz.CurrentState.JsParameters, Quiz.CurrentState.JsMusic, Quiz.CurrentState.JsJingle);
                         break;
 
                     case ConsoleKey.E:
@@ -183,10 +183,14 @@ namespace QuizGameEngine
 
                     if (transitionResult.JsMethod != null || transitionResult.JsMusic != null)
                     {
-                        var prms = ClassifyJson.Serialize(transitionResult.JsParameters);
-                        if (prms.ContainsKey(":fulltype"))
-                            prms.Remove(":fulltype");
-                        var dict = new JsonDict { { "method", transitionResult.JsMethod }, { "params", prms }, { "music", transitionResult.JsMusic } };
+                        var prms = transitionResult.JsParameters.NullOr(p =>
+                        {
+                            var ret = ClassifyJson.Serialize(p);
+                            if (ret.ContainsKey(":fulltype"))
+                                ret.Remove(":fulltype");
+                            return ret;
+                        });
+                        var dict = new JsonDict { { "method", transitionResult.JsMethod }, { "params", prms }, { "music", transitionResult.JsMusic }, { "jingle", transitionResult.JsJingle } };
                         lock (Sockets)
                             foreach (var socket in Sockets)
                                 socket.SendLoggedMessage(dict);
@@ -195,6 +199,10 @@ namespace QuizGameEngine
                     needSave = true;
                 }
             }
+
+            exit:
+            Server.StopListening(true, true);
+            return 0;
         }
 
         private static void save()
@@ -632,7 +640,7 @@ namespace QuizGameEngine
                         var ix = 0;
                         if (rawEditables.Length != 0)
                         {
-                            var resultInf = ConsoleSelect(
+                            var resultInf = ConsoleSelectClass(
                                 new[] { new { Index = selStart, Label = "Insert here" }, new { Index = rawEditables.Length, Label = "Insert at bottom" } },
                                 inf => inf.Label.Color(ConsoleColor.Green));
                             if (resultInf == null)
@@ -764,7 +772,7 @@ namespace QuizGameEngine
             if (type.IsAbstract)
             {
                 var availableTypes = type.Assembly.GetTypes().Where(t => !t.IsAbstract && type.IsAssignableFrom(t)).ToArray();
-                type = ConsoleSelect(availableTypes, t => t.Name.Color(ConsoleColor.Green));
+                type = ConsoleSelectClass(availableTypes, t => t.Name.Color(ConsoleColor.Green));
                 if (type == null)
                     return null;
             }
@@ -800,7 +808,12 @@ namespace QuizGameEngine
             }
         }
 
-        public static T ConsoleSelect<T>(this IEnumerable<T> objs, Func<T, ConsoleColoredString> describe)
+        public static T ConsoleSelectClass<T>(this IEnumerable<T> objs, Func<T, ConsoleColoredString> describe) where T : class
+        {
+            return (T) ConsoleSelect(objs, describe);
+        }
+
+        public static object ConsoleSelect<T>(this IEnumerable<T> objs, Func<T, ConsoleColoredString> describe)
         {
             var dic = new Dictionary<ConsoleKey, Tuple<ConsoleColoredString, object>>();
             var curDic = dic;
@@ -818,7 +831,7 @@ namespace QuizGameEngine
                 curDic[curKey] = new Tuple<ConsoleColoredString, object>(describe(obj), obj);
                 curKey++;
             }
-            return (T) GetConsoleSelectionFull(dic);
+            return GetConsoleSelectionFull(dic);
         }
     }
 }

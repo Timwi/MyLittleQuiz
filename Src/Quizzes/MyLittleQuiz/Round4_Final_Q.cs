@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using RT.Util;
 using RT.Util.Consoles;
 using RT.Util.ExtensionMethods;
 
@@ -17,7 +16,11 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         protected override string Round { get { return "r4"; } }
 
         public override QuestionBase CurrentQuestion { get { return Data.CurrentQuestion; } }
-        public override QuizStateBase GiveAnswer(object answer) { return new Round4_Final_Q(Data.GiveAnswer(answer)); }
+        public override TransitionResult GiveAnswer(bool correct)
+        {
+            return new Round4_Final_Q(Data.GiveAnswer(correct))
+                .With("showA", new { answer = correct, round = Round });
+        }
 
         public override ConsoleColoredString Describe
         {
@@ -27,7 +30,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             }
         }
 
-        public override IEnumerable<Transition> Transitions { get { return Data.AnswerObject == null ? getAnswerTransitions() : transitionsAfterAnswer; } }
+        public override IEnumerable<Transition> Transitions { get { return Data.AnswerGiven == null ? getAnswerTransitions() : transitionsAfterAnswer; } }
 
         private IEnumerable<Transition> transitionsAfterAnswer
         {
@@ -60,8 +63,8 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             }
         }
 
-        public override string JsMethod { get { return Data.AnswerObject == null ? "showQ" : "showQA"; } }
-        public override string JsMusic { get { return Data.MusicStarted ? "music4" : null; } }
+        public override string JsMethod { get { return Data.AnswerGiven == null ? "showQ" : "showQA"; } }
+        public override string JsMusic { get { return Data.MusicStarted ? Music.Music4.ToString() : null; } }
         public override object JsParameters
         {
             get
@@ -69,7 +72,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                 return new
                 {
                     question = CurrentQuestion,
-                    answer = Data.AnswerObject,
+                    answer = Data.AnswerGiven,
                     round = "r4"
                 };
             }

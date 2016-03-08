@@ -21,7 +21,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         protected Round3_SetPoker_PlayBase() { }  // for Classify
 
         public abstract Round3_SetPoker_PlayBase GiveCorrectAnswer(string answer);
-        public abstract Round3_SetPoker_PlayBase GiveWrongAnswer();
+        public abstract TransitionResult GiveWrongAnswer();
 
         public override IEnumerable<Transition> Transitions
         {
@@ -31,9 +31,9 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
 
                 yield return Transition.Find(ConsoleKey.G, "Give a correct answer", remaining,
                     ans => ans.Color(ans == null ? ConsoleColor.Red : ConsoleColor.Green),
-                    ans => GiveCorrectAnswer(ans).With("r3_play_transition"));
+                    ans => GiveCorrectAnswer(ans).With("r3_play_transition", jsJingle: Jingle.Round3CorrectAnswer.ToString()));
 
-                yield return Transition.Simple(ConsoleKey.M, "Give a wrong answer", () => GiveWrongAnswer().With("r3_play_transition"));
+                yield return Transition.Simple(ConsoleKey.M, "Give a wrong answer", () => GiveWrongAnswer());
 
                 yield return Transition.Simple(ConsoleKey.L, "List {0} remaining correct answers".Fmt(remaining.Length), () =>
                 {
@@ -42,8 +42,8 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                     Program.ReadKey();
                 });
 
-                yield return Transition.Simple(ConsoleKey.A, "Team A wins", () => new Round3_SetPoker_ShowTeams(Data.TeamAWins()));
-                yield return Transition.Simple(ConsoleKey.B, "Team B wins", () => new Round3_SetPoker_ShowTeams(Data.TeamBWins()));
+                yield return Transition.Simple(ConsoleKey.A, "Team A wins", () => new Round3_SetPoker_ShowTeams(Data.TeamAWins()).With(jsJingle: Jingle.Tada.ToString()));
+                yield return Transition.Simple(ConsoleKey.B, "Team B wins", () => new Round3_SetPoker_ShowTeams(Data.TeamBWins()).With(jsJingle: Jingle.Tada.ToString()));
             }
         }
 
@@ -56,6 +56,6 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         }
 
         public override string JsMethod { get { return "r3_play"; } }
-        public override string JsMusic { get { return Data.MusicStarted ? "music3" : null; } }
+        public override string JsMusic { get { return Data.MusicStarted ? Music.Music3.ToString() : null; } }
     }
 }

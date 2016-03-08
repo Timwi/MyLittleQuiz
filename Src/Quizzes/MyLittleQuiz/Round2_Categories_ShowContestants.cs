@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using RT.Util;
 using RT.Util.Consoles;
 using RT.Util.ExtensionMethods;
-using RT.Util.Text;
 
 namespace QuizGameEngine.Quizzes.MyLittleQuiz
 {
@@ -32,16 +27,16 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                     {
                         // TODO
                     });
-                    yield return Transition.Simple(ConsoleKey.S, "Show scores", () => new Round2_Categories_ShowContestants(Data));
+                    yield return Transition.Simple(ConsoleKey.S, "Show scores", () => new Round2_Categories_ShowContestants(Data).With(jsJingle: Jingle.Swoosh.ToString()));
                 }
                 else
-                    yield return Transition.Simple(ConsoleKey.C, "Show categories", () => new Round2_Categories_ShowCategories(Data));
+                    yield return Transition.Simple(ConsoleKey.C, "Show categories", () => new Round2_Categories_ShowCategories(Data).With(jsJingle: Jingle.Swoosh.ToString()));
 
                 yield return listContestantsTransition;
 
                 yield return Transition.Simple(ConsoleKey.N, "Go to next round", () =>
                     new Round3_SetPoker_MakeTeams(Data.QuizData,
-                        Data.Contestants.OrderByDescending(c => c.Score).Take(Data.NumContestantsNeeded).Select(c => new ContestantAndScore(c.Name, c.Score)).ToArray()));
+                        Data.Contestants.OrderByDescending(c => c.Score).Take(Data.NumContestantsNeeded).Select(c => new ContestantAndScore(c.Name, c.Score)).ToArray()).With(jsJingle: Jingle.Tada.ToString()));
             }
         }
 

@@ -20,14 +20,14 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         {
             get
             {
-                yield return Transition.Simple(ConsoleKey.Q, "Ask {0} the next question".Fmt(Data.Contestants[Data.WhoseTurn].Name), () => new Round4_Final_Q(Data));
+                yield return Transition.Simple(ConsoleKey.Q, "Ask {0} the next question".Fmt(Data.Contestants[Data.WhoseTurn].Name), () => new Round4_Final_Q(Data.StartMusic()));
             }
         }
 
         public override ConsoleColoredString Describe { get { return Data.Describe; } }
 
         public override string JsMethod { get { return "r4_showContestants"; } }
-        public override string JsMusic { get { return Data.MusicStarted ? "music4" : null; } }
+        public override string JsMusic { get { return Data.MusicStarted ? Music.Music4.ToString() : null; } }
         public override object JsParameters
         {
             get { return new { contestants = Data.Contestants, answers = Data.Answers, minAnswers = Data.QuizData.Round4MinQuestions }; }

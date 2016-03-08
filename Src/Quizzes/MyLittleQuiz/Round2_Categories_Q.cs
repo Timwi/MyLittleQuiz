@@ -18,7 +18,11 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         protected override string Round { get { return "r2"; } }
 
         public override QuestionBase CurrentQuestion { get { return Data.Categories[Data.SelectedCategory.Value].Questions[Data.SelectedQuestion.Value]; } }
-        public override QuizStateBase GiveAnswer(object answer) { return new Round2_Categories_Q(Data.GiveAnswer(answer)); }
+        public override TransitionResult GiveAnswer(bool correct)
+        {
+            return new Round2_Categories_Q(Data.GiveAnswer(correct))
+                .With("showA", new { answer = correct, round = Round }, jsJingle: (correct ? Jingle.Round1CorrectAnswer : Jingle.Round1WrongAnswer).ToString());
+        }
 
         public override ConsoleColoredString Describe
         {
@@ -26,7 +30,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             {
                 return "{0}\n\n{1}".Color(null).Fmt(
                     /* 0 */ Data.Describe,
-                    /* 1 */ CurrentQuestion.Describe(Data.AnswerObject)
+                    /* 1 */ CurrentQuestion.Describe(Data.AnswerGiven)
                 );
             }
         }
@@ -35,14 +39,14 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         {
             get
             {
-                return Data.AnswerObject == null
+                return Data.AnswerGiven == null
                     ? getAnswerTransitions()
-                    : new[] { Transition.Simple(ConsoleKey.Spacebar, "Dismiss question", () => new Round2_Categories_ShowContestants(Data.DismissQuestion())) };
+                    : new[] { Transition.Simple(ConsoleKey.Spacebar, "Dismiss question", () => new Round2_Categories_ShowContestants(Data.DismissQuestion()).With(jsJingle: Jingle.Swoosh.ToString())) };
             }
         }
 
-        public override string JsMethod { get { return Data.AnswerObject == null ? "showQ" : "showQA"; } }
-        public override string JsMusic { get { return Data.MusicStarted ? "music2" : null; } }
+        public override string JsMethod { get { return Data.AnswerGiven == null ? "showQ" : "showQA"; } }
+        public override string JsMusic { get { return Data.MusicStarted ? Music.Music2.ToString() : null; } }
         public override object JsParameters
         {
             get
@@ -50,7 +54,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                 return new
                 {
                     question = CurrentQuestion,
-                    answer = Data.AnswerObject,
+                    answer = Data.AnswerGiven,
                     round = "r2"
                 };
             }

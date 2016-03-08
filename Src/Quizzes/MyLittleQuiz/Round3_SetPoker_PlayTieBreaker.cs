@@ -23,9 +23,9 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             return new Round3_SetPoker_PlayTieBreaker(Data.GiveCorrectAnswer(answer), TeamAStarted);
         }
 
-        public override Round3_SetPoker_PlayBase GiveWrongAnswer()
+        public override TransitionResult GiveWrongAnswer()
         {
-            return new Round3_SetPoker_PlayTieBreaker(Data.GiveWrongAnswer(true), TeamAStarted);
+            return new Round3_SetPoker_PlayTieBreaker(Data.GiveWrongAnswer(true), TeamAStarted).With("r3_play_transition", jsJingle: Jingle.Round3WrongAnswer.ToString());
         }
 
         public override IEnumerable<Transition> Transitions

@@ -44,6 +44,30 @@ body {
         bottom: 0;
     }
 
+        #content #background.r1, #content #background.r2 {
+            background: hsl(240, 100%, 10%);
+        }
+
+    #content .setup {
+        width: 60vw;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 10vh;
+        opacity: 0;
+        transition: opacity linear 1.4s;
+        color: white;
+        text-align: center;
+    }
+
+        #content .setup.in {
+            opacity: 1;
+        }
+
+        #content .setup.out {
+            opacity: 0;
+        }
+
     #content #r1-contestants {
         text-align: center;
         transition: opacity linear .3s, transform linear .3s;
@@ -699,7 +723,7 @@ body {
 
         #content #r3-play .ans {
             border-radius: 2em;
-            background: #ba0;
+            background: #3a0;
             padding: .1em 1.5em;
             text-align: center;
             margin: .2em 0;
@@ -707,7 +731,7 @@ body {
         }
 
         #content #r3-play td:first-child .ans {
-            background: #3a0;
+            background: #ba0;
         }
 
             #content #r3-play .ans.wrong, #content #r3-play td:first-child .ans.wrong {

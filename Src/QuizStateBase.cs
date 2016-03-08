@@ -11,6 +11,7 @@ namespace QuizGameEngine
         public abstract string JsMethod { get; }
         public abstract object JsParameters { get; }
         public virtual string JsMusic { get { return null; } }
+        public virtual string JsJingle { get { return null; } }
 
         public QuizStateBase() { }
 

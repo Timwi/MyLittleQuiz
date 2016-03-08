@@ -24,7 +24,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         [ClassifyIgnoreIfDefault]
         public int? CurrentQuestionIndex { get; private set; }
         [ClassifyIgnoreIfDefault]
-        public object AnswerObject { get; private set; }
+        public bool? AnswerGiven { get; private set; }
 
         public bool MusicStarted { get; private set; }
         public Round1Data StartMusic()
@@ -41,7 +41,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             QuestionsTaken = new Dictionary<Difficulty, int[]> { { Difficulty.Easy, new int[0] }, { Difficulty.Medium, new int[0] } };
             SelectedContestant = null;
             CurrentDifficulty = null;
-            AnswerObject = null;
+            AnswerGiven = null;
             MusicStarted = false;
         }
 
@@ -77,7 +77,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                     /* 3 */ SelectedContestant == null ? null : "\n\n{0/White}\n{1/Green} {2/Red} {3/Yellow}".Color(null).Fmt("Selected contestant:", Contestants[SelectedContestant.Value].NumCorrect, Contestants[SelectedContestant.Value].NumWrong, Contestants[SelectedContestant.Value].Name),
                     /* 4 */ "Number of questions available:",
                     /* 5 */ Questions.Select(kvp => "{0/Cyan}: {1/Magenta}".Color(null).Fmt(kvp.Key, kvp.Value.Length - QuestionsTaken[kvp.Key].Length)).JoinColoredString("\n"),
-                    /* 6 */ CurrentQuestion == null ? null : "\n\n" + CurrentQuestion.Describe(AnswerObject)
+                    /* 6 */ CurrentQuestion == null ? null : "\n\n" + CurrentQuestion.Describe(AnswerGiven)
                 );
             }
         }
@@ -109,9 +109,9 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             });
         }
 
-        public Round1Data GiveAnswer(object answerObj)
+        public Round1Data GiveAnswer(bool correct)
         {
-            return this.ApplyToClone(c => { c.AnswerObject = answerObj; });
+            return this.ApplyToClone(c => { c.AnswerGiven = correct; });
         }
 
         public Round1Data DismissQuestion()
@@ -123,12 +123,12 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                 cl.QuestionsTaken[CurrentDifficulty.Value] = cl.QuestionsTaken[CurrentDifficulty.Value].Concat(CurrentQuestionIndex.Value).ToArray();
 
                 // Update the contestant’s score
-                cl.Contestants = Contestants.ReplaceIndex(SelectedContestant.Value, c => c.IncScore(!AnswerObject.Equals(false)));
+                cl.Contestants = Contestants.ReplaceIndex(SelectedContestant.Value, c => c.IncScore(AnswerGiven.Value));
 
                 cl.SelectedContestant = null;
                 cl.CurrentDifficulty = null;
                 cl.CurrentQuestionIndex = null;
-                cl.AnswerObject = null;
+                cl.AnswerGiven = null;
             });
         }
     }

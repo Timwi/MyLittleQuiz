@@ -3,7 +3,7 @@ $(function ()
 {
     var content = $('#content');
 
-    function clearScreen(except)
+    function clearScreen(bgClass, except)
     {
         $('.away.out').remove();
         var consider = $('.away');
@@ -12,6 +12,7 @@ $(function ()
         consider.removeClass('in').addClass('out');
         if (!$('#background').length)
             $('<div id="background">').prependTo(content);
+        $('#background').removeClass().addClass(bgClass);
     }
 
     function twoColumnLayout(id, divClassName, num, nameFnc, fnc)
@@ -45,7 +46,7 @@ $(function ()
     function r2_setupCats(cats, used)
     {
         $('#r2-cats').remove();
-        clearScreen();
+        clearScreen('r2');
         twoColumnLayout('r2-cats', 'away', cats.length,
             function (i) { return cats[i]; },
             function (div)
@@ -104,19 +105,61 @@ $(function ()
     }
 
     musics = {
-        music1: { url: '/files/MyLittleQuiz/Music1.ogg', fadeIn: 0, fadeOut: 1 },
-        music2: { url: '/files/MyLittleQuiz/Music2.ogg', fadeIn: 0, fadeOut: 1 },
-        music3: { url: '/files/MyLittleQuiz/Music3.ogg', fadeIn: 0, fadeOut: 1 },
-        music4: { url: '/files/MyLittleQuiz/Music4.ogg', fadeIn: 0, fadeOut: 1 },
+        Music1: { url: '/files/MyLittleQuiz/Music1.ogg', fadeIn: 0, fadeOut: 1, volume: .3 },
+        Music2: { url: '/files/MyLittleQuiz/Music2.ogg', fadeIn: 0, fadeOut: 1, volume: .3 },
+        Music3: { url: '/files/MyLittleQuiz/Music3.ogg', fadeIn: 0, fadeOut: 1, volume: .3 },
+        Music4: { url: '/files/MyLittleQuiz/Music4.ogg', fadeIn: 0, fadeOut: 1, volume: .3 },
     };
 
+    jingleUrl = function (p) { return '/files/MyLittleQuiz/' + p + '.ogg'; };
+
     transitions = {
+
+        setup: function (p)
+        {
+            clearScreen('setup');
+            div = $('<div class="setup away">').appendTo(content).addClassDelay('in');
+
+            var msgs = [
+                'The administrator pony is setting stuff up...',
+                'Ponying something up...',
+                'Now I’m awoken and I’m setting something up!',
+                'Isn’t it great to be set up?',
+                'Fillies and Gentlecolts! Setup in progress!',
+                'While I’m setting this up, will you read my fanfic?',
+                'Silly foals with silly dreams, together while I set this up...',
+                'Pegasus, fly! Fly far while I set this up here...',
+                'Setting up the Magic of Friendship...',
+                'Dear Princess Celestia, I’m setting this up.',
+                'Take me to the place where everything’s set up',
+                'Let’s get this party started!',
+                'I can set this up in 10 seconds flat...',
+                'It needs... about 20% more setup.',
+                'Until I’ve set this up, join the herd!',
+                'I watch it for the setup.',
+                'Can you do that? Can you set it up twice?',
+                'What fun is there in ever setting it up?',
+                'Human being fascinate me, setting up the way they do...',
+                'Don’t set up at night.'
+            ];
+            var msg = msgs[Math.floor(Math.random() * msgs.length)];
+            div.html(msg);
+            findBestValue(100, function (fs)
+            {
+                div.css('font-size', fs + 'px');
+                if (div.outerWidth() > content.width() * 2 / 3)
+                    return 1;
+                if (div.outerHeight() > content.height() * 3 / 5)
+                    return 1;
+                return -1;
+            });
+        },
 
         //#region QUESTION/ANSWER (showQ, showA, showQA)
         showQ: function (p)
         {
             $('#qa').remove();
-            clearScreen();
+            clearScreen(p.round);
 
             var qa = $('<div id="qa" class="static full-flow away ' + p.round + '">').appendTo(content);
 
@@ -160,9 +203,6 @@ $(function ()
                 return;
 
             var a = p.answer;
-            if (':value' in a)
-                a = a[':value'];
-
             $('#qa .answer').removeClass('invisible wrong correct').addClass(a === false ? 'wrong in' : 'correct in');
             $('#qa .answer .decor').text(a === false ? '✗' : '✓');
 
@@ -190,19 +230,17 @@ $(function ()
         r1_showContestants: function (p)
         {
             $('#r1-contestants').remove();
-            clearScreen();
+            clearScreen('r1');
             var c = $('<div id="r1-contestants" class="full-flow away">').appendTo(content);
             for (var i = 0; i < p.contestants.length; i++)
             {
-                if (p.contestants[i].NumCorrect > 1 || p.contestants[i].NumWrong > 1)
-                    continue;
                 var div = $('<div class="contestant">')
-                    .attr('data-num', i + 1)
+                    .attr('data-num', p.contestants[i].Number)
                     .css('transition-delay', Math.random() * .75 + 's')
                     .appendTo(c);
-                if (p.contestants[i].NumCorrect > 0)
+                if (p.contestants[i].HasCorrect)
                     div.addClass('correct');
-                if (p.contestants[i].NumWrong > 0)
+                if (p.contestants[i].HasWrong)
                     div.addClass('wrong');
             }
             findBestValue(100, function (fs) { c.css('font-size', fs + 'px'); return c.height() < content.height() ? -1 : 1; });
@@ -212,12 +250,11 @@ $(function ()
         r1_select: function (p)
         {
             $('.r1-contestant').remove();
-            clearScreen();
+            clearScreen('r1');
 
-            var c = p.contestants[p.selected];
-            var span = $('<span class="inner">').text(c.Name);
+            var span = $('<span class="inner">').text(p.contestant.Name);
             var div = $('<div class="r1-contestant away static" id="r1-contestant-name">').append(span).appendTo(content).addClassDelay('in');
-            $('<div class="r1-contestant away" id="r1-contestant-roll">').text(c.Roll).appendTo(content).addClassDelay('in');
+            $('<div class="r1-contestant away" id="r1-contestant-roll">').text(p.contestant.Roll).appendTo(content).addClassDelay('in');
 
             if (span.width() > div.width())
                 span.css('transform', 'scale(' + (div.width() / span.width()) + ', 1)');
@@ -228,7 +265,7 @@ $(function ()
         r2_showContestants: function (p)
         {
             $('#r2-contestants').remove();
-            clearScreen();
+            clearScreen('r2');
 
             twoColumnLayout('r2-contestants', p.noscores ? 'no-scores away' : 'away', p.contestants.length,
                 function (i) { return p.contestants[i].Name; },
@@ -289,7 +326,7 @@ $(function ()
         r3_showContestants: function (p)
         {
             $('#r3-contestants').remove();
-            clearScreen();
+            clearScreen('r3');
 
             var div = $('<div id="r3-contestants" class="r3-display static away"></div>').appendTo(content).addClassDelay('in');
 
@@ -313,7 +350,7 @@ $(function ()
         r3_showTeams: function (p)
         {
             $('#r3-teams').remove();
-            clearScreen();
+            clearScreen('r3');
 
             var div = $('<div id="r3-teams" class="r3-display static away"></div>').appendTo(content).addClassDelay('in');
 
@@ -346,7 +383,7 @@ $(function ()
         r3_showSet: function (p)
         {
             $('#r3-set').remove();
-            clearScreen();
+            clearScreen('r3');
 
             var div = $('<div id="r3-set" class="away">').appendTo(content).addClassDelay('in');
             var inner = $('<div class="name static">').appendTo(div).html(p.set);
@@ -368,9 +405,13 @@ $(function ()
                 alreadyFontSize = parseFloat($('#r3-play').css('font-size'));
 
             $('#r3-play').remove();
-            clearScreen('#r3-bid,#r3-strikes');
+            clearScreen('r3', '#r3-bid,#r3-strikes');
 
-            var div = $('<table id="r3-play" class="away static">').appendTo(content);
+            var div = $('<table id="r3-play" class="away static">');
+            if ($('#r3-bid').length)
+                div.insertBefore($('#r3-bid'));
+            else
+                div.appendTo(content);
             if ('remaining' in p)
             {
                 if (!$('#r3-bid').length)
@@ -401,7 +442,7 @@ $(function ()
                     prevTr = $('<tr>').appendTo(div);
 
                 var td = $('<td>').append(
-                    $('<div class="ans' + (i < p.answers.length ? ((p.answers[i] === null ? ' wrong' : '') + (i < p.answers.length - 1 ? ' in' : '')) : ' invisible') + '">').data('index', i).append(
+                    $('<div class="ans' + (i < p.answers.length ? ((p.answers[i] === null ? ' wrong' : '') + (i < p.answers.length - 1 || !doTransition ? ' in' : '')) : ' invisible') + '">').data('index', i).append(
                         $('<div class="answer">').append(
                             $('<span class="inner">').html(i < p.answers.length && p.answers[i] !== null ? p.answers[i] : p.answers[0]))));
                 if (!p.tie || p.teamAStarted)
@@ -457,7 +498,7 @@ $(function ()
         r3_reveal: function (p)
         {
             $('#r3-reveal').remove();
-            clearScreen();
+            clearScreen('r3');
 
             var div = $('<div id="r3-reveal" class="static away">').appendTo(content).addClassDelay('in');
             div.append($('<h1>').html(p.set));
@@ -481,7 +522,7 @@ $(function ()
                     div.css('font-size', fs + 'px');
                     if (div.outerHeight() > content.height())
                         return 1;
-                    if (table.outerWidth() > content.width())
+                    if (table.outerWidth() + parseFloat(div.css('padding-left')) + parseFloat(div.css('padding-right')) > content.width())
                         return 1;
                     return -1;
                 });
@@ -502,7 +543,7 @@ $(function ()
         r4_showContestants: function (p)
         {
             $('#r4-contestants').remove();
-            clearScreen();
+            clearScreen('r3');
 
             var div = $('<div id="r4-contestants" class="static away">').appendTo(content);
             var innerDiv = $('<div class="r4-style away">').appendTo(div).addClassDelay('in', 500);

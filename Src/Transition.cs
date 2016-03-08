@@ -26,7 +26,7 @@ namespace QuizGameEngine
         {
             if (state == null)
                 return null;
-            return new TransitionResult(state, name, state.JsMethod, state.JsParameters, state.JsMusic);
+            return new TransitionResult(state, name, state.JsMethod, state.JsParameters, state.JsMusic, state.JsJingle);
         }
 
         public static Transition Simple(ConsoleKey key, string name, Func<TransitionResult> executor)
@@ -35,7 +35,7 @@ namespace QuizGameEngine
             {
                 var ret = executor();
                 if (ret != null && ret.UndoLine == null)
-                    ret = new TransitionResult(ret.State, name, ret.JsMethod, ret.JsParameters, ret.JsMusic);
+                    ret = new TransitionResult(ret.State, name, ret.JsMethod, ret.JsParameters, ret.JsMusic, ret.JsJingle);
                 return ret;
             });
         }
@@ -50,9 +50,9 @@ namespace QuizGameEngine
             return new Transition(key, name, () => { action(); return null; });
         }
 
-        public static Transition Simple(ConsoleKey key, string name, string jsMethod, object jsParameters = null, string jsMusic = null)
+        public static Transition Simple(ConsoleKey key, string name, string jsMethod, object jsParameters = null, string jsMusic = null, string jsJingle = null)
         {
-            return new Transition(key, name, () => new TransitionResult(null, null, jsMethod, jsParameters, jsMusic));
+            return new Transition(key, name, () => new TransitionResult(null, null, jsMethod, jsParameters, jsMusic, jsJingle));
         }
 
         public static Transition String(ConsoleKey key, string name, string prompt, Func<string, TransitionResult> executor, bool allowEmpty = false)
@@ -99,9 +99,9 @@ namespace QuizGameEngine
                 var selected = Program.ConsoleSelect(selection, describe);
                 if (selected == null)
                     return null;
-                var transition = executor(selected);
+                var transition = executor((T) selected);
                 if (transition != null && transition.UndoLine == null)
-                    transition = new TransitionResult(transition.State, name, transition.JsMethod, transition.JsParameters, transition.JsMusic);
+                    transition = new TransitionResult(transition.State, name, transition.JsMethod, transition.JsParameters, transition.JsMusic, transition.JsJingle);
                 return transition;
             });
         }
@@ -151,7 +151,7 @@ namespace QuizGameEngine
 
                 var transition = executor(index - 1);
                 if (transition != null && transition.UndoLine == null)
-                    transition = new TransitionResult(transition.State, name, transition.JsMethod, transition.JsParameters, transition.JsMusic);
+                    transition = new TransitionResult(transition.State, name, transition.JsMethod, transition.JsParameters, transition.JsMusic, transition.JsJingle);
                 return transition;
             });
         }

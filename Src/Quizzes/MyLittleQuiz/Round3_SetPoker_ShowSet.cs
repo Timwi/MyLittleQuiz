@@ -27,8 +27,8 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             {
                 if (Data.SetIndex == 2)
                 {
-                    yield return Transition.Simple(ConsoleKey.A, "Play tie breaker; Team A starts", () => new Round3_SetPoker_PlayTieBreaker(Data, true));
-                    yield return Transition.Simple(ConsoleKey.B, "Play tie breaker; Team B starts", () => new Round3_SetPoker_PlayTieBreaker(Data, false));
+                    yield return Transition.Simple(ConsoleKey.A, "Play tie breaker; Team A starts", () => new Round3_SetPoker_PlayTieBreaker(Data.StartMusic(), true));
+                    yield return Transition.Simple(ConsoleKey.B, "Play tie breaker; Team B starts", () => new Round3_SetPoker_PlayTieBreaker(Data.StartMusic(), false));
                 }
                 else
                     yield return Transition.Simple(ConsoleKey.P, "Play", () =>
@@ -40,7 +40,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                                 return null;
                             int bid;
                             if (int.TryParse(bidStr, out bid))
-                                return new Round3_SetPoker_Play(Data, bid);
+                                return new Round3_SetPoker_Play(Data.StartMusic(), bid);
                         }
                     });
             }
@@ -62,6 +62,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
 
         public override string JsMethod { get { return "r3_showSet"; } }
         public override string JsMusic { get { return null; } }
+        public override string JsJingle { get { return Jingle.PresentSet.ToString(); } }
         public override object JsParameters { get { return new { set = Data.CurrentSet.Name }; } }
     }
 }

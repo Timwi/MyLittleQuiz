@@ -83,9 +83,9 @@ namespace QuizGameEngine
             return newArray;
         }
 
-        public static TransitionResult With(this QuizStateBase state, string jsMethod, object jsParams = null, string jsMusic = null)
+        public static TransitionResult With(this QuizStateBase state, string jsMethod = null, object jsParams = null, string jsMusic = null, string jsJingle = null)
         {
-            return new TransitionResult(state, null, jsMethod, jsParams ?? state.JsParameters, jsMusic ?? state.JsMusic);
+            return new TransitionResult(state, null, jsMethod ?? state.JsMethod, jsParams ?? state.JsParameters, jsMusic ?? state.JsMusic, jsJingle ?? state.JsJingle);
         }
 
         public static TransitionResult NoTransition(this QuizStateBase state)

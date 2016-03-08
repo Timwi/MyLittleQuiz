@@ -27,9 +27,9 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                 }
                 else if (Data.SelectedCategory == null)
                 {
-                    yield return Transition.Simple(ConsoleKey.S, "Show scores", () => new Round2_Categories_ShowContestants(Data));
+                    yield return Transition.Simple(ConsoleKey.S, "Show scores", () => new Round2_Categories_ShowContestants(Data).With(jsJingle: Jingle.Swoosh.ToString()));
                     yield return Transition.Select(ConsoleKey.C, "Select a category", Data.QuizData.Round2Categories, cat => cat.Name.Color(ConsoleColor.Yellow),
-                        cat => Data.Categories.IndexOf(cat).Apply(index => new Round2_Categories_ShowCategories(Data.SelectCategory(index)).With("r2_selectCat", new { selected = index })));
+                        cat => Data.Categories.IndexOf(cat).Apply(index => new Round2_Categories_ShowCategories(Data.SelectCategory(index)).With("r2_selectCat", new { selected = index }, jsJingle: Jingle.Present.ToString())));
                     yield return Transition.Simple(ConsoleKey.P, "Pass", () => new Round2_Categories_ShowCategories(Data.Pass()).NoTransition());
                 }
                 else
@@ -39,7 +39,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                         new[] { "Very easy", "Easy", "Medium", "Hard", "Very hard" }
                             .Select((df, ix) => new { Index = ix, Difficulty = df, Taken = Data.QuestionsUsed[sel][ix] }),
                         qs => qs.Difficulty.Color(qs.Taken ? ConsoleColor.DarkYellow : ConsoleColor.Yellow) + (qs.Taken ? " (taken)".Color(ConsoleColor.DarkRed) : null),
-                        qs => qs.Taken ? null : new Round2_Categories_Q(Data.SelectQuestion(qs.Index)));
+                        qs => qs.Taken ? null : new Round2_Categories_Q(Data.SelectQuestion(qs.Index).StartMusic()));
                 }
                 yield return listContestantsTransition;
             }

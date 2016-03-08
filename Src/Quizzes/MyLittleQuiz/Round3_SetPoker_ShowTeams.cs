@@ -46,7 +46,8 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         }
 
         public override string JsMethod { get { return "r3_showTeams"; } }
-        public override string JsMusic { get { return Data.MusicStarted ? "music3" : null; } }
+        public override string JsMusic { get { return Data.MusicStarted ? Music.Music3.ToString() : null; } }
+        public override string JsJingle { get { return Jingle.Swoosh.ToString(); } }
         public override object JsParameters
         {
             get { return new { teamA = Data.TeamA, teamB = Data.TeamB }; }

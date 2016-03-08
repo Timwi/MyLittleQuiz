@@ -1,25 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using RT.Util.ExtensionMethods;
 
 namespace QuizGameEngine.Quizzes.MyLittleQuiz
 {
     public abstract class MyLittleQuizStateBase : QuizStateBase
     {
         public abstract QuestionBase CurrentQuestion { get; }
-        public abstract QuizStateBase GiveAnswer(object answer);
+        public abstract TransitionResult GiveAnswer(bool correct);
 
         protected MyLittleQuizStateBase() { }   // for Classify
 
         protected IEnumerable<Transition> getAnswerTransitions()
         {
-            return CurrentQuestion.CorrectAnswerInfos
-                .Concat(Tuple.Create(ConsoleKey.Z, "Wrong", (object) false))
-                .Select(answerInfo => Transition.Simple(
-                    answerInfo.Item1,
-                    "Answer: " + answerInfo.Item2,
-                    () => GiveAnswer(answerInfo.Item3).With("showA", new { answer = answerInfo.Item3, round = Round })));
+            yield return Transition.Simple(ConsoleKey.G, "Give correct answer", () => GiveAnswer(true));
+            yield return Transition.Simple(ConsoleKey.Z, "Give wrong answer", () => GiveAnswer(false));
         }
 
         protected abstract string Round { get; }

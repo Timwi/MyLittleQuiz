@@ -21,7 +21,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         public int[] QuestionsTaken { get; private set; } = new int[0];
         public int CurrentQuestionIndex { get; private set; }
         [ClassifyIgnoreIfDefault]
-        public object AnswerObject { get; private set; }
+        public bool? AnswerGiven { get; private set; }
 
         public bool MusicStarted { get; private set; }
         public Round4Data StartMusic()
@@ -35,7 +35,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             Contestants = contestants;
             Answers = Ut.NewArray(contestants.Length, i => new bool[0]);
             chooseQuestion();
-            AnswerObject = null;
+            AnswerGiven = null;
         }
 
         private void chooseQuestion()
@@ -68,14 +68,13 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             }
         }
 
-        public Round4Data GiveAnswer(object answer)
+        public Round4Data GiveAnswer(bool correct)
         {
             var turn = WhoseTurn;
-            var correct = !Equals(answer, false);
             return this.ApplyToClone(r4c =>
             {
                 r4c.Answers = Answers.Select((ans, ix) => ix == turn ? ans.Concat(correct).ToArray() : ans).ToArray();
-                r4c.AnswerObject = answer;
+                r4c.AnswerGiven = correct;
             });
         }
 
@@ -83,7 +82,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         {
             return this.ApplyToClone(r4c =>
             {
-                r4c.AnswerObject = null;
+                r4c.AnswerGiven = null;
                 r4c.QuestionsTaken = QuestionsTaken.Concat(CurrentQuestionIndex).ToArray();
                 r4c.chooseQuestion();
             });
@@ -119,7 +118,11 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                     for (int j = 0; j < cols; j++)
                         tt.SetCell(j + 3, i, j >= Answers[i].Length ? "?".Color(ConsoleColor.Blue) : Answers[i][j] ? "✓".Color(ConsoleColor.Green) : "✗".Color(ConsoleColor.Magenta));
                 }
-                return tt.ToColoredString() + "\n\n" + (QuestionsTaken.Length >= Questions.Length ? "NO MORE QUESTIONS".Color(ConsoleColor.Red) : "{0/Yellow} questions left.\n\n{1}".Color(ConsoleColor.Green).Fmt(Questions.Length - QuestionsTaken.Length, CurrentQuestion.Describe(AnswerObject)));
+                return "{0}\n{1}".Color(null).Fmt(
+                    tt.ToColoredString(),
+                    QuestionsTaken.Length >= Questions.Length 
+                        ? "NO MORE QUESTIONS".Color(ConsoleColor.Red) 
+                        : "{0/Yellow} questions left.\n\n{1}".Color(ConsoleColor.Green).Fmt(Questions.Length - QuestionsTaken.Length, CurrentQuestion.Describe(AnswerGiven)));
             }
         }
 
