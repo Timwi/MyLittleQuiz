@@ -849,7 +849,7 @@ body {
             text-align: center;
             margin: 0 0 .2em 0;
             font-weight: normal;
-            padding: 0 .25em;
+            padding: 0 1em;
         }
 
         #content #r3-reveal table {
@@ -974,3 +974,41 @@ body {
                     background-repeat: no-repeat;
                     background-size: contain;
                 }
+
+    #content #r4-start-title {
+        left: 0;
+        right: 0;
+        top: 20vh;
+        transition-delay: 1s, 1.6s;
+    }
+
+    #content #r4-start-subtitle {
+        left: 0;
+        right: 0;
+        bottom: 20vh;
+        transition-delay: 2s, 2.6s;
+    }
+
+    #content .r4-start span {
+        white-space: nowrap;
+        padding: 0 .4em;
+    }
+
+    #content #octavia {
+        left: -100vw;
+        width: 100vw;
+        top: 0;
+        bottom: 0;
+        background: url(/files/MyLittleQuiz/Octavia.png) left top no-repeat;
+        background-size: contain;
+        transition: left ease-out .7s;
+        transition-delay: 3s;
+    }
+
+        #content #octavia.in {
+            left: 0;
+        }
+
+    #content .r4-start.out {
+        transition-delay: 0s, .3s !important;
+    }

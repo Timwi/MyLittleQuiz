@@ -24,7 +24,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             {
                 if (Data.TeamA.Score > 1 || Data.TeamB.Score > 1)
                     yield return Transition.Simple(ConsoleKey.N, "Next round: Final",
-                        () => new Round4_Final_ShowContestants(new Round4Data(Data.QuizData, (Data.TeamA.Score > 1 ? Data.TeamA : Data.TeamB).Contestants)));
+                        () => new Round4_Final_Start(new Round4Data(Data.QuizData, (Data.TeamA.Score > 1 ? Data.TeamA : Data.TeamB).Contestants)));
 
                 else if (Data.SetIndex >= 0 && Data.SetIndex < Data.QuizData.Round3Sets.Length)
                     yield return Transition.Simple(ConsoleKey.S, "Show set: " + Data.QuizData.Round3Sets[Data.SetIndex].Name,

@@ -68,7 +68,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                     });
 
                 if (Contestants.Count > 0)
-                    yield return Transition.Simple(ConsoleKey.S, "Start Round: Elimination Round", () => new Round1_Elimination(new Round1Data(Data, Contestants.ToArray().Shuffle())));
+                    yield return Transition.Simple(ConsoleKey.S, "Start", () => new Round1_Elimination_Beginning(new Round1Data(Data, Contestants.ToArray().Shuffle())));
 
                 if (Music == null)
                     yield return Transition.Select(ConsoleKey.M, "Set music", EnumStrong.GetValues<Music>(), m => m.ToString(), m => this.ApplyToClone(th => { th.Music = m; th.Jingle = null; }));

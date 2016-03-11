@@ -26,6 +26,10 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             get
             {
                 yield return Transition.Simple(ConsoleKey.S, "Show teams", () => new Round3_SetPoker_ShowTeams(Data));
+
+                if (Data.TeamA.Score > 1 || Data.TeamB.Score > 1)
+                    yield return Transition.Simple(ConsoleKey.N, "Next round: Final",
+                        () => new Round4_Final_Start(new Round4Data(Data.QuizData, (Data.TeamA.Score > 1 ? Data.TeamA : Data.TeamB).Contestants)));
             }
         }
 

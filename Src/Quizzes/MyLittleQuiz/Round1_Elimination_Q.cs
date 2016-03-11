@@ -29,7 +29,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         {
             get
             {
-                yield return Transition.Simple(ConsoleKey.Spacebar, "Dismiss question", () => Round1_Elimination.TransitionTo(Data.DismissQuestion()));
+                yield return Transition.Simple(ConsoleKey.Spacebar, "Dismiss question", () => Round1_Elimination_ShowContestants.TransitionTo(Data.DismissQuestion()));
             }
         }
 

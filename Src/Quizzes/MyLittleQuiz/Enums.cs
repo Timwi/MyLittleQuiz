@@ -24,6 +24,8 @@
         Swoosh,
         PresentSet,
         Round3CorrectAnswer,
-        Round3WrongAnswer
+        Round3WrongAnswer,
+        Round1Start,
+        Round4Start
     }
 }

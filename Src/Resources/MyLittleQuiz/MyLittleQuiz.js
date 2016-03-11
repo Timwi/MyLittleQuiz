@@ -66,10 +66,11 @@ $(function ()
             });
     }
 
-    function r4_addBackground(div, iwidth, height, hue, positionTop)
+    function r4_addBackground(div, iwidth, height, hue, positionTop, xFactor)
     {
+        xFactor = xFactor || .5;
         var owidth = div.outerWidth();
-        var lf = owidth / 2 - iwidth / 2;
+        var lf = (owidth - iwidth) * xFactor;
         var llf = lf - height / 4;
         var rg = lf + iwidth;
         var rrg = rg + height / 4;
@@ -115,6 +116,11 @@ $(function ()
 
     transitions = {
 
+        blank: function (p)
+        {
+            clearScreen('blank');
+        },
+
         setup: function (p)
         {
             clearScreen('setup');
@@ -132,14 +138,14 @@ $(function ()
                 'Setting up the Magic of Friendship...',
                 'Dear Princess Celestia, I’m setting this up.',
                 'Take me to the place where everything’s set up',
-                'Let’s get this party started!',
+                'Let’s get this party set up!',
                 'I can set this up in 10 seconds flat...',
                 'It needs... about 20% more setup.',
                 'Until I’ve set this up, join the herd!',
                 'I watch it for the setup.',
                 'Can you do that? Can you set it up twice?',
                 'What fun is there in ever setting it up?',
-                'Human being fascinate me, setting up the way they do...',
+                'Human beings fascinate me, setting up the way they do...',
                 'Don’t set up at night.'
             ];
             var msg = msgs[Math.floor(Math.random() * msgs.length)];
@@ -540,6 +546,50 @@ $(function ()
         //#endregion
 
         //#region ROUND 4 (Final/Sudden Death)
+        r4_start: function (p)
+        {
+            $('.r4-start').remove();
+            clearScreen('r4');
+
+            var span1 = $('<span>').text('Round 4');
+            var div1 = $('<div id="r4-start-title" class="r4-start r4-style static away">')
+                .append(span1)
+                .addClassDelay('in')
+                .appendTo(content);
+
+            findBestValue(100, function (fs)
+            {
+                div1.css('font-size', fs + 'px');
+                if (span1.outerWidth() > content.width() * 1 / 2)
+                    return 1;
+                return -1;
+            });
+
+            var factor = .8;
+            r4_addBackground(div1, content.width() / 2, div1.height(), 0, false, factor);
+            div1.css('padding-left', (content.width() - span1.outerWidth()) * factor);
+
+            var span2 = $('<span>').text('Sudden Death');
+            var div2 = $('<div id="r4-start-subtitle" class="r4-start r4-style static away">')
+                .append(span2)
+                .addClassDelay('in')
+                .appendTo(content);
+
+            findBestValue(100, function (fs)
+            {
+                div2.css('font-size', fs + 'px');
+                if (span2.outerWidth() > content.width() * 1 / 2)
+                    return 1;
+                return -1;
+            });
+
+            factor = .9;
+            r4_addBackground(div2, content.width() / 2, div2.height(), 60, false, factor);
+            div2.css('padding-left', (content.width() - span2.outerWidth()) * factor);
+
+            var div3 = $('<div class="r4-start away" id="octavia">').addClassDelay('in').appendTo(content);
+        },
+
         r4_showContestants: function (p)
         {
             $('#r4-contestants').remove();

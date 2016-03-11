@@ -54,6 +54,7 @@
     <Compile Include="QuizBase.cs" />
     <Compile Include="QuizStateBase.cs" />
     <Compile Include="QuizWebSocket.cs" />
+    <Compile Include="Quizzes\MyLittleQuiz\Round1_Elimination_Beginning.cs" />
     <Compile Include="Quizzes\MyLittleQuiz\Cmd.cs" />
     <Compile Include="Quizzes\MyLittleQuiz\Contestant.cs" />
     <Compile Include="Quizzes\MyLittleQuiz\ContestantAndScore.cs" />
@@ -74,7 +75,7 @@
     <Compile Include="Quizzes\MyLittleQuiz\Question.cs" />
     <Compile Include="Quizzes\MyLittleQuiz\Quiz.cs" />
     <Compile Include="Quizzes\MyLittleQuiz\Round1Data.cs" />
-    <Compile Include="Quizzes\MyLittleQuiz\Round1_Elimination.cs" />
+    <Compile Include="Quizzes\MyLittleQuiz\Round1_Elimination_ShowContestants.cs" />
     <Compile Include="Quizzes\MyLittleQuiz\Round1_Elimination_Q.cs" />
     <Compile Include="Quizzes\MyLittleQuiz\Round2Category.cs" />
     <Compile Include="Quizzes\MyLittleQuiz\Round2Data.cs" />
@@ -87,6 +88,7 @@
     <Compile Include="Quizzes\MyLittleQuiz\Round3_SetPoker_ShowTeams.cs" />
     <Compile Include="Quizzes\MyLittleQuiz\Round4Data.cs" />
     <Compile Include="Quizzes\MyLittleQuiz\Round4_Final_ShowContestants.cs" />
+    <Compile Include="Quizzes\MyLittleQuiz\Round4_Final_Start.cs" />
     <Compile Include="Quizzes\MyLittleQuiz\Setup.cs" />
     <Compile Include="Quizzes\SimpleQuiz\Contestant.cs" />
     <Compile Include="Quizzes\SimpleQuiz\Quiz.cs" />

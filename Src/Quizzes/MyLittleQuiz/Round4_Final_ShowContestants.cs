@@ -9,11 +9,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
     {
         public Round4Data Data { get; private set; }
 
-        public Round4_Final_ShowContestants(Round4Data data)
-        {
-            Data = data;
-        }
-
+        public Round4_Final_ShowContestants(Round4Data data) { Data = data; }
         private Round4_Final_ShowContestants() { }  // for Classify
 
         public override IEnumerable<Transition> Transitions
