@@ -13,14 +13,14 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         private Round4_Final_Start() { }    // for Classify
 
         public override ConsoleColoredString Describe { get { return "Start of Round 4 (Final)."; } }
-        public override string JsMethod { get { return PlayIntro ? "r4_start" : "blank"; } }
+        public override string JsMethod { get { return PlayIntro ? "r4_intro" : "blank"; } }
         public override object JsParameters { get { return null; } }
         public override string JsJingle { get { return PlayIntro ? Jingle.Round4Start.ToString() : null; } }
         public override IEnumerable<Transition> Transitions
         {
             get
             {
-                yield return Transition.Simple(ConsoleKey.I, "Intro", () => new Round4_Final_Start(Data, true));
+                yield return Transition.Simple(ConsoleKey.I, "Intro Round 4", () => new Round4_Final_Start(Data, true));
                 yield return Transition.Simple(ConsoleKey.S, "Show contestants", () => new Round4_Final_ShowContestants(Data));
             }
         }

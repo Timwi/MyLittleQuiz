@@ -42,10 +42,23 @@ body {
         left: 0;
         right: 0;
         bottom: 0;
+        transition: background-color ease-in-out 8s;
     }
 
-        #content #background.r1, #content #background.r2 {
-            background: hsl(240, 100%, 10%);
+        #content #background.r1 {
+            background-color: hsl(240, 100%, 12%);
+        }
+
+        #content #background.r2 {
+            background-color: hsl(240, 100%, 8%);
+        }
+
+        #content #background.r3 {
+            background-color: hsl(240, 100%, 4%);
+        }
+
+        #content #background.r4 {
+            background-color: hsl(240, 100%, 0%);
         }
 
     #content .setup {
@@ -67,6 +80,69 @@ body {
         #content .setup.out {
             opacity: 0;
         }
+
+    #content #derpy {
+        left: 100vw;
+        width: 100vw;
+        top: 5vh;
+        height: 95vh;
+        background: url(/files/MyLittleQuiz/Derpy.png) right bottom no-repeat;
+        background-size: contain;
+        transition: left ease-out .7s, top ease-in .5s;
+        transition-delay: 3.2s, 0s;
+    }
+
+        #content #derpy.in {
+            left: 0;
+        }
+
+        #content #derpy.out {
+            left: 0;
+            top: 100vh;
+        }
+
+    #content .r1-intro.out {
+        transition-delay: 0s !important;
+    }
+
+    #content #r1-intro-title {
+        bottom: 10vh;
+        transform-origin: 0 100%;
+        transform: translateX(10vw) scale(.01);
+        opacity: 0;
+        font-size: 20vh;
+        transition: transform cubic-bezier(0, .8, .5, 1.5) .3s, opacity linear .1s;
+        transition-delay: 4.3s;
+    }
+
+        #content #r1-intro-title.in {
+            transform: rotate(9deg) translateX(10vw);
+            opacity: 1;
+        }
+
+    #content .muffin {
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: contain;
+        width: 20vw;
+        height: 20vw;
+    }
+
+        #content .muffin.out {
+            opacity: 0;
+        }
+
+    #content .muffin1 {
+        background-image: url(/files/MyLittleQuiz/Muffin1_sm.png);
+    }
+
+    #content .muffin2 {
+        background-image: url(/files/MyLittleQuiz/Muffin2_sm.png);
+    }
+
+    #content .muffin3 {
+        background-image: url(/files/MyLittleQuiz/Muffin3_sm.png);
+    }
 
     #content #r1-contestants {
         text-align: center;
@@ -975,21 +1051,21 @@ body {
                     background-size: contain;
                 }
 
-    #content #r4-start-title {
+    #content #r4-intro-title {
         left: 0;
         right: 0;
         top: 20vh;
         transition-delay: 1s, 1.6s;
     }
 
-    #content #r4-start-subtitle {
+    #content #r4-intro-subtitle {
         left: 0;
         right: 0;
         bottom: 20vh;
         transition-delay: 2s, 2.6s;
     }
 
-    #content .r4-start span {
+    #content .r4-intro span {
         white-space: nowrap;
         padding: 0 .4em;
     }
@@ -1009,6 +1085,6 @@ body {
             left: 0;
         }
 
-    #content .r4-start.out {
+    #content .r4-intro.out {
         transition-delay: 0s, .3s !important;
     }

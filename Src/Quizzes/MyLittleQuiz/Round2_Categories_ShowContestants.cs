@@ -23,7 +23,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             {
                 if (NoScores)
                 {
-                    yield return Transition.Simple(ConsoleKey.I, "Intro", () =>
+                    yield return Transition.Simple(ConsoleKey.I, "Intro Round 2", () =>
                     {
                         // TODO
                     });

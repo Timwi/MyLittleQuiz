@@ -233,6 +233,55 @@ $(function ()
         //#endregion
 
         //#region ROUND 1 (Elimination)
+        r1_intro: function (p)
+        {
+            $('.r1-intro').remove();
+            clearScreen('r1');
+
+            var w = content.width();
+            var h = content.height();
+            for (var i = 0; i < 50; i++)
+            {
+                var tr = 'ease-in-out ' + (1 + 2 * Math.random()) + 's';
+                var transition = 'transition: transform ' + tr + ', left ' + tr + ', top ' + tr + ', opacity linear ' + (Math.random()) + 's;';
+                var angle = Math.random() * 2 * Math.PI;
+                var muffin = $('<div class="away muffin muffin' + (1 + Math.floor(Math.random() * 3)) + '">').appendTo(content)[0];
+                muffin.style =
+                    'left:' + (w / 2 + 2 * w * Math.cos(angle)) + 'px;' +
+                    'top:' + (h / 2 + 2 * w * Math.sin(angle)) + 'px;' +
+                    'transform: translate(-50%, -50%) rotate(' + (3600 * Math.random()) + 'deg);' +
+                    transition;
+                window.setTimeout(function (m, tr)
+                {
+                    return function ()
+                    {
+                        m.style =
+                            'left:' + (w * Math.random()) + 'px;' +
+                            'top:' + (h * Math.random()) + 'px;' +
+                            'transform: translate(-50%, -50%) rotate(' + (360 * Math.random()) + 'deg);' +
+                            tr;
+                    }
+                }(muffin, transition), 500 + 60 * i);
+            }
+
+            var derpyHeight = content.height() * 95 / 100;
+            var derpyWidth = derpyHeight * 6750 / 3931;
+            if (derpyWidth > content.width())
+            {
+                derpyWidth = content.width();
+                derpyHeight = derpyWidth * 3931 / 6750;
+            }
+            var derpy = $('<div class="r1-intro away" id="derpy">')
+                .addClassDelay('in')
+                .appendTo(content);
+
+            var div1 = $('<div id="r1-intro-title" class="r1-intro static away">')
+                .text('Round 1')
+                .addClassDelay('in')
+                .appendTo(content)
+                .css({ left: content.width() - derpyWidth });
+        },
+
         r1_showContestants: function (p)
         {
             $('#r1-contestants').remove();
@@ -249,7 +298,7 @@ $(function ()
                 if (p.contestants[i].HasWrong)
                     div.addClass('wrong');
             }
-            findBestValue(100, function (fs) { c.css('font-size', fs + 'px'); return c.height() < content.height() ? -1 : 1; });
+            findBestValue(100, function (fs) { c.css('font-size', fs + 'px'); return c.outerHeight() < content.height() ? -1 : 1; });
             $('.contestant').addClassDelay('in');
         },
 
@@ -546,13 +595,13 @@ $(function ()
         //#endregion
 
         //#region ROUND 4 (Final/Sudden Death)
-        r4_start: function (p)
+        r4_intro: function (p)
         {
-            $('.r4-start').remove();
+            $('.r4-intro').remove();
             clearScreen('r4');
 
             var span1 = $('<span>').text('Round 4');
-            var div1 = $('<div id="r4-start-title" class="r4-start r4-style static away">')
+            var div1 = $('<div id="r4-intro-title" class="r4-intro r4-style static away">')
                 .append(span1)
                 .addClassDelay('in')
                 .appendTo(content);
@@ -570,7 +619,7 @@ $(function ()
             div1.css('padding-left', (content.width() - span1.outerWidth()) * factor);
 
             var span2 = $('<span>').text('Sudden Death');
-            var div2 = $('<div id="r4-start-subtitle" class="r4-start r4-style static away">')
+            var div2 = $('<div id="r4-intro-subtitle" class="r4-intro r4-style static away">')
                 .append(span2)
                 .addClassDelay('in')
                 .appendTo(content);
@@ -587,7 +636,7 @@ $(function ()
             r4_addBackground(div2, content.width() / 2, div2.height(), 60, false, factor);
             div2.css('padding-left', (content.width() - span2.outerWidth()) * factor);
 
-            var div3 = $('<div class="r4-start away" id="octavia">').addClassDelay('in').appendTo(content);
+            var div3 = $('<div class="r4-intro away" id="octavia">').addClassDelay('in').appendTo(content);
         },
 
         r4_showContestants: function (p)
