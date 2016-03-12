@@ -42,7 +42,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                     yield return transition;
 
                 if (TeamA.Length == UnassignedContestants.Length)
-                    yield return Transition.Simple(ConsoleKey.Z, "Done", () => new Round3_SetPoker_ShowTeams(new Round3Data(QuizData, TeamA, UnassignedContestants)));
+                    yield return Transition.Simple(ConsoleKey.Z, "Start Round 3", () => new Round3_SetPoker_ShowTeams(new Round3Data(QuizData, TeamA, UnassignedContestants)).With(jsJingle: Jingle.Round3Start.ToString()));
             }
         }
 

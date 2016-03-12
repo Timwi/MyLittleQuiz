@@ -26,6 +26,7 @@
         Round3CorrectAnswer,
         Round3WrongAnswer,
         Round1Start,
+        Round3Start,
         Round4Start
     }
 }
