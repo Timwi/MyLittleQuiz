@@ -773,7 +773,7 @@ body {
         }
 
     #content #bonbon {
-        background: url(/files/MyLittleQuiz/BonBon.svg?aa) bottom right no-repeat;
+        background: url(/files/MyLittleQuiz/BonBon.svg) bottom right no-repeat;
         background-size: contain;
         top: 100vh;
         height: 60vh;
