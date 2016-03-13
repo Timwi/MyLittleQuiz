@@ -41,8 +41,10 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                     Transition.Simple(ConsoleKey.A + index, "Assign {0} to Team A".Fmt(cont.Name), () => AssignContestantToTeamA(index).NoTransition())))
                     yield return transition;
 
+                yield return Transition.Simple(ConsoleKey.I, "Intro Round 3", "r3_intro", jsJingle: Jingle.Round3Start.ToString());
+
                 if (TeamA.Length == UnassignedContestants.Length)
-                    yield return Transition.Simple(ConsoleKey.Z, "Start Round 3", () => new Round3_SetPoker_ShowTeams(new Round3Data(QuizData, TeamA, UnassignedContestants)).With(jsJingle: Jingle.Round3Start.ToString()));
+                    yield return Transition.Simple(ConsoleKey.Z, "Start Round 3", () => new Round3_SetPoker_ShowTeams(new Round3Data(QuizData, TeamA, UnassignedContestants)));
             }
         }
 

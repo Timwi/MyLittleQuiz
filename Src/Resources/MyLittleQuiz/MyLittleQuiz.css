@@ -46,15 +46,15 @@ body {
     }
 
         #content #background.r1 {
-            background-color: hsl(240, 100%, 12%);
+            background-color: hsl(240, 100%, 15%);
         }
 
         #content #background.r2 {
-            background-color: hsl(240, 100%, 8%);
+            background-color: hsl(240, 100%, 10%);
         }
 
         #content #background.r3 {
-            background-color: hsl(240, 100%, 4%);
+            background-color: hsl(240, 100%, 5%);
         }
 
         #content #background.r4 {
@@ -672,7 +672,7 @@ body {
 
         #content .r3-display .contestant {
             background: #62d;
-            padding: .0em 1em;
+            padding: .0em .7em;
             margin: .4em 2em;
             border-radius: 3em;
             text-align: center;
@@ -751,6 +751,79 @@ body {
             left: 0;
             right: 0;
             transform: translateY(-50%);
+        }
+
+    #content #lyra {
+        background: url(/files/MyLittleQuiz/Lyra.png) bottom left no-repeat;
+        background-size: contain;
+        top: 20vh;
+        bottom: 0;
+        left: -60vw;
+        right: 0;
+        transition: left ease-out 1s;
+        transition-delay: 1s;
+    }
+
+        #content #lyra.in {
+            left: -10vw;
+        }
+
+        #content #lyra.out {
+            transition-delay: 0s;
+        }
+
+    #content #bonbon {
+        background: url(/files/MyLittleQuiz/BonBon.svg?aa) bottom right no-repeat;
+        background-size: contain;
+        top: 100vh;
+        height: 60vh;
+        left: 0;
+        right: 5vw;
+        transition: top ease-out 1s;
+        transition-delay: 3s;
+    }
+
+        #content #bonbon.in {
+            top: 40vh;
+        }
+
+        #content #bonbon.out {
+            transition-delay: 0s;
+        }
+
+    #content #r3-intro-title {
+        top: 5vh;
+        left: 45vw;
+        right: 45vw;
+        height: 24vh;
+        margin: 0 auto;
+        background: #280;
+        text-align: center;
+        border-radius: 12vh;
+        overflow: hidden;
+        opacity: 0;
+        transition: opacity linear .1s, left ease-in-out 2s, right ease-in-out 2s;
+        transition-delay: 5s, 5.2s, 5.2s;
+    }
+
+        #content #r3-intro-title span {
+            position: absolute;
+            left: 60%;
+            top: 0;
+            transform: translateX(-50%);
+            font-size: 20vh;
+            line-height: 1;
+            white-space: nowrap;
+        }
+
+        #content #r3-intro-title.in {
+            left: 5vw;
+            right: 5vw;
+            opacity: 1;
+        }
+
+        #content #r3-intro-title.out {
+            transition-delay: 0s,0s,0s;
         }
 
     #content #r3-set {

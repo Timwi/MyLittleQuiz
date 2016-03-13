@@ -378,6 +378,16 @@ $(function ()
         //#endregion
 
         //#region ROUND 3 (Set Poker)
+        r3_intro: function (p)
+        {
+            clearScreen('r3');
+
+            $('<div class="r3-intro away static" id="r3-intro-title">').addClassDelay('in').appendTo(content)
+                .append($('<span>').text('Round 3'));
+            $('<div class="r3-intro away" id="lyra">').addClassDelay('in').appendTo(content);
+            $('<div class="r3-intro away" id="bonbon">').addClassDelay('in').appendTo(content);
+        },
+
         r3_showContestants: function (p)
         {
             $('#r3-contestants').remove();
@@ -426,7 +436,7 @@ $(function ()
             findBestValue(100, function (fs) { div.css('font-size', fs + 'px'); return div.outerHeight() < content.height() ? -1 : 1; });
             div.css({ bottom: 0 });
 
-            $('#r3-contestants>.contestant').each(function ()
+            $('#r3-teams>.contestant').each(function ()
             {
                 var inner = $(this).find('.inner');
                 var name = inner.find('.name');
@@ -636,7 +646,8 @@ $(function ()
             r4_addBackground(div2, content.width() / 2, div2.height(), 60, false, factor);
             div2.css('padding-left', (content.width() - span2.outerWidth()) * factor);
 
-            var div3 = $('<div class="r4-intro away" id="octavia">').addClassDelay('in').appendTo(content);
+            // Octavia
+            $('<div class="r4-intro away" id="octavia">').addClassDelay('in').appendTo(content);
         },
 
         r4_showContestants: function (p)
