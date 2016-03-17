@@ -11,17 +11,19 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         public bool Check = false;
         public abstract string QuestionFullText { get; }
         public abstract string AnswerFullText { get; }
+        public string HostHint;
         public ConsoleColoredString ToConsoleColoredString() { return (Check ? "[CHECK!] ".Color(ConsoleColor.Red) : "") + toConsoleColoredString(); }
         protected abstract ConsoleColoredString toConsoleColoredString();
 
         public ConsoleColoredString Describe(bool? answerGiven)
         {
-            return "{0/White}\n{1/Cyan}\n\n{2/White}\n{3/Green}{4}".Color(null).Fmt(
+            return "{0/White}\n{1/Cyan}\n\n{5}{2/White}\n{3/Green}{4}".Color(null).Fmt(
                 /* 0 */ "Question:",
                 /* 1 */ QuestionFullText.WordWrap(ConsoleUtil.WrapToWidth()).JoinColoredString(Environment.NewLine),
                 /* 2 */ "Answer:",
                 /* 3 */ AnswerFullText.WordWrap(ConsoleUtil.WrapToWidth()).JoinColoredString(Environment.NewLine),
-                /* 4 */ answerGiven == null ? null : "\n\nAnswer given".Color(answerGiven.Value ? ConsoleColor.Green : ConsoleColor.Red)
+                /* 4 */ answerGiven == null ? null : "\n\nAnswer given".Color(answerGiven.Value ? ConsoleColor.Green : ConsoleColor.Red),
+                /* 5 */ HostHint == null ? null : "{0/White}\n{1/Magenta}\n\n".Color(null).Fmt("Host hint:", HostHint)
             );
         }
     }

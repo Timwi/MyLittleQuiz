@@ -21,8 +21,8 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         [ClassifyNotNull]
         public List<Contestant> DeletedContestants { get; private set; }
 
-        public Music? Music { get; private set; } = null;
-        public Jingle? Jingle { get; private set; } = null;
+        public Music? CurrentMusic { get; private set; } = null;
+        public Jingle? CurrentJingle { get; private set; } = null;
 
         [ClassifyNotNull]
         public QuizData Data = new QuizData();
@@ -70,12 +70,24 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                 if (Contestants.Count > 0)
                     yield return Transition.Simple(ConsoleKey.S, "Start", () => new Round1_Elimination_Beginning(new Round1Data(Data, Contestants.ToArray().Shuffle())));
 
-                if (Music == null)
-                    yield return Transition.Select(ConsoleKey.M, "Set music", EnumStrong.GetValues<Music>(), m => m.ToString(), m => this.ApplyToClone(th => { th.Music = m; th.Jingle = null; }));
+                if (CurrentMusic == null)
+                    yield return Transition.Select(ConsoleKey.M, "Set music", EnumStrong.GetValues<Music>(), m => m.ToString(), m => this.ApplyToClone(th => { th.CurrentMusic = m; th.CurrentJingle = null; }));
                 else
-                    yield return Transition.Simple(ConsoleKey.M, "Mute music", () => this.ApplyToClone(th => { th.Music = null; th.Jingle = null; }));
+                    yield return Transition.Simple(ConsoleKey.M, "Mute music", () => this.ApplyToClone(th => { th.CurrentMusic = null; th.CurrentJingle = null; }));
 
-                yield return Transition.Select(ConsoleKey.J, "Play jingle", EnumStrong.GetValues<Jingle>(), j => j.ToString(), j => this.ApplyToClone(th => { th.Jingle = j; }));
+                yield return Transition.Select(ConsoleKey.J, "Play jingle", EnumStrong.GetValues<Jingle>(), j => j.ToString(), j => this.ApplyToClone(th => { th.CurrentJingle = j; }));
+
+                yield return Transition.Select(ConsoleKey.T, "Test intros etc.",
+                    Ut.NewArray(
+                        new { Method = "r1_intro", Params = (object) null, Jingle = (Jingle?) Jingle.Round1Start },
+                        new { Method = "r2_intro", Params = (object) null, Jingle = (Jingle?) Jingle.Round2Start },
+                        new { Method = "r3_intro", Params = (object) null, Jingle = (Jingle?) Jingle.Round3Start },
+                        new { Method = "r4_intro", Params = (object) null, Jingle = (Jingle?) Jingle.Round4Start },
+                        new { Method = "blank", Params = (object) new { bgclass = "r1" }, Jingle = (Jingle?) null }
+                    ),
+                    //inf => "{0/Yellow} · {1/Cyan}".Color(null).Fmt(inf.Method, inf.Jingle),
+                    inf => inf.ToString().Color(ConsoleColor.Yellow),
+                    inf => new TransitionResult(this, jsMethod: inf.Method, jsParams: inf.Params, jsJingle: inf.Jingle.ToString()));
             }
         }
 
@@ -89,7 +101,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
 
         public override string JsMethod { get { return "setup"; } }
         public override object JsParameters { get { return null; } }
-        public override string JsMusic { get { return Music?.ToString(); } }
-        public override string JsJingle { get { return Jingle?.ToString(); } }
+        public override string JsMusic { get { return CurrentMusic?.ToString(); } }
+        public override string JsJingle { get { return CurrentJingle?.ToString(); } }
     }
 }

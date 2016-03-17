@@ -106,25 +106,25 @@ $(function ()
     }
 
     musics = {
-        Music1: { url: '/files/MyLittleQuiz/Music1.ogg', fadeIn: 0, fadeOut: 1, volume: .3 },
-        Music2: { url: '/files/MyLittleQuiz/Music2.ogg', fadeIn: 0, fadeOut: 1, volume: .3 },
-        Music3: { url: '/files/MyLittleQuiz/Music3.ogg', fadeIn: 0, fadeOut: 1, volume: .3 },
-        Music4: { url: '/files/MyLittleQuiz/Music4.ogg', fadeIn: 0, fadeOut: 1, volume: .3 },
+        Music1: { url: '/files/MyLittleQuiz/Generated/Music1.ogg', fadeIn: 0, fadeOut: 1, volume: .3 },
+        Music2: { url: '/files/MyLittleQuiz/Generated/Music2.ogg', fadeIn: 0, fadeOut: 1, volume: .3 },
+        Music3: { url: '/files/MyLittleQuiz/Generated/Music3.ogg', fadeIn: 0, fadeOut: 1, volume: .3 },
+        Music4: { url: '/files/MyLittleQuiz/Generated/Music4.ogg', fadeIn: 0, fadeOut: 1, volume: .3 },
     };
 
-    jingleUrl = function (p) { return '/files/MyLittleQuiz/' + p + '.ogg'; };
+    jingleUrl = function (p) { return '/files/MyLittleQuiz/Generated/' + p + '.ogg'; };
 
     transitions = {
 
         blank: function (p)
         {
-            clearScreen('blank');
+            clearScreen(p.bgclass || 'blank');
         },
 
         setup: function (p)
         {
             clearScreen('setup');
-            div = $('<div class="setup away">').appendTo(content).addClassDelay('in');
+            div = $('<div class="setup phrase away">').appendTo(content).addClassDelay('in');
 
             var msgs = [
                 'The administrator pony is setting stuff up...',
@@ -317,6 +317,19 @@ $(function ()
         //#endregion
 
         //#region ROUND 2 (Categories)
+        r2_intro: function (p)
+        {
+            $('.r2-intro').remove();
+            clearScreen('r2');
+
+            $('<div class="r2-intro r2-intro-title away static" id="r2-intro-title">').addClassDelay('in').appendTo(content)
+                .append($('<span>').text('Round 2'));
+            $('<div class="r2-intro away" id="minuette">').addClassDelay('in').appendTo(content);
+            $('<div class="r2-intro r2-intro-title away static" id="r2-intro-subtitle">').addClassDelay('in').appendTo(content)
+                .append($('<span>').text('Categories'));
+            $('<div class="r2-intro away" id="roseluck">').addClassDelay('in').appendTo(content);
+        },
+
         r2_showContestants: function (p)
         {
             $('#r2-contestants').remove();
@@ -380,6 +393,7 @@ $(function ()
         //#region ROUND 3 (Set Poker)
         r3_intro: function (p)
         {
+            $('.r3-intro').remove();
             clearScreen('r3');
 
             $('<div class="r3-intro away static" id="r3-intro-title">').addClassDelay('in').appendTo(content)
@@ -452,7 +466,11 @@ $(function ()
 
             var div = $('<div id="r3-set" class="away">').appendTo(content).addClassDelay('in');
             var inner = $('<div class="name static">').appendTo(div).html(p.set);
-            findBestValue(100, function (fs) { div.css('font-size', fs + 'px'); return inner.outerHeight() < div.outerHeight() ? -1 : 1; });
+            findBestValue(100, function (fs)
+            {
+                div.css('font-size', fs + 'px');
+                return inner.outerHeight() < div.height() ? -1 : 1;
+            });
         },
 
         r3_play_transition: function (p)
@@ -653,7 +671,7 @@ $(function ()
         r4_showContestants: function (p)
         {
             $('#r4-contestants').remove();
-            clearScreen('r3');
+            clearScreen('r4');
 
             var div = $('<div id="r4-contestants" class="static away">').appendTo(content);
             var innerDiv = $('<div class="r4-style away">').appendTo(div).addClassDelay('in', 500);
@@ -679,9 +697,9 @@ $(function ()
                 else if (p.answers[i].length < p.answers[0].length)
                     allHave = false;
             }
-            cols++; // contestant names
-            if (allHave && cols >= p.minAnswers)
+            if (allHave && p.answers[0].length >= p.minAnswers)
                 cols++;
+            cols++; // contestant names
 
             for (var i = 0; i < trs.length; i++)
             {

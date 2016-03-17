@@ -21,14 +21,15 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                 {
                     var newData = Data.PresentCategory();
                     if (newData.NextCategoryToPresent != null)
-                        yield return Transition.Simple(ConsoleKey.P, "Present category " + Data.Categories[newData.NextCategoryToPresent.Value].Name, () => new Round2_Categories_ShowCategories(newData));
+                        yield return Transition.Simple(ConsoleKey.P, "Present category " + Data.Categories[newData.NextCategoryToPresent.Value].Name, () => new Round2_Categories_ShowCategories(newData).With(jsJingle: Jingle.Present.ToString()));
                     else
                         yield return Transition.Simple(ConsoleKey.P, "Show question difficulties", () => new Round2_Categories_ShowCategories(newData));
                 }
                 else if (Data.SelectedCategory == null)
                 {
                     yield return Transition.Simple(ConsoleKey.S, "Show scores", () => new Round2_Categories_ShowContestants(Data).With(jsJingle: Jingle.Swoosh.ToString()));
-                    yield return Transition.Select(ConsoleKey.C, "Select a category", Data.QuizData.Round2Categories, cat => cat.Name.Color(ConsoleColor.Yellow),
+                    yield return Transition.Select(ConsoleKey.C, "Select a category", Data.QuizData.Round2Categories,
+                        cat => Data.QuestionsUsed[Data.Categories.IndexOf(cat)].All(used => used) ? cat.Name.Color(ConsoleColor.DarkYellow) + " (taken)".Color(ConsoleColor.DarkRed) : cat.Name.Color(ConsoleColor.Yellow),
                         cat => Data.Categories.IndexOf(cat).Apply(index => new Round2_Categories_ShowCategories(Data.SelectCategory(index)).With("r2_selectCat", new { selected = index }, jsJingle: Jingle.Present.ToString())));
                     yield return Transition.Simple(ConsoleKey.P, "Pass", () => new Round2_Categories_ShowCategories(Data.Pass()).NoTransition());
                 }

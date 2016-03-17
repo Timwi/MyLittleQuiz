@@ -23,10 +23,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             {
                 if (NoScores)
                 {
-                    yield return Transition.Simple(ConsoleKey.I, "Intro Round 2", () =>
-                    {
-                        // TODO
-                    });
+                    yield return Transition.Simple(ConsoleKey.I, "Intro Round 2", "r2_intro", jsJingle: Jingle.Round2Start.ToString());
                     yield return Transition.Simple(ConsoleKey.S, "Show scores", () => new Round2_Categories_ShowContestants(Data).With(jsJingle: Jingle.Swoosh.ToString()));
                 }
                 else
@@ -48,8 +45,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             {
                 return new
                 {
-                    contestants = Data.Contestants,
-                    current = Data.CurrentContestant,
+                    contestants = Data.Contestants.OrderByDescending(c => c.Score).ToArray(),
                     noscores = NoScores
                 };
             }

@@ -222,7 +222,7 @@ namespace QuizGameEngine
                         else if (words.Count > 1)
                             words.RemoveAt(words.Count - 1);
                     }
-                    else
+                    else if (keyInfo.KeyChar >= 'a' && keyInfo.KeyChar <= 'z')
                         words[words.Count - 1] += keyInfo.KeyChar;
                 }
             });

@@ -22,6 +22,6 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         public override ConsoleColoredString Describe { get { return ""; } }
         public override string JsMethod { get { return "blank"; } }
         public override string JsJingle { get { return null; } }
-        public override object JsParameters { get { return null; } }
+        public override object JsParameters { get { return new { bgclass = "r1" }; } }
     }
 }

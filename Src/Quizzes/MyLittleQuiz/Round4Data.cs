@@ -43,7 +43,8 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
             var available = Enumerable.Range(0, Questions.Length).Except(QuestionsTaken).ToArray();
             if (available.Length == 0)
                 CurrentQuestionIndex = 0;
-            CurrentQuestionIndex = available[Rnd.Next(0, available.Length)];
+            else
+                CurrentQuestionIndex = available[Rnd.Next(0, available.Length)];
         }
 
         private Round4Data() { }    // for Classify
@@ -120,8 +121,8 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                 }
                 return "{0}\n{1}".Color(null).Fmt(
                     tt.ToColoredString(),
-                    QuestionsTaken.Length >= Questions.Length 
-                        ? "NO MORE QUESTIONS".Color(ConsoleColor.Red) 
+                    QuestionsTaken.Length >= Questions.Length
+                        ? "NO MORE QUESTIONS".Color(ConsoleColor.Red)
                         : "{0/Yellow} questions left.\n\n{1}".Color(ConsoleColor.Green).Fmt(Questions.Length - QuestionsTaken.Length, CurrentQuestion.Describe(AnswerGiven)));
             }
         }

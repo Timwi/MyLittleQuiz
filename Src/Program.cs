@@ -161,8 +161,11 @@ namespace QuizGameEngine
                         var newState = Quiz.CurrentState;
                         Edit(newState, new[] { "Quiz" }, setValue: val => { newState = (QuizStateBase) val; });
                         needSave = true;
-                        transitionResult = new TransitionResult(newState);
-                        transitionUndoLine = "Edit quiz state manually";
+                        if (newState != Quiz.CurrentState)
+                        {
+                            transitionResult = new TransitionResult(newState);
+                            transitionUndoLine = "Edit quiz state manually";
+                        }
                         break;
 
                     default:
@@ -418,7 +421,7 @@ namespace QuizGameEngine
                     t.WriteToConsole();
                 }
 
-                var addElement = Ut.Lambda((int index) =>
+                var addElement = Ut.Lambda((int insertAtIndex) =>
                 {
                     object key = null;
                     if (isDictionary)
@@ -434,7 +437,7 @@ namespace QuizGameEngine
                         }
                     }
                     else
-                        key = index;
+                        key = insertAtIndex;
 
                     dynamic value = createInstance(valueType);
                     if (value == null && valueType != typeof(string))
@@ -448,7 +451,7 @@ namespace QuizGameEngine
                         obj.Add(value);
                     else
                     {
-                        obj = Extensions.InsertAtIndex(obj, index, value);
+                        obj = Extensions.InsertAtIndex(obj, insertAtIndex, value);
                         setValue(obj);
                     }
                 });
@@ -637,17 +640,7 @@ namespace QuizGameEngine
                     case "Insert":
                         if (!isCollection && !isDictionary)
                             break;
-                        var ix = 0;
-                        if (rawEditables.Length != 0)
-                        {
-                            var resultInf = ConsoleSelectClass(
-                                new[] { new { Index = selStart, Label = "Insert here" }, new { Index = rawEditables.Length, Label = "Insert at bottom" } },
-                                inf => inf.Label.Color(ConsoleColor.Green));
-                            if (resultInf == null)
-                                break;
-                            ix = resultInf.Index;
-                        }
-                        addElement(ix);
+                        addElement(rawEditables.Length);
                         break;
 
                     case "Ctrl+X":

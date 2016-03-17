@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using RT.Util.Consoles;
+using RT.Util.ExtensionMethods;
 
 namespace QuizGameEngine.Quizzes.MyLittleQuiz
 {
@@ -11,9 +12,9 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
         public Round4_Final_Start(Round4Data data) { Data = data; }
         private Round4_Final_Start() { }    // for Classify
 
-        public override ConsoleColoredString Describe { get { return "Start of Round 4 (Final)."; } }
+        public override ConsoleColoredString Describe { get { return "Start of Round 4 (Final).\n\n{0/White}\n{1/Yellow}".Color(null).Fmt("Contestants:", Data.Contestants.Select(c => c.Name).JoinColoredString("\n")); } }
         public override string JsMethod { get { return "blank"; } }
-        public override object JsParameters { get { return null; } }
+        public override object JsParameters { get { return new { bgclass = "r3" }; } }
         public override string JsJingle { get { return null; } }
         public override IEnumerable<Transition> Transitions
         {

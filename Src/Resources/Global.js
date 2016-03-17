@@ -37,8 +37,7 @@ $(function ()
             }
             if ('jingle' in data && data.jingle)
             {
-                $('#jingle').remove();
-                var newJingle = $('<audio id="jingle" src="' + jingleUrl(data.jingle) + '">').appendTo(document.body);
+                var newJingle = $('<audio src="' + jingleUrl(data.jingle) + '">').appendTo(document.body);
                 newJingle[0].volume = jingleVolume;
                 newJingle[0].play();
                 newJingle[0].onended = function () { newJingle.remove(); };

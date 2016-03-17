@@ -42,26 +42,30 @@ body {
         left: 0;
         right: 0;
         bottom: 0;
-        transition: background-color ease-in-out 8s;
+        transition: background-color ease-in-out 12s;
     }
 
+        #content #background.setup {
+            background-color: hsl(300, 100%, 20%);
+        }
+
         #content #background.r1 {
-            background-color: hsl(240, 100%, 15%);
+            background-color: hsl(240, 100%, 16%);
         }
 
         #content #background.r2 {
-            background-color: hsl(240, 100%, 10%);
+            background-color: hsl(240, 100%, 12%);
         }
 
         #content #background.r3 {
-            background-color: hsl(240, 100%, 5%);
+            background-color: hsl(240, 100%, 8%);
         }
 
         #content #background.r4 {
             background-color: hsl(240, 100%, 0%);
         }
 
-    #content .setup {
+    #content .setup.phrase {
         width: 60vw;
         top: 50%;
         left: 50%;
@@ -73,11 +77,11 @@ body {
         text-align: center;
     }
 
-        #content .setup.in {
+        #content .setup.phrase.in {
             opacity: 1;
         }
 
-        #content .setup.out {
+        #content .setup.phrase.out {
             opacity: 0;
         }
 
@@ -469,6 +473,127 @@ body {
                 white-space: nowrap;
             }
 
+    #content #minuette {
+        background: url(/files/MyLittleQuiz/Minuette.png) bottom left no-repeat;
+        background-size: contain;
+        top: 5vh;
+        bottom: 0;
+        left: -60vw;
+        right: 0;
+        transition: left ease-out 1s;
+        transition-delay: 1s;
+    }
+
+        #content #minuette.in {
+            left: -10vw;
+        }
+
+        #content #minuette.out {
+            transition-delay: 0s;
+        }
+
+    #content #roseluck {
+        background: url(/files/MyLittleQuiz/Roseluck.png) bottom right no-repeat;
+        background-size: contain;
+        top: 100vh;
+        height: 75vh;
+        width: 100vw;
+        right: 0;
+        transition: top ease-out 1s, right ease-in 1s;
+        transition-delay: 6.1s, 0s;
+    }
+
+        #content #roseluck.in {
+            top: 25vh;
+        }
+
+        #content #roseluck.out {
+            top: 25vh;
+            right: -50vw;
+        }
+
+    #content .r2-intro-title {
+        color: white;
+        padding: .1em 1em .5em 1em;
+        margin: .5em 0;
+        background: hsl(220, 60%, 33.3%);
+        box-shadow: inset -.05em -.15em 0 hsl(220, 60%, 25%);
+    }
+
+        #content .r2-intro-title::before {
+            content: '';
+            position: absolute;
+            top: .1em;
+            left: .7em;
+            right: .8em;
+            height: .2em;
+            background: hsl(220, 50%, 40%);
+            border-radius: 2em;
+            transition: background ease-in-out .7s;
+        }
+
+        #content .r2-intro-title::after {
+            content: '';
+            position: absolute;
+            top: .7em;
+            left: .2em;
+            width: .5em;
+            height: .5em;
+            background: hsl(220, 50%, 50%);
+            border-radius: 2em;
+            transition: background ease-in-out .7s;
+        }
+
+        #content .r2-intro-title.out {
+            transition-delay: 0s !important;
+        }
+
+    #content #r2-intro-title {
+        font-size: 10vh;
+        border-top-right-radius: 10vh;
+        border-bottom-right-radius: 10vh;
+        top: 5vh;
+        left: -80vw;
+        width: 75vw;
+        transform: scale(.1);
+        text-align: right;
+        transition: left ease-out 1.4s, transform ease-out 1.4s;
+        transition-delay: 2.7s;
+    }
+
+        #content #r2-intro-title.in {
+            left: 0;
+            transform: scale(1);
+        }
+
+    #content #r2-intro-subtitle {
+        font-size: 12vh;
+        border-top-left-radius: 12vh;
+        border-bottom-left-radius: 12vh;
+        bottom: 5vh;
+        right: -80vw;
+        width: 75vw;
+        transform: scale(.1);
+        text-align: left;
+        background: hsl(60, 100%, 30%);
+        box-shadow: inset -.05em -.15em 0 hsl(60, 100%, 25%);
+        transition: right ease-out 1.4s, transform ease-out 1.4s;
+        transition-delay: 4.4s;
+    }
+
+        #content #r2-intro-subtitle.in {
+            right: 0;
+            transform: scale(1);
+        }
+
+        #content #r2-intro-subtitle::before {
+            background: hsl(60, 100%, 35%);
+        }
+
+        #content #r2-intro-subtitle::after {
+            background: hsl(60, 100%, 40%);
+        }
+
     #content #r2-contestants.no-scores .score {
         display: none;
     }
@@ -505,29 +630,6 @@ body {
             line-height: 1.1;
         }
 
-    #content #r2-cats .r2-cat {
-        color: white;
-        padding: .1em 1em .5em 1em;
-        margin: .5em 0;
-        background: hsl(220, 60%, 33.3%);
-        box-shadow: inset -.05em -.15em 0 hsl(220, 60%, 25%);
-        transition: left ease-out 1s, background ease-in-out .7s, box-shadow ease-in-out .7s, transform ease-out .7s, opacity linear .7s;
-    }
-
-        #content #r2-cats .r2-cat.all-used {
-            opacity: .3;
-        }
-
-            #content #r2-cats .r2-cat.all-used .name {
-                visibility: hidden;
-            }
-
-        #content #r2-cats .r2-cat.selected, #content #r2-cats.presenting .r2-cat.present {
-            background: hsl(60, 100%, 30%);
-            box-shadow: inset -.05em -.15em 0 hsl(60, 100%, 25%);
-            transform: scale(1.1);
-        }
-
     #content #r2-cats .col-1 {
         padding: 5vh 3vw 5vh 0;
     }
@@ -554,65 +656,90 @@ body {
                 transform-origin: right center;
             }
 
-    #content #r2-cats .r2-cat::before {
-        content: '';
-        position: absolute;
-        top: .1em;
-        left: .7em;
-        right: .8em;
-        height: .2em;
-        background: hsl(220, 50%, 40%);
-        border-radius: 2em;
-        transition: background ease-in-out .7s;
+    #content #r2-cats .r2-cat {
+        color: white;
+        padding: .1em 1em .5em 1em;
+        margin: .5em 0;
+        background: hsl(220, 60%, 33.3%);
+        box-shadow: inset -.05em -.15em 0 hsl(220, 60%, 25%);
+        transition: left ease-out 1s, background ease-in-out .7s, box-shadow ease-in-out .7s, transform ease-out .7s, opacity linear .7s;
     }
 
-    #content #r2-cats .r2-cat.selected::before, #content #r2-cats.presenting .r2-cat.present::before {
-        background: hsl(60, 100%, 35%);
-    }
+        #content #r2-cats .r2-cat.all-used {
+            opacity: .3;
+        }
 
-    #content #r2-cats .r2-cat::after {
-        content: '';
-        position: absolute;
-        top: .7em;
-        left: .2em;
-        width: .5em;
-        height: .5em;
-        background: hsl(220, 50%, 50%);
-        border-radius: 2em;
-        transition: background ease-in-out .7s;
-    }
+            #content #r2-cats .r2-cat.all-used .name {
+                visibility: hidden;
+            }
 
-    #content #r2-cats .r2-cat.selected::after, #content #r2-cats.presenting .r2-cat.present::after {
-        background: hsl(60, 100%, 40%);
-    }
+        #content #r2-cats .r2-cat.selected, #content #r2-cats.presenting .r2-cat.present {
+            background: hsl(60, 100%, 30%);
+            box-shadow: inset -.05em -.15em 0 hsl(60, 100%, 25%);
+            transform: scale(1.1);
+        }
 
-    #content #r2-cats .r2-cat .useds {
-        position: absolute;
-        bottom: -.5em;
-        right: .5em;
-    }
-
-        #content #r2-cats .r2-cat .useds .used {
-            display: inline-block;
-            margin-left: .5em;
-            width: .7em;
-            height: .7em;
-            border-radius: .7em;
-            background: hsl(220, 50%, 70%);
+        #content #r2-cats .r2-cat::before {
+            content: '';
+            position: absolute;
+            top: .1em;
+            left: .7em;
+            right: .8em;
+            height: .2em;
+            background: hsl(220, 50%, 40%);
+            border-radius: 2em;
             transition: background ease-in-out .7s;
         }
 
-    #content #r2-cats .r2-cat.selected .useds .used {
-        background: hsl(60, 100%, 70%);
-    }
+        #content #r2-cats .r2-cat.selected::before, #content #r2-cats.presenting .r2-cat.present::before {
+            background: hsl(60, 100%, 35%);
+        }
 
-    #content #r2-cats .r2-cat .useds .used.yes {
-        background: hsla(220, 50%, 70%, .2);
-    }
+        #content #r2-cats .r2-cat::after {
+            content: '';
+            position: absolute;
+            top: .7em;
+            left: .2em;
+            width: .5em;
+            height: .5em;
+            background: hsl(220, 50%, 50%);
+            border-radius: 2em;
+            transition: background ease-in-out .7s;
+        }
 
-    #content #r2-cats .r2-cat.selected .useds .used.yes {
-        background: hsla(60, 100%, 70%, .2);
-    }
+        #content #r2-cats .r2-cat.selected::after, #content #r2-cats.presenting .r2-cat.present::after {
+            background: hsl(60, 100%, 40%);
+        }
+
+        #content #r2-cats .r2-cat .useds {
+            position: absolute;
+            bottom: -.5em;
+            right: .5em;
+        }
+
+            #content #r2-cats .r2-cat .useds .used {
+                display: inline-block;
+                margin-left: .5em;
+                width: .7em;
+                height: .7em;
+                border-radius: .7em;
+                background: hsl(220, 50%, 70%);
+                transition: background ease-in-out .7s;
+            }
+
+        #content #r2-cats .r2-cat.selected .useds .used {
+            background: hsl(60, 100%, 70%);
+        }
+
+        #content #r2-cats .r2-cat .useds .used.yes {
+            background: none;
+            border: .5vw solid hsla(220, 50%, 70%, .15);
+        }
+
+        #content #r2-cats .r2-cat.selected .useds .used.yes {
+            background: none;
+            border: .5vw solid hsla(60, 100%, 70%, .15);
+        }
 
     #content #r2-cats.presenting .r2-cat.hidden {
         opacity: 0;
@@ -793,8 +920,8 @@ body {
 
     #content #r3-intro-title {
         top: 5vh;
-        left: 45vw;
-        right: 45vw;
+        left: 52vw;
+        right: 38vw;
         height: 24vh;
         margin: 0 auto;
         background: #280;
@@ -808,7 +935,7 @@ body {
 
         #content #r3-intro-title span {
             position: absolute;
-            left: 60%;
+            left: 59%;
             top: 0;
             transform: translateX(-50%);
             font-size: 20vh;
@@ -833,6 +960,7 @@ body {
         bottom: 5%;
         border-radius: 100%;
         background: #008;
+        padding: 7% 7%;
         opacity: 0;
         transform: scale(.1);
         transition: opacity linear .3s,transform ease-out .3s;
@@ -850,8 +978,8 @@ body {
         #content #r3-set .name {
             padding: 0;
             top: 50%;
-            left: 0;
-            right: 0;
+            left: 7%;
+            right: 7%;
             transform: translateY(-50%);
             text-align: center;
         }
@@ -1128,14 +1256,14 @@ body {
         left: 0;
         right: 0;
         top: 20vh;
-        transition-delay: 1s, 1.6s;
+        transition-delay: 2.5s, 3.1s;
     }
 
     #content #r4-intro-subtitle {
         left: 0;
         right: 0;
         bottom: 20vh;
-        transition-delay: 2s, 2.6s;
+        transition-delay: 4.0s, 4.6s;
     }
 
     #content .r4-intro span {
@@ -1146,12 +1274,12 @@ body {
     #content #octavia {
         left: -100vw;
         width: 100vw;
-        top: 0;
-        bottom: 0;
+        top: 2vh;
+        bottom: 2vh;
         background: url(/files/MyLittleQuiz/Octavia.png) left top no-repeat;
         background-size: contain;
-        transition: left ease-out .7s;
-        transition-delay: 3s;
+        transition: left ease-out 1.5s;
+        transition-delay: .5s;
     }
 
         #content #octavia.in {

@@ -3,19 +3,19 @@
 #declare use_arealight = on;
 #declare use_radiosity = on;
 
-#include "Generated/My.pov"
-#include "Generated/MyHeart.pov"
-#include "Generated/Little.pov"
-#include "Generated/Quiz.pov"
-#include "Generated/MyCloud.pov"
-#include "Generated/LittleCloud.pov"
-#include "Generated/QuizCloud.pov"
-#include "Generated/RainbowCloud.pov"
-#include "Generated/Rainbow1.pov"
-#include "Generated/Rainbow2.pov"
-#include "Generated/Rainbow3.pov"
-#include "Generated/Rainbow4.pov"
-#include "Generated/Rainbow5.pov"
+#include "My.pov"
+#include "MyHeart.pov"
+#include "Little.pov"
+#include "Quiz.pov"
+#include "MyCloud.pov"
+#include "LittleCloud.pov"
+#include "QuizCloud.pov"
+#include "RainbowCloud.pov"
+#include "Rainbow1.pov"
+#include "Rainbow2.pov"
+#include "Rainbow3.pov"
+#include "Rainbow4.pov"
+#include "Rainbow5.pov"
 
 
 global_settings { assumed_gamma 2.2 }
@@ -42,7 +42,6 @@ global_settings { assumed_gamma 2.2 }
 #end
 
 background { rgb <0, 30, 111>/255 }
-// background { rgb 1 } // for print
 
 #macro mklight(loc, c, sz)
         light_source {
