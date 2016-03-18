@@ -1,7 +1,7 @@
 #version 3.7;
 
-#declare use_arealight = off;
-#declare use_radiosity = off;
+#declare use_arealight = on;
+#declare use_radiosity = on;
 
 #include "Generated/Germany.pov"
 #include "Generated/Berlin.pov"
@@ -30,8 +30,7 @@ global_settings { assumed_gamma 2.2 }
         }
 #end
 
-background { rgb <0, 0, 0>/255 }
-// background { rgb 1 } // for print
+background { rgb <0, 30, 111>/255 }
 
 #macro mklight(loc, c, sz)
         light_source {
@@ -56,14 +55,14 @@ mklight(<1130-500, -280, -800>, rgb .15, 1000)
 camera {
         right
         x*image_width/image_height
-        
+
         // Germany
-        location <400, -450, -800>
-        look_at <400, -450, 0>
+        //location <400, -450, -800>
+        //look_at <400, -450, 0>
 
         // Berlin
-        //location <675, -326, -40>
-        //look_at <675, -326, 0>
+        location <675, -326, -40>
+        look_at <675, -326, 0>
         
 }                             
 
