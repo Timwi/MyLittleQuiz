@@ -748,5 +748,28 @@ $(function ()
             r4_addBackground(innerDiv, table.outerWidth(), table.outerHeight(), 30, true);
         },
         //#endregion
+
+        'congratulations': function (p)
+        {
+            $('.congratulations').remove();
+            clearScreen('congratulations');
+
+            var stripes = $('<div class="congratulations away stripes">').appendTo(content).addClassDelay('in');
+            for (var i = 0; i < 10; i++)
+                $('<div class="congratulations stripe">').appendTo(stripes).css({
+                    transform: 'translateX(-50%) rotate(' + (i * 360 / 10) + 'deg)'
+                });
+
+            $('<div class="congratulations away" id="trophy">').appendTo(content);
+            var winnerdiv = $('<div class="congratulations static away" id="winner-name">').appendTo(content)
+                .append($('<div class="inner">')
+                    .append($('<span class="name">').text(p.winner)));
+
+            var nameWidth = $('#winner-name .name').width();
+            if (nameWidth > winnerdiv.width())
+                $('#winner-name .inner').css({ transform: 'scaleX(' + (winnerdiv.width() / nameWidth) + ')' });
+
+            $('<div class="congratulations away" id="logo">').appendTo(content).addClassDelay('in');
+        }
     };
 });

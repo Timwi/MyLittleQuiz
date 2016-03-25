@@ -155,6 +155,14 @@ namespace QuizGameEngine
                         transitionResult = new TransitionResult(Quiz.CurrentState, null, Quiz.CurrentState.JsMethod, Quiz.CurrentState.JsParameters, Quiz.CurrentState.JsMusic, Quiz.CurrentState.JsJingle);
                         break;
 
+                    case ConsoleKey.F9:
+                        if (keyInfo.Modifiers != 0)
+                            goto default;
+                        lock (Sockets)
+                            foreach (var socket in Sockets)
+                                socket.SendLoggedMessage(new JsonDict { { "panic", true } });
+                        break;
+
                     case ConsoleKey.E:
                         if (keyInfo.Modifiers != 0)
                             goto default;

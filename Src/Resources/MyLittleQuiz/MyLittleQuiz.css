@@ -1289,3 +1289,115 @@ body {
     #content .r4-intro.out {
         transition-delay: 0s, .3s !important;
     }
+
+    #content #trophy {
+        left: 0;
+        top: 5vh;
+        right: 0;
+        bottom: 0;
+        background-image: url(/files/MyLittleQuiz/Trophy.png);
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: 50% 50%;
+    }
+
+    #content #winner-name {
+        left: 10vw;
+        right: 10vw;
+        top: 62vh;
+        font-size: 16vh;
+        text-align: center;
+        background: hsla(274, 100%, 8%, .8);
+        border-radius: 10vh;
+        padding: 3vh 5vw 8vh;
+        text-shadow: 1vh 1vh 1vh rgba(0, 0, 0, .5);
+        line-height: 1;
+    }
+
+        #content #winner-name .inner {
+            transform-origin: left center;
+        }
+
+        #content #winner-name .name {
+            white-space: nowrap;
+        }
+
+    #content #background.congratulations {
+        background-color: hsl(274, 100%, 18%);
+        transition: background-color ease-in-out 1s;
+    }
+
+    #content .congratulations.stripes {
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        animation: rotating 20s linear infinite;
+        opacity: 0;
+        transition: opacity linear 2s;
+        transition-delay: .5s;
+    }
+
+        #content .congratulations.stripes.in {
+            opacity: 1;
+        }
+
+    #content .congratulations.stripe {
+        bottom: 50%;
+        left: 50%;
+        border-top: 80vw solid rgba(255, 255, 255, .1);
+        border-left: 12vw solid transparent;
+        border-right: 12vw solid transparent;
+        transform-origin: center bottom;
+    }
+
+@keyframes rotating {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+#content #logo {
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: #00186F;
+}
+
+    #content #logo::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        background-image: url(/files/MyLittleQuiz/Logo.png);
+        background-position: 50% 50%;
+        background-size: contain;
+        background-repeat: no-repeat;
+    }
+
+    #content #logo.congratulations {
+        opacity: 0;
+        transition: opacity linear 3s;
+        transition-delay: 21s;
+    }
+
+        #content #logo.congratulations::after {
+            transform: scale(.01);
+            transition: transform ease-out 5s;
+            transition-delay: 21s;
+        }
+
+        #content #logo.congratulations.in {
+            opacity: 1;
+        }
+
+            #content #logo.congratulations.in::after {
+                transform: none;
+            }

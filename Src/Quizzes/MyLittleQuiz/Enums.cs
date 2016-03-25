@@ -28,6 +28,7 @@
         Round1Start,
         Round2Start,
         Round3Start,
-        Round4Start
+        Round4Start,
+        WinnerAndOutro
     }
 }

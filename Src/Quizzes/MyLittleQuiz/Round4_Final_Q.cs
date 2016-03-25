@@ -54,7 +54,7 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
                 if (cOut.Length > 0 && Data.Contestants.Length - cOut.Length == 1)
                 {
                     yield return Transition.Simple(ConsoleKey.Spacebar, "{0} wins. Congratulations!".Fmt(Data.Contestants.Where((c, i) => !cOut.Contains(i)).First().Name),
-                        () => new Round4_Final_Congratulations(Data));
+                        () => new Round4_Final_Congratulations(Data.Contestants.Where((c, i) => !cOut.Contains(i)).First().Name));
                     yield break;
                 }
 

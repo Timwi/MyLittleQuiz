@@ -28,82 +28,90 @@ $(function ()
         {
             console.log('socket message: ' + msg.data);
             var data = JSON.parse(msg.data);
-            if ('method' in data)
+            if ('panic' in data && data.panic)
             {
-                if (data.method in transitions)
-                    transitions[data.method](data.params);
-                else
-                    console.log('Undefined transition method: ' + data.method);
+                $('audio,video').remove();
+                $('#content').empty();
             }
-            if ('jingle' in data && data.jingle)
+            else
             {
-                var newJingle = $('<audio src="' + jingleUrl(data.jingle) + '">').appendTo(document.body);
-                newJingle[0].volume = jingleVolume;
-                newJingle[0].play();
-                newJingle[0].onended = function () { newJingle.remove(); };
-            }
-            if ('music' in data)
-            {
-                if (data.music !== currentMusic)
+                if ('method' in data)
+                {
+                    if (data.method in transitions)
+                        transitions[data.method](data.params);
+                    else
+                        console.log('Undefined transition method: ' + data.method);
+                }
+                if ('jingle' in data && data.jingle)
+                {
+                    var newJingle = $('<audio src="' + jingleUrl(data.jingle) + '">').appendTo(document.body);
+                    newJingle[0].volume = jingleVolume;
+                    newJingle[0].play();
+                    newJingle[0].onended = function () { newJingle.remove(); };
+                }
+                if ('music' in data)
                 {
                     var prevMusic = $('#music');
-                    if (prevMusic.length)
+                    if (data.music !== currentMusic || !prevMusic.length)
                     {
-                        prevMusic.data('cancel', true);
-                        var fadeOutTime = prevMusic.data('fadeout');
-                        var prevVolume = prevMusic.data('volume');
-                        prevMusic.attr('id', '');
-                        if (!fadeOutTime)
-                            prevMusic.remove();
-                        else
+                        if (prevMusic.length)
                         {
-                            var fiCounter = 100;
-                            for (var i = 1; i <= 100; i++)
+                            prevMusic.data('cancel', true);
+                            var fadeOutTime = prevMusic.data('fadeout');
+                            var prevVolume = prevMusic.data('volume');
+                            prevMusic.attr('id', '');
+                            if (!fadeOutTime)
+                                prevMusic.remove();
+                            else
                             {
-                                (function (i2)
+                                var fiCounter = 100;
+                                for (var i = 1; i <= 100; i++)
                                 {
-                                    window.setTimeout(function ()
+                                    (function (i2)
                                     {
-                                        prevMusic[0].volume = prevVolume * (100 - i2) / 100;
-                                        fiCounter--;
-                                        if (fiCounter === 0)
-                                            prevMusic.remove();
-                                    }, fadeOutTime * 10 * i2);
-                                })(i);
+                                        window.setTimeout(function ()
+                                        {
+                                            prevMusic[0].volume = prevVolume * (100 - i2) / 100;
+                                            fiCounter--;
+                                            if (fiCounter === 0)
+                                                prevMusic.remove();
+                                        }, fadeOutTime * 10 * i2);
+                                    })(i);
+                                }
                             }
                         }
-                    }
 
-                    if (!(data.music in musics))
-                        currentMusic = null;
-                    else
-                    {
-                        currentMusic = data.music;
-                        var inf = musics[currentMusic];
-                        var newMusic = $('<audio id="music" src="' + inf.url + '">').appendTo(document.body);
-                        newMusic[0].volume = 0;
-                        newMusic[0].play();
-                        newMusic.data('fadeout', inf.fadeOut);
-                        newMusic.data('volume', inf.volume);
-
-                        if (!inf.fadeIn)
-                            newMusic[0].volume = inf.volume;
+                        if (!(data.music in musics))
+                            currentMusic = null;
                         else
                         {
-                            var foCounter = 100;
-                            for (var i = 1; i <= 100; i++)
+                            currentMusic = data.music;
+                            var inf = musics[currentMusic];
+                            var newMusic = $('<audio id="music" src="' + inf.url + '">').appendTo(document.body);
+                            newMusic[0].volume = 0;
+                            newMusic[0].play();
+                            newMusic.data('fadeout', inf.fadeOut);
+                            newMusic.data('volume', inf.volume);
+
+                            if (!inf.fadeIn)
+                                newMusic[0].volume = inf.volume;
+                            else
                             {
-                                (function (i2)
+                                var foCounter = 100;
+                                for (var i = 1; i <= 100; i++)
                                 {
-                                    window.setTimeout(function ()
+                                    (function (i2)
                                     {
-                                        foCounter--;
-                                        if (foCounter === 0)
-                                            newMusic[0].volume = inf.volume;
-                                        else
-                                            newMusic[0].volume = inf.volume * i2 / 100;
-                                    }, inf.fadeIn * 10 * i2);
-                                })(i);
+                                        window.setTimeout(function ()
+                                        {
+                                            foCounter--;
+                                            if (foCounter === 0)
+                                                newMusic[0].volume = inf.volume;
+                                            else
+                                                newMusic[0].volume = inf.volume * i2 / 100;
+                                        }, inf.fadeIn * 10 * i2);
+                                    })(i);
+                                }
                             }
                         }
                     }
