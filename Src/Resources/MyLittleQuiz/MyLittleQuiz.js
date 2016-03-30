@@ -3,9 +3,38 @@ $(function ()
 {
     var content = $('#content');
 
+    var preloadableImages = ["BonBon.svg", "Derpy.png", "Horseshoe.svg", "Logo.png", "Lyra.png", "Minuette.png", "Muffin1_sm.png", "Muffin2_sm.png", "Muffin3_sm.png",
+        "Octavia.png", "Roseluck.png", "SweetieBelle.png", "Trophy.png"];
+
+    var preloadableJingles = ["Round1CorrectAnswer", "Round1WrongAnswer", "Present", "Tada", "Swoosh", "PresentSet", "Round3CorrectAnswer", "Round3WrongAnswer",
+        "Round1Start", "Round2Start", "Round3Start", "Round4Start", "WinnerAndOutro"];
+
     function clearScreen(bgClass, except)
     {
+        // There are some items we want to ensure are pre-buffered (mostly images).
+        // Make sure that there is always an ‘img’ element for each such image.
+        for (var i = 0; i < preloadableImages.length; i++)
+        {
+            var p = $('#preloadable' + i);
+            if (!p.length)
+                content.append("<img src='/files/MyLittleQuiz/" + preloadableImages[i] + "' id='preloadable" + i + "' class='preloadable'>");
+        }
+        // Create an audio element for every jingle
+        for (i = 0; i < preloadableJingles.length; i++)
+        {
+            var q = $('#preloadableAudio' + i);
+            if (!q.length)
+                $(document.body).append("<audio src='/files/MyLittleQuiz/Generated/" + preloadableJingles[i] + ".ogg' id='preloadableAudio" + i + "'>");
+        }
+        // Pre-buffer the intro video if we are likely to need it soon
+        if (bgClass == 'setup' || bgClass == 'intro')
+        {
+            if (!$('#intro').length)
+                $('<video id="intro" src="/files/MyLittleQuiz/Generated/Intro.mp4">').appendTo(content);
+        }
+
         $('.away.out').remove();
+        $('#intro').removeClass('visible');
         var consider = $('.away');
         if (except)
             consider = consider.not(except);
@@ -159,6 +188,16 @@ $(function ()
                     return 1;
                 return -1;
             });
+        },
+
+        intro: function (p)
+        {
+            clearScreen('intro');
+            $('#content *').not('video').remove();
+            $('#intro').addClass('visible');
+            $('#intro')[0].pause();
+            $('#intro')[0].currentTime = 0;
+            $('#intro')[0].play();
         },
 
         //#region QUESTION/ANSWER (showQ, showA, showQA)

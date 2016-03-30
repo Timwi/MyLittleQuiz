@@ -103,29 +103,32 @@ namespace QuizGameEngine
             var needSave = false;
             while (true)
             {
-                Console.Clear();
-                ConsoleUtil.WriteLine(Quiz.UndoLine == null ? null : "← Undo: {0/Gray}".Color(ConsoleColor.Magenta).Fmt(Quiz.UndoLine));
-                ConsoleUtil.WriteLine(Quiz.RedoLine == null ? null : "→ Redo: {0/Gray}".Color(ConsoleColor.Green).Fmt(Quiz.RedoLine));
-                ConsoleUtil.WriteLine("{0/DarkYellow} · {1/DarkGreen} · {2/DarkMagenta}".Color(ConsoleColor.DarkGray).Fmt(Quiz.CurrentState.GetType().Name, Quiz.CurrentState.JsMethod ?? "(no method)", Quiz.CurrentState.JsMusic ?? "(no music)"), align: HorizontalTextAlignment.Right);
-                ConsoleUtil.WriteLine(Quiz.CurrentState.Describe);
-                Console.WriteLine();
-
-                var keysUsed = new Dictionary<ConsoleKey, int>();
-                foreach (var t in Quiz.CurrentState.Transitions)
+                if (!Console.KeyAvailable)
                 {
-                    keysUsed.IncSafe(t.Key);
-                    if (keysUsed[t.Key] > 1)
-                        ConsoleUtil.WriteLine("Key {0/Magenta} used more than once.".Color(ConsoleColor.Red).Fmt(t.Key));
-                    else if (t.Key == ConsoleKey.Escape || t.Key == ConsoleKey.Backspace)
-                        ConsoleUtil.WriteLine("Key {0/Magenta} is already bound.".Color(ConsoleColor.Red).Fmt(t.Key));
-                    ConsoleUtil.WriteLine("{0/White}: {1/Cyan}".Color(null).Fmt(t.Key, t.Name));
-                }
+                    Console.Clear();
+                    ConsoleUtil.WriteLine(Quiz.UndoLine == null ? null : "← Undo: {0/Gray}".Color(ConsoleColor.Magenta).Fmt(Quiz.UndoLine));
+                    ConsoleUtil.WriteLine(Quiz.RedoLine == null ? null : "→ Redo: {0/Gray}".Color(ConsoleColor.Green).Fmt(Quiz.RedoLine));
+                    ConsoleUtil.WriteLine("{0/DarkYellow} · {1/DarkGreen} · {2/DarkMagenta}".Color(ConsoleColor.DarkGray).Fmt(Quiz.CurrentState.GetType().Name, Quiz.CurrentState.JsMethod ?? "(no method)", Quiz.CurrentState.JsMusic ?? "(no music)"), align: HorizontalTextAlignment.Right);
+                    ConsoleUtil.WriteLine(Quiz.CurrentState.Describe);
+                    Console.WriteLine();
 
-                again:
-                if (needSave)
-                {
-                    save();
-                    needSave = false;
+                    var keysUsed = new Dictionary<ConsoleKey, int>();
+                    foreach (var t in Quiz.CurrentState.Transitions)
+                    {
+                        keysUsed.IncSafe(t.Key);
+                        if (keysUsed[t.Key] > 1)
+                            ConsoleUtil.WriteLine("Key {0/Magenta} used more than once.".Color(ConsoleColor.Red).Fmt(t.Key));
+                        else if (t.Key == ConsoleKey.Escape || t.Key == ConsoleKey.Backspace)
+                            ConsoleUtil.WriteLine("Key {0/Magenta} is already bound.".Color(ConsoleColor.Red).Fmt(t.Key));
+                        ConsoleUtil.WriteLine("{0/White}: {1/Cyan}".Color(null).Fmt(t.Key, t.Name));
+                    }
+
+                    again:
+                    if (needSave)
+                    {
+                        save();
+                        needSave = false;
+                    }
                 }
 
                 var keyInfo = Console.ReadKey(true);
@@ -178,12 +181,12 @@ namespace QuizGameEngine
 
                     default:
                         var transition = Quiz.CurrentState.Transitions.FirstOrDefault(q => q.Key == keyInfo.Key);
-                        if (transition == null)
-                            goto again;
-
-                        Console.WriteLine();    // In case transition.Execute() outputs something and then waits for a key
-                        transitionResult = transition.Execute();
-                        transitionUndoLine = transition.Name;
+                        if (transition != null)
+                        {
+                            Console.WriteLine();    // In case transition.Execute() outputs something and then waits for a key
+                            transitionResult = transition.Execute();
+                            transitionUndoLine = transition.Name;
+                        }
                         break;
                 }
 

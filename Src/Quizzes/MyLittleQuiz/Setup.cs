@@ -77,6 +77,8 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
 
                 yield return Transition.Select(ConsoleKey.J, "Play jingle", EnumStrong.GetValues<Jingle>(), j => j.ToString(), j => this.ApplyToClone(th => { th.CurrentJingle = j; }));
 
+                yield return Transition.Simple(ConsoleKey.I, "Play intro", "intro");
+
                 yield return Transition.Select(ConsoleKey.T, "Test intros etc.",
                     Ut.NewArray(
                         new { Method = "r1_intro", Params = (object) null, Jingle = (Jingle?) Jingle.Round1Start },

@@ -10,6 +10,7 @@ $(function ()
     var socket;
     var currentMusic = null;
     var jingleVolume = 1;
+    var jingles = {};
 
     function newSocket()
     {
@@ -31,6 +32,9 @@ $(function ()
             if ('panic' in data && data.panic)
             {
                 $('audio,video').remove();
+                for (var key in musics)
+                    if (musics[key].audio)
+                        musics[key].audio.pause();
                 $('#content').empty();
             }
             else
@@ -51,68 +55,29 @@ $(function ()
                 }
                 if ('music' in data)
                 {
-                    var prevMusic = $('#music');
-                    if (data.music !== currentMusic || !prevMusic.length)
+                    for (var key in musics)
                     {
-                        if (prevMusic.length)
+                        if (!musics[key].audio)
                         {
-                            prevMusic.data('cancel', true);
-                            var fadeOutTime = prevMusic.data('fadeout');
-                            var prevVolume = prevMusic.data('volume');
-                            prevMusic.attr('id', '');
-                            if (!fadeOutTime)
-                                prevMusic.remove();
-                            else
-                            {
-                                var fiCounter = 100;
-                                for (var i = 1; i <= 100; i++)
-                                {
-                                    (function (i2)
-                                    {
-                                        window.setTimeout(function ()
-                                        {
-                                            prevMusic[0].volume = prevVolume * (100 - i2) / 100;
-                                            fiCounter--;
-                                            if (fiCounter === 0)
-                                                prevMusic.remove();
-                                        }, fadeOutTime * 10 * i2);
-                                    })(i);
-                                }
-                            }
+                            if (key !== data.music)
+                                continue;
+                            musics[key].audio = new Audio(musics[key].url);
                         }
-
-                        if (!(data.music in musics))
-                            currentMusic = null;
+                        if (key !== data.music)
+                        {
+                            // fade out
+                            $(musics[key].audio).animate({ volume: 0 }, musics[key].fadeOut * 1000, function (k) { return function () { musics[k].audio.pause(); }; }(key));
+                        }
                         else
                         {
-                            currentMusic = data.music;
-                            var inf = musics[currentMusic];
-                            var newMusic = $('<audio id="music" src="' + inf.url + '">').appendTo(document.body);
-                            newMusic[0].volume = 0;
-                            newMusic[0].play();
-                            newMusic.data('fadeout', inf.fadeOut);
-                            newMusic.data('volume', inf.volume);
-
-                            if (!inf.fadeIn)
-                                newMusic[0].volume = inf.volume;
-                            else
+                            // fade in
+                            if (musics[key].audio.paused)
                             {
-                                var foCounter = 100;
-                                for (var i = 1; i <= 100; i++)
-                                {
-                                    (function (i2)
-                                    {
-                                        window.setTimeout(function ()
-                                        {
-                                            foCounter--;
-                                            if (foCounter === 0)
-                                                newMusic[0].volume = inf.volume;
-                                            else
-                                                newMusic[0].volume = inf.volume * i2 / 100;
-                                        }, inf.fadeIn * 10 * i2);
-                                    })(i);
-                                }
+                                musics[key].audio.volume = 0;
+                                musics[key].audio.currentTime = 0;
+                                musics[key].audio.play();
                             }
+                            $(musics[key].audio).animate({ volume: musics[key].volume }, musics[key].fadeIn * 1000);
                         }
                     }
                 }
@@ -182,4 +147,11 @@ function findBestValue(startingValue, evaluator, threshold, preferHigh)
     var finalValue = preferHigh ? high : low;
     evaluator(finalValue);
     return finalValue;
+}
+
+function startBuffering(music)
+{
+    if (!musics[music] || musics[music].audio)
+        return;
+    musics[music].audio = new Audio(musics[music].url);
 }

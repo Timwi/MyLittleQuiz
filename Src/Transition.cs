@@ -146,7 +146,7 @@ namespace QuizGameEngine
                         break;
                 }
                 int index;
-                if (!int.TryParse(str, out index) || index >= selection.Length)
+                if (!int.TryParse(str, out index) || index > selection.Length || index == 0)
                     return null;
 
                 var transition = executor(index - 1);

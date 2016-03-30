@@ -60,6 +60,14 @@ namespace QuizGameEngine.Quizzes.MyLittleQuiz
 
                 // Otherwise, just continue with the game.
                 yield return Transition.Simple(ConsoleKey.Spacebar, "Dismiss question", () => new Round4_Final_ShowContestants(Data.DismissQuestion()));
+
+                // Shortcuts for unexpected cases
+                for (int i = 0; i < Data.Contestants.Length; i++)
+                {
+                    var j = i;
+                    yield return Transition.Simple((ConsoleKey) (ConsoleKey.A + i), "{0} wins.".Fmt(Data.Contestants[i].Name),
+                        () => new Round4_Final_Congratulations(Data.Contestants[j].Name));
+                }
             }
         }
 

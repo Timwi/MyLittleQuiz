@@ -1,4 +1,0 @@
-TODO:
-• Pre-buffer assets (esp. intro video)
-• Outro video
-• Intro sound recording
