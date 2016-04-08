@@ -1,0 +1,146 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{DF442759-6E07-4173-A7BA-9DEB4327A4D9}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Trophy.MyLittleQuiz</RootNamespace>
+    <AssemblyName>MyLittleQuiz</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <OutputPath>..\Builds\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>..\Builds\$(Configuration)\obj-$(AssemblyName)\</IntermediateOutputPath>
+    <BaseIntermediateOutputPath>..\Builds\$(Configuration)\obj-$(AssemblyName)\</BaseIntermediateOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Round1_Elimination_Beginning.cs" />
+    <Compile Include="Cmd.cs" />
+    <Compile Include="Contestant.cs" />
+    <Compile Include="ContestantAndScore.cs" />
+    <Compile Include="Enums.cs" />
+    <Compile Include="Round3_SetPoker_Reveal.cs" />
+    <Compile Include="Round4_Final_Congratulations.cs" />
+    <Compile Include="Round4_Final_Q.cs" />
+    <Compile Include="Round3_SetPoker_PlayBase.cs" />
+    <Compile Include="Round3_SetPoker_PlayTieBreaker.cs" />
+    <Compile Include="Round3Set.cs" />
+    <Compile Include="Round3_SetPoker_Play.cs" />
+    <Compile Include="Round3_SetPoker_ShowSet.cs" />
+    <Compile Include="Round3_SetPoker_MakeTeams.cs" />
+    <Compile Include="Round2_Categories_Base.cs" />
+    <Compile Include="MyLittleQuizStateBase.cs" />
+    <Compile Include="QuizData.cs" />
+    <Compile Include="Round1Contestant.cs" />
+    <Compile Include="Question.cs" />
+    <Compile Include="Quiz.cs" />
+    <Compile Include="Round1Data.cs" />
+    <Compile Include="Round1_Elimination_ShowContestants.cs" />
+    <Compile Include="Round1_Elimination_Q.cs" />
+    <Compile Include="Round2Category.cs" />
+    <Compile Include="Round2Data.cs" />
+    <Compile Include="Round2_Categories_Q.cs" />
+    <Compile Include="Round2_Categories_ShowCategories.cs" />
+    <Compile Include="Round2_Categories_ShowContestants.cs" />
+    <Compile Include="Round2Contestant.cs" />
+    <Compile Include="Round3Data.cs" />
+    <Compile Include="Round3Team.cs" />
+    <Compile Include="Round3_SetPoker_ShowTeams.cs" />
+    <Compile Include="Round4Data.cs" />
+    <Compile Include="Round4_Final_ShowContestants.cs" />
+    <Compile Include="Round4_Final_Start.cs" />
+    <Compile Include="Setup.cs" />
+    <Content Include="Resources\BonBon.svg" />
+    <Content Include="Resources\Derpy.png" />
+    <Content Include="Resources\Logo.png" />
+    <Content Include="Resources\Lyra.png" />
+    <Content Include="Resources\Minuette.png" />
+    <Content Include="Resources\Muffin1.png" />
+    <Content Include="Resources\Muffin1_sm.png" />
+    <Content Include="Resources\Muffin2.png" />
+    <Content Include="Resources\Muffin2_sm.png" />
+    <Content Include="Resources\Muffin3.png" />
+    <Content Include="Resources\Muffin3_sm.png" />
+    <Content Include="Resources\Music info.txt" />
+    <Content Include="Resources\My Little Quiz music 1.mid" />
+    <Content Include="Resources\My Little Quiz music 2.mid" />
+    <Content Include="Resources\My Little Quiz music 3.mid" />
+    <Content Include="Resources\My Little Quiz music 4.mid" />
+    <Content Include="Resources\MyLittleQuiz.css" />
+    <Content Include="Resources\MyLittleQuiz.js" />
+    <Content Include="Resources\Horseshoe.svg" />
+    <Content Include="Resources\Octavia.png" />
+    <Content Include="Resources\Registration.html" />
+    <Content Include="Resources\Roseluck.png" />
+    <Content Include="Resources\SweetieBelle.png" />
+    <Content Include="Resources\Trophy.png" />
+    <None Include="Resources\Celestia.ttf" />
+    <None Include="Resources\Correct Answer.wrk" />
+    <None Include="Resources\Derpy.pdn" />
+    <None Include="Resources\My Little Quiz intro old.wrk" />
+    <None Include="Resources\My Little Quiz intro.wrk" />
+    <None Include="Resources\Present.wrk" />
+    <None Include="Resources\PresentSet.wrk" />
+    <None Include="Resources\Round 1 start.wrk" />
+    <None Include="Resources\Round 2 start.wrk" />
+    <None Include="Resources\Round 3 Correct Answer.wrk" />
+    <None Include="Resources\Round 3 start.wrk" />
+    <None Include="Resources\Round 3 Wrong Answer.wrk" />
+    <None Include="Resources\Round 4 start.wrk" />
+    <None Include="Resources\Tada.wrk" />
+    <None Include="Resources\WinnerAndOutro.wrk" />
+    <None Include="Resources\Wrong Answer.wrk" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\RT.Util\Src\RT.Util.csproj">
+      <Project>{8d0fe79c-ad8d-475c-9e6f-9cae85365b5d}</Project>
+      <Name>RT.Util</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Trophy\Trophy\Trophy.csproj">
+      <Project>{e4e20d55-3e57-4860-83ba-6ee3dc6e8d56}</Project>
+      <Name>Trophy</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>"$(TargetPath)" --post-build-check "$(SolutionDir)."</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("QuizGameEngine")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("MyLittleQuiz")]
+[assembly: AssemblyDescription("Trophy plugin for My Little Quiz (brony quizshow).")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("QuizGameEngine")]
-[assembly: AssemblyCopyright("Copyright ©  2015")]
+[assembly: AssemblyProduct("MyLittleQuiz")]
+[assembly: AssemblyCopyright("Copyright © Timwi 2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
