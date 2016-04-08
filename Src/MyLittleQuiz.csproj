@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{DF442759-6E07-4173-A7BA-9DEB4327A4D9}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Trophy.MyLittleQuiz</RootNamespace>
     <AssemblyName>MyLittleQuiz</AssemblyName>
@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Round1_Elimination_Beginning.cs" />
     <Compile Include="Cmd.cs" />
@@ -127,7 +128,7 @@
       <Project>{8d0fe79c-ad8d-475c-9e6f-9cae85365b5d}</Project>
       <Name>RT.Util</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Trophy\Trophy\Trophy.csproj">
+    <ProjectReference Include="..\..\Trophy\Src\Trophy.csproj">
       <Project>{e4e20d55-3e57-4860-83ba-6ee3dc6e8d56}</Project>
       <Name>Trophy</Name>
     </ProjectReference>
