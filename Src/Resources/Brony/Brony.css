@@ -1,0 +1,56 @@
+﻿@font-face {
+    font-family: 'Celestia';
+    src: url('/files/MyLittleQuiz/Brony/Celestia.ttf') format('truetype');
+}
+
+body {
+    font-family: 'Celestia', 'Celestia Redux', 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+#content #derpy {
+    background-image: url(/files/MyLittleQuiz/Brony/Derpy.png);
+}
+
+#content .muffin1 {
+    background-image: url(/files/MyLittleQuiz/Brony/Muffin1_sm.png);
+}
+
+#content .muffin2 {
+    background-image: url(/files/MyLittleQuiz/Brony/Muffin2_sm.png);
+}
+
+#content .muffin3 {
+    background-image: url(/files/MyLittleQuiz/Brony/Muffin3_sm.png);
+}
+
+#content #minuette {
+    background-image: url(/files/MyLittleQuiz/Brony/Minuette.png);
+}
+
+#content #roseluck {
+    background-image: url(/files/MyLittleQuiz/Brony/Roseluck.png);
+}
+
+#content #lyra {
+    background-image: url(/files/MyLittleQuiz/Brony/Lyra.png);
+}
+
+#content #bonbon {
+    background-image: url(/files/MyLittleQuiz/Brony/BonBon.svg);
+}
+
+#content #r4-contestants table td.correct {
+    background-image: url(/files/MyLittleQuiz/Brony/Horseshoe.svg);
+}
+
+#content #octavia {
+    background-image: url(/files/MyLittleQuiz/Brony/Octavia.png);
+}
+
+#content #trophy {
+    background-image: url(/files/MyLittleQuiz/Brony/Trophy.png);
+}
+
+#content #logo::after {
+    background-image: url(/files/MyLittleQuiz/Brony/Logo.png);
+}

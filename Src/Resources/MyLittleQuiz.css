@@ -1,9 +1,4 @@
-﻿@font-face {
-    font-family: 'Celestia';
-    src: url('/files/MyLittleQuiz/Celestia.ttf') format('truetype');
-}
-
-* {
+﻿* {
     box-sizing: border-box;
     position: absolute;
 }
@@ -16,7 +11,6 @@ body {
     background: black;
     color: white;
     cursor: none;
-    font-family: 'Celestia', 'Celestia Redux', 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
 .static * {
@@ -102,7 +96,8 @@ body {
         width: 100vw;
         top: 5vh;
         height: 95vh;
-        background: url(/files/MyLittleQuiz/Derpy.png) right bottom no-repeat;
+        background-position: right bottom;
+        background-repeat: no-repeat;
         background-size: contain;
         transition: left ease-out .7s, top ease-in .5s;
         transition-delay: 3.2s, 0s;
@@ -147,18 +142,6 @@ body {
         #content .muffin.out {
             opacity: 0;
         }
-
-    #content .muffin1 {
-        background-image: url(/files/MyLittleQuiz/Muffin1_sm.png);
-    }
-
-    #content .muffin2 {
-        background-image: url(/files/MyLittleQuiz/Muffin2_sm.png);
-    }
-
-    #content .muffin3 {
-        background-image: url(/files/MyLittleQuiz/Muffin3_sm.png);
-    }
 
     #content #r1-contestants {
         text-align: center;
@@ -486,7 +469,8 @@ body {
             }
 
     #content #minuette {
-        background: url(/files/MyLittleQuiz/Minuette.png) bottom left no-repeat;
+        background-position: bottom left;
+        background-repeat: no-repeat;
         background-size: contain;
         top: 5vh;
         bottom: 0;
@@ -505,7 +489,8 @@ body {
         }
 
     #content #roseluck {
-        background: url(/files/MyLittleQuiz/Roseluck.png) bottom right no-repeat;
+        background-position: bottom right;
+        background-repeat: no-repeat;
         background-size: contain;
         top: 100vh;
         height: 75vh;
@@ -893,7 +878,8 @@ body {
         }
 
     #content #lyra {
-        background: url(/files/MyLittleQuiz/Lyra.png) bottom left no-repeat;
+        background-position: bottom left;
+        background-repeat: no-repeat;
         background-size: contain;
         top: 20vh;
         bottom: 0;
@@ -912,7 +898,8 @@ body {
         }
 
     #content #bonbon {
-        background: url(/files/MyLittleQuiz/BonBon.svg) bottom right no-repeat;
+        background-position: bottom right;
+        background-repeat: no-repeat;
         background-size: contain;
         top: 100vh;
         height: 60vh;
@@ -1258,7 +1245,6 @@ body {
                 }
 
                 #content #r4-contestants table td.correct {
-                    background-image: url(/files/MyLittleQuiz/Horseshoe.svg);
                     background-position: 50% 50%;
                     background-repeat: no-repeat;
                     background-size: contain;
@@ -1288,7 +1274,8 @@ body {
         width: 100vw;
         top: 2vh;
         bottom: 2vh;
-        background: url(/files/MyLittleQuiz/Octavia.png) left top no-repeat;
+        background-position: left top;
+        background-repeat: no-repeat;
         background-size: contain;
         transition: left ease-out 1.5s;
         transition-delay: .5s;
@@ -1307,7 +1294,6 @@ body {
         top: 5vh;
         right: 0;
         bottom: 0;
-        background-image: url(/files/MyLittleQuiz/Trophy.png);
         background-repeat: no-repeat;
         background-size: contain;
         background-position: 50% 50%;
@@ -1388,7 +1374,6 @@ body {
         left: 0;
         bottom: 0;
         right: 0;
-        background-image: url(/files/MyLittleQuiz/Logo.png);
         background-position: 50% 50%;
         background-size: contain;
         background-repeat: no-repeat;

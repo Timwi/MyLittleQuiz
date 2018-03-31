@@ -24,13 +24,13 @@ $(function ()
         {
             var q = $('#preloadableAudio' + i);
             if (!q.length)
-                $(document.body).append("<audio src='/files/MyLittleQuiz/Generated/" + preloadableJingles[i] + ".ogg' id='preloadableAudio" + i + "'>");
+                $(document.body).append("<audio src='/files/MyLittleQuiz/GeneratedMusic/" + preloadableJingles[i] + ".ogg' id='preloadableAudio" + i + "'>");
         }
         // Pre-buffer the intro video if we are likely to need it soon
         if (bgClass == 'setup' || bgClass == 'intro')
         {
             if (!$('#intro').length)
-                $('<video id="intro" src="/files/MyLittleQuiz/Generated/Intro.mp4">').appendTo(content);
+                $('<video id="intro" src="/files/MyLittleQuiz/' + $('#content').data('package') + '/Intro.mp4">').appendTo(content);
         }
 
         $('.away.out').remove();
@@ -135,13 +135,13 @@ $(function ()
     }
 
     musics = {
-        Music1: { url: '/files/MyLittleQuiz/Generated/Music1.ogg', fadeIn: 0, fadeOut: 1, volume: .3 },
-        Music2: { url: '/files/MyLittleQuiz/Generated/Music2.ogg', fadeIn: 0, fadeOut: 1, volume: .3 },
-        Music3: { url: '/files/MyLittleQuiz/Generated/Music3.ogg', fadeIn: 0, fadeOut: 1, volume: .3 },
-        Music4: { url: '/files/MyLittleQuiz/Generated/Music4.ogg', fadeIn: 0, fadeOut: 1, volume: .3 },
+        Music1: { url: '/files/MyLittleQuiz/GeneratedMusic/Music1.ogg', fadeIn: 0, fadeOut: 1, volume: .3 },
+        Music2: { url: '/files/MyLittleQuiz/GeneratedMusic/Music2.ogg', fadeIn: 0, fadeOut: 1, volume: .3 },
+        Music3: { url: '/files/MyLittleQuiz/GeneratedMusic/Music3.ogg', fadeIn: 0, fadeOut: 1, volume: .3 },
+        Music4: { url: '/files/MyLittleQuiz/GeneratedMusic/Music4.ogg', fadeIn: 0, fadeOut: 1, volume: .3 },
     };
 
-    jingleUrl = function (p) { return '/files/MyLittleQuiz/Generated/' + p + '.ogg'; };
+    jingleUrl = function (p) { return '/files/MyLittleQuiz/GeneratedMusic/' + p + '.ogg'; };
 
     transitions = {
 
@@ -152,6 +152,7 @@ $(function ()
 
         setup: function (p)
         {
+            $('#content').data('package', p.graphicsPackage);
             clearScreen('setup');
             div = $('<div class="setup phrase away">').appendTo(content).addClassDelay('in');
 
@@ -192,6 +193,7 @@ $(function ()
 
         intro: function (p)
         {
+            $('#content').data('package', p.graphicsPackage);
             clearScreen('intro');
             $('#content *').not('video').remove();
             $('#intro').addClass('visible');
