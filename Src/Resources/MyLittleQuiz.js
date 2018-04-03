@@ -1,40 +1,36 @@
 ﻿/// <reference path="Global.js" />
 $(function ()
 {
+    var globalData = $(document.body).data('data');
+
     var content = $('#content');
-
-    var preloadableImages = ["BonBon.svg", "Derpy.png", "Horseshoe.svg", "Logo.png", "Lyra.png", "Minuette.png", "Muffin1_sm.png", "Muffin2_sm.png", "Muffin3_sm.png",
-        "Octavia.png", "Roseluck.png", "SweetieBelle.png", "Trophy.png"];
-
-    var preloadableJingles = ["Round1CorrectAnswer", "Round1WrongAnswer", "Present", "Tada", "Swoosh", "PresentSet", "Round3CorrectAnswer", "Round3WrongAnswer",
-        "Round1Start", "Round2Start", "Round3Start", "Round4Start", "WinnerAndOutro"];
 
     function clearScreen(bgClass, except)
     {
         // There are some items we want to ensure are pre-buffered (mostly images).
         // Make sure that there is always an ‘img’ element for each such image.
-        for (var i = 0; i < preloadableImages.length; i++)
+        for (var i = 0; i < globalData.PreloadableImages.length; i++)
         {
             var p = $('#preloadable' + i);
             if (!p.length)
-                content.append("<img src='/files/MyLittleQuiz/" + preloadableImages[i] + "' id='preloadable" + i + "' class='preloadable'>");
+                content.append("<img src='/files/MyLittleQuiz/" + globalData.PreloadableImages[i] + "' id='preloadable" + i + "' class='preloadable'>");
         }
         // Create an audio element for every jingle
-        for (i = 0; i < preloadableJingles.length; i++)
+        for (i = 0; i < globalData.PreloadableJingles.length; i++)
         {
             var q = $('#preloadableAudio' + i);
             if (!q.length)
-                $(document.body).append("<audio src='/files/MyLittleQuiz/GeneratedMusic/" + preloadableJingles[i] + ".ogg' id='preloadableAudio" + i + "'>");
+                $(document.body).append("<audio src='/files/MyLittleQuiz/GeneratedMusic/" + globalData.PreloadableJingles[i] + ".ogg' id='preloadableAudio" + i + "'>");
         }
         // Pre-buffer the intro video if we are likely to need it soon
         if (bgClass == 'setup' || bgClass == 'intro')
         {
             if (!$('#intro').length)
-                $('<video id="intro" src="/files/MyLittleQuiz/' + $('#content').data('package') + '/Intro.mp4">').appendTo(content);
+                $('<video id="intro" src="/files/MyLittleQuiz/' + globalData.GraphicsPackage + '/Intro.mp4">').appendTo(content);
         }
 
         $('.away.out').remove();
-        $('#intro').removeClass('visible');
+        $('#intro').removeClass('visible')[0].pause();
         var consider = $('.away');
         if (except)
             consider = consider.not(except);
@@ -152,12 +148,11 @@ $(function ()
 
         setup: function (p)
         {
-            $('#content').data('package', p.graphicsPackage);
             clearScreen('setup');
             div = $('<div class="setup phrase away">').appendTo(content).addClassDelay('in');
 
             var msgs;
-            switch (p.graphicsPackage)
+            switch (globalData.GraphicsPackage)
             {
                 case 'Brony':
                     msgs = [
@@ -205,7 +200,6 @@ $(function ()
 
         intro: function (p)
         {
-            $('#content').data('package', p.graphicsPackage);
             clearScreen('intro');
             $('#content *').not('video').remove();
             $('#intro').addClass('visible');
@@ -329,7 +323,7 @@ $(function ()
                 .appendTo(content);
 
             var div1 = $('<div id="r1-intro-title" class="r1-intro static away">')
-                .text('Round 1')
+                .text(globalData.Round1Title)
                 .addClassDelay('in')
                 .appendTo(content)
                 .css({ left: content.width() - derpyWidth });
@@ -375,11 +369,11 @@ $(function ()
             $('.r2-intro').remove();
             clearScreen('r2');
 
-            $('<div class="r2-intro r2-intro-title away static" id="r2-intro-title">').addClassDelay('in').appendTo(content)
-                .append($('<span>').text('Round 2'));
+            $('<div class="r2-intro r2-intro-title away" id="r2-intro-title">').addClassDelay('in').appendTo(content)
+                .append($('<span>').text(globalData.Round2Title));
             $('<div class="r2-intro away" id="minuette">').addClassDelay('in').appendTo(content);
-            $('<div class="r2-intro r2-intro-title away static" id="r2-intro-subtitle">').addClassDelay('in').appendTo(content)
-                .append($('<span>').text('Categories'));
+            $('<div class="r2-intro r2-intro-title away" id="r2-intro-subtitle">').addClassDelay('in').appendTo(content)
+                .append($('<span>').text(globalData.Round2Name));
             $('<div class="r2-intro away" id="roseluck">').addClassDelay('in').appendTo(content);
         },
 
@@ -450,7 +444,7 @@ $(function ()
             clearScreen('r3');
 
             $('<div class="r3-intro away static" id="r3-intro-title">').addClassDelay('in').appendTo(content)
-                .append($('<span>').text('Round 3'));
+                .append($('<span>').text(globalData.Round3Title));
             $('<div class="r3-intro away" id="lyra">').addClassDelay('in').appendTo(content);
             $('<div class="r3-intro away" id="bonbon">').addClassDelay('in').appendTo(content);
         },
@@ -681,7 +675,7 @@ $(function ()
             $('.r4-intro').remove();
             clearScreen('r4');
 
-            var span1 = $('<span>').text('Round 4');
+            var span1 = $('<span>').text(globalData.Round4Title);
             var div1 = $('<div id="r4-intro-title" class="r4-intro r4-style static away">')
                 .append(span1)
                 .addClassDelay('in')
@@ -699,7 +693,7 @@ $(function ()
             r4_addBackground(div1, content.width() / 2, div1.height(), 0, false, factor);
             div1.css('padding-left', (content.width() - span1.outerWidth()) * factor);
 
-            var span2 = $('<span>').text('Sudden Death');
+            var span2 = $('<span>').text(globalData.Round4Name);
             var div2 = $('<div id="r4-intro-subtitle" class="r4-intro r4-style static away">')
                 .append(span2)
                 .addClassDelay('in')

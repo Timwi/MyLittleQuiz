@@ -1,0 +1,41 @@
+<html>
+    <head>
+        <title>My Little Quiz - registration</title>
+        <style>
+            @font-face {
+                font-family: 'Celestia';
+                src: url('Celestia.ttf') format('truetype');
+            }
+
+            body { background: #00186F; }
+            div { position: absolute; }
+            .logo { 
+                top: 15vh; bottom: 15vh; left: 0; right: 0;
+                background: url(Logo.png) 50% 50% no-repeat;
+                background-size: contain;
+            }
+            .top, .bottom {
+                left: 0; right: 0;
+                font-size: 20vh;
+                text-align: center;
+                color: white;
+                font-family: 'Celestia';
+                line-height: 1;
+                padding-bottom: .2em;
+                text-shadow: 1vh 1vh .5vh rgba(0, 0, 0, .7);
+            }
+            .top {
+                top: 0;
+            }
+            .bottom {
+                bottom: 5vh;
+                font-size: 8vh;
+            }
+        </style>
+    </head>
+    <body>
+        <div class='logo'></div>
+        <div class='top'>Be a contestant!</div>
+        <div class='bottom'>To register, please talk to Tree Sharp</div>
+    </body>
+</html>

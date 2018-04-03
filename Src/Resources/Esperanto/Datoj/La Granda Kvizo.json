@@ -2,287 +2,284 @@
   ":fulltype": "Trophy.MyLittleQuiz.Quiz, MyLittleQuiz, Version=1.0.9999.9999, Culture=neutral, PublicKeyToken=null",
   "CurrentState": {
     ":fulltype": "Trophy.MyLittleQuiz.Setup, MyLittleQuiz, Version=1.0.9999.9999, Culture=neutral, PublicKeyToken=null",
-    "Contestants": {
-      ":refid": 0,
-      ":value": [
-        {
-          "Name": "Aike Müller",
-          "Roll": ""
-        },
-        {
-          "Name": "Aike Müller",
-          "Roll": ""
-        },
-        {
-          "Name": "Amelia Werner",
-          "Roll": ""
-        },
-        {
-          "Name": "Andreas Langholf",
-          "Roll": ""
-        },
-        {
-          "Name": "Anja Burkert",
-          "Roll": ""
-        },
-        {
-          "Name": "Annelies Rudolf",
-          "Roll": ""
-        },
-        {
-          "Name": "Bart Demeyere",
-          "Roll": ""
-        },
-        {
-          "Name": "Birke Dockhorn",
-          "Roll": ""
-        },
-        {
-          "Name": "Charlotte Sauer",
-          "Roll": ""
-        },
-        {
-          "Name": "Christa Koß",
-          "Roll": ""
-        },
-        {
-          "Name": "Christina Schwarzenstein",
-          "Roll": ""
-        },
-        {
-          "Name": "Clarissa Lohr",
-          "Roll": ""
-        },
-        {
-          "Name": "Conny Burkert",
-          "Roll": ""
-        },
-        {
-          "Name": "Constanze Schlesinger",
-          "Roll": ""
-        },
-        {
-          "Name": "Danka Leyk",
-          "Roll": ""
-        },
-        {
-          "Name": "Dieter Menke",
-          "Roll": ""
-        },
-        {
-          "Name": "Eduard Werner",
-          "Roll": ""
-        },
-        {
-          "Name": "Elisabeth Kuhl-Kruse",
-          "Roll": ""
-        },
-        {
-          "Name": "Elke Albrecht",
-          "Roll": ""
-        },
-        {
-          "Name": "Esther Langholf",
-          "Roll": ""
-        },
-        {
-          "Name": "Füller Marco",
-          "Roll": ""
-        },
-        {
-          "Name": "Floreal Gabalda",
-          "Roll": ""
-        },
-        {
-          "Name": "Florence Sans",
-          "Roll": ""
-        },
-        {
-          "Name": "Franz Kruse",
-          "Roll": ""
-        },
-        {
-          "Name": "Gunter Neue",
-          "Roll": ""
-        },
-        {
-          "Name": "Hanna Menke",
-          "Roll": ""
-        },
-        {
-          "Name": "Helmut Klünder",
-          "Roll": ""
-        },
-        {
-          "Name": "Ilse Jacques",
-          "Roll": ""
-        },
-        {
-          "Name": "Ivo Vercammen",
-          "Roll": ""
-        },
-        {
-          "Name": "Jenny Danzmayr",
-          "Roll": ""
-        },
-        {
-          "Name": "Jonas Sauer",
-          "Roll": ""
-        },
-        {
-          "Name": "Julius Werner",
-          "Roll": ""
-        },
-        {
-          "Name": "Kaŝi",
-          "Roll": ""
-        },
-        {
-          "Name": "Karin Frejarö",
-          "Roll": ""
-        },
-        {
-          "Name": "Klaus-Dieter Albrecht",
-          "Roll": ""
-        },
-        {
-          "Name": "Laura Klünder",
-          "Roll": ""
-        },
-        {
-          "Name": "Liba Gabalda",
-          "Roll": ""
-        },
-        {
-          "Name": "Mara Emilia Diestel",
-          "Roll": ""
-        },
-        {
-          "Name": "Marika Frense",
-          "Roll": ""
-        },
-        {
-          "Name": "Martin Sawitzki",
-          "Roll": ""
-        },
-        {
-          "Name": "Max Burkert",
-          "Roll": ""
-        },
-        {
-          "Name": "Maya Lou Diestel",
-          "Roll": ""
-        },
-        {
-          "Name": "Michael Kruse",
-          "Roll": ""
-        },
-        {
-          "Name": "Miro Johannes Diestel",
-          "Roll": ""
-        },
-        {
-          "Name": "Nicky Janssen",
-          "Roll": ""
-        },
-        {
-          "Name": "Nina Burkert",
-          "Roll": ""
-        },
-        {
-          "Name": "Norbert Karbe",
-          "Roll": ""
-        },
-        {
-          "Name": "Paŭlo Ebermann",
-          "Roll": ""
-        },
-        {
-          "Name": "Petra Dückershoff",
-          "Roll": ""
-        },
-        {
-          "Name": "Petro Chrdle",
-          "Roll": ""
-        },
-        {
-          "Name": "Rainer Rudolf",
-          "Roll": ""
-        },
-        {
-          "Name": "Rasa Miseikyte",
-          "Roll": ""
-        },
-        {
-          "Name": "Robert Weemeyer",
-          "Roll": ""
-        },
-        {
-          "Name": "Simone Kruse-Specht",
-          "Roll": ""
-        },
-        {
-          "Name": "Stefan Burkert",
-          "Roll": ""
-        },
-        {
-          "Name": "Stephanie Eilenberger",
-          "Roll": ""
-        },
-        {
-          "Name": "Sunita Mira Diestel",
-          "Roll": ""
-        },
-        {
-          "Name": "Thomas Demeyere",
-          "Roll": ""
-        },
-        {
-          "Name": "Tomio Frejarö",
-          "Roll": ""
-        },
-        {
-          "Name": "Toninho László",
-          "Roll": ""
-        },
-        {
-          "Name": "Tony Guyot",
-          "Roll": ""
-        },
-        {
-          "Name": "Tony László",
-          "Roll": ""
-        },
-        {
-          "Name": "Ulrike Diestel",
-          "Roll": ""
-        },
-        {
-          "Name": "Volframo Diestel",
-          "Roll": ""
-        },
-        {
-          "Name": "Witali Monastyrjow",
-          "Roll": ""
-        },
-        {
-          "Name": "Yves Bellefeuille",
-          "Roll": ""
-        },
-        {
-          "Name": "Zélia Sans",
-          "Roll": ""
-        },
-        {
-          "Name": "Zohra Sans",
-          "Roll": ""
-        }
-      ]
-    },
-    "CurrentJingle": "Round1CorrectAnswer",
+    ":refid": 0,
+    "Contestants": [
+      {
+        "Name": "Aike Müller",
+        "Roll": ""
+      },
+      {
+        "Name": "Aike Müller",
+        "Roll": ""
+      },
+      {
+        "Name": "Amelia Werner",
+        "Roll": ""
+      },
+      {
+        "Name": "Andreas Langholf",
+        "Roll": ""
+      },
+      {
+        "Name": "Anja Burkert",
+        "Roll": ""
+      },
+      {
+        "Name": "Annelies Rudolf",
+        "Roll": ""
+      },
+      {
+        "Name": "Bart Demeyere",
+        "Roll": ""
+      },
+      {
+        "Name": "Birke Dockhorn",
+        "Roll": ""
+      },
+      {
+        "Name": "Charlotte Sauer",
+        "Roll": ""
+      },
+      {
+        "Name": "Christa Koß",
+        "Roll": ""
+      },
+      {
+        "Name": "Christina Schwarzenstein",
+        "Roll": ""
+      },
+      {
+        "Name": "Clarissa Lohr",
+        "Roll": ""
+      },
+      {
+        "Name": "Conny Burkert",
+        "Roll": ""
+      },
+      {
+        "Name": "Constanze Schlesinger",
+        "Roll": ""
+      },
+      {
+        "Name": "Danka Leyk",
+        "Roll": ""
+      },
+      {
+        "Name": "Dieter Menke",
+        "Roll": ""
+      },
+      {
+        "Name": "Eduard Werner",
+        "Roll": ""
+      },
+      {
+        "Name": "Elisabeth Kuhl-Kruse",
+        "Roll": ""
+      },
+      {
+        "Name": "Elke Albrecht",
+        "Roll": ""
+      },
+      {
+        "Name": "Esther Langholf",
+        "Roll": ""
+      },
+      {
+        "Name": "Füller Marco",
+        "Roll": ""
+      },
+      {
+        "Name": "Floreal Gabalda",
+        "Roll": ""
+      },
+      {
+        "Name": "Florence Sans",
+        "Roll": ""
+      },
+      {
+        "Name": "Franz Kruse",
+        "Roll": ""
+      },
+      {
+        "Name": "Gunter Neue",
+        "Roll": ""
+      },
+      {
+        "Name": "Hanna Menke",
+        "Roll": ""
+      },
+      {
+        "Name": "Helmut Klünder",
+        "Roll": ""
+      },
+      {
+        "Name": "Ilse Jacques",
+        "Roll": ""
+      },
+      {
+        "Name": "Ivo Vercammen",
+        "Roll": ""
+      },
+      {
+        "Name": "Jenny Danzmayr",
+        "Roll": ""
+      },
+      {
+        "Name": "Jonas Sauer",
+        "Roll": ""
+      },
+      {
+        "Name": "Julius Werner",
+        "Roll": ""
+      },
+      {
+        "Name": "Kaŝi",
+        "Roll": ""
+      },
+      {
+        "Name": "Karin Frejarö",
+        "Roll": ""
+      },
+      {
+        "Name": "Klaus-Dieter Albrecht",
+        "Roll": ""
+      },
+      {
+        "Name": "Laura Klünder",
+        "Roll": ""
+      },
+      {
+        "Name": "Liba Gabalda",
+        "Roll": ""
+      },
+      {
+        "Name": "Mara Emilia Diestel",
+        "Roll": ""
+      },
+      {
+        "Name": "Marika Frense",
+        "Roll": ""
+      },
+      {
+        "Name": "Martin Sawitzki",
+        "Roll": ""
+      },
+      {
+        "Name": "Max Burkert",
+        "Roll": ""
+      },
+      {
+        "Name": "Maya Lou Diestel",
+        "Roll": ""
+      },
+      {
+        "Name": "Michael Kruse",
+        "Roll": ""
+      },
+      {
+        "Name": "Miro Johannes Diestel",
+        "Roll": ""
+      },
+      {
+        "Name": "Nicky Janssen",
+        "Roll": ""
+      },
+      {
+        "Name": "Nina Burkert",
+        "Roll": ""
+      },
+      {
+        "Name": "Norbert Karbe",
+        "Roll": ""
+      },
+      {
+        "Name": "Paŭlo Ebermann",
+        "Roll": ""
+      },
+      {
+        "Name": "Petra Dückershoff",
+        "Roll": ""
+      },
+      {
+        "Name": "Petro Chrdle",
+        "Roll": ""
+      },
+      {
+        "Name": "Rainer Rudolf",
+        "Roll": ""
+      },
+      {
+        "Name": "Rasa Miseikyte",
+        "Roll": ""
+      },
+      {
+        "Name": "Robert Weemeyer",
+        "Roll": ""
+      },
+      {
+        "Name": "Simone Kruse-Specht",
+        "Roll": ""
+      },
+      {
+        "Name": "Stefan Burkert",
+        "Roll": ""
+      },
+      {
+        "Name": "Stephanie Eilenberger",
+        "Roll": ""
+      },
+      {
+        "Name": "Sunita Mira Diestel",
+        "Roll": ""
+      },
+      {
+        "Name": "Thomas Demeyere",
+        "Roll": ""
+      },
+      {
+        "Name": "Tomio Frejarö",
+        "Roll": ""
+      },
+      {
+        "Name": "Toninho László",
+        "Roll": ""
+      },
+      {
+        "Name": "Tony Guyot",
+        "Roll": ""
+      },
+      {
+        "Name": "Tony László",
+        "Roll": ""
+      },
+      {
+        "Name": "Ulrike Diestel",
+        "Roll": ""
+      },
+      {
+        "Name": "Volframo Diestel",
+        "Roll": ""
+      },
+      {
+        "Name": "Witali Monastyrjow",
+        "Roll": ""
+      },
+      {
+        "Name": "Yves Bellefeuille",
+        "Roll": ""
+      },
+      {
+        "Name": "Zélia Sans",
+        "Roll": ""
+      },
+      {
+        "Name": "Zohra Sans",
+        "Roll": ""
+      }
+    ],
+    "CurrentJingle": null,
     "CurrentMusic": null,
     "Data": {
-      ":refid": 2,
       "Round1NumContestantsNeeded": 10,
       "Round1Questions": {},
       "Round2Categories": [],
@@ -291,36 +288,155 @@
       "Round4MinQuestions": 5,
       "Round4Questions": []
     },
-    "DeletedContestants": {
-      ":refid": 1,
-      ":value": []
-    },
-    "GraphicsPackage": "Esperanto"
+    "DeletedContestants": []
   },
   "GraphicsPackage": "Esperanto",
   "redo": [],
   "undo": [
     [
-      {
-        ":fulltype": "Trophy.MyLittleQuiz.Setup, MyLittleQuiz, Version=1.0.9999.9999, Culture=neutral, PublicKeyToken=null",
-        ":refid": 3,
-        "Contestants": { ":ref": 0 },
-        "CurrentJingle": null,
-        "CurrentMusic": null,
-        "Data": { ":ref": 2 },
-        "DeletedContestants": { ":ref": 1 },
-        "GraphicsPackage": "Esperanto"
-      },
+      { ":ref": 0 },
       null
     ],
     [
-      { ":ref": 3 },
+      { ":ref": 0 },
       "Test intros etc."
     ],
     [
-      { ":ref": 3 },
+      { ":ref": 0 },
+      "Test intros etc."
+    ],
+    [
+      { ":ref": 0 },
+      "Test intros etc."
+    ],
+    [
+      { ":ref": 0 },
+      "Test intros etc."
+    ],
+    [
+      { ":ref": 0 },
+      "Test intros etc."
+    ],
+    [
+      { ":ref": 0 },
+      "Test intros etc."
+    ],
+    [
+      { ":ref": 0 },
+      "Test intros etc."
+    ],
+    [
+      { ":ref": 0 },
+      "Test intros etc."
+    ],
+    [
+      { ":ref": 0 },
+      "Test intros etc."
+    ],
+    [
+      { ":ref": 0 },
+      "Test intros etc."
+    ],
+    [
+      { ":ref": 0 },
+      "Test intros etc."
+    ],
+    [
+      { ":ref": 0 },
+      "Test intros etc."
+    ],
+    [
+      { ":ref": 0 },
+      "Test intros etc."
+    ],
+    [
+      { ":ref": 0 },
+      "Test intros etc."
+    ],
+    [
+      { ":ref": 0 },
+      "Test intros etc."
+    ],
+    [
+      { ":ref": 0 },
+      "Test intros etc."
+    ],
+    [
+      { ":ref": 0 },
+      "Test intros etc."
+    ],
+    [
+      { ":ref": 0 },
+      "Test intros etc."
+    ],
+    [
+      { ":ref": 0 },
+      "Test intros etc."
+    ],
+    [
+      { ":ref": 0 },
+      "Test intros etc."
+    ],
+    [
+      { ":ref": 0 },
+      "Test intros etc."
+    ],
+    [
+      { ":ref": 0 },
+      "Test intros etc."
+    ],
+    [
+      { ":ref": 0 },
+      "Test intros etc."
+    ],
+    [
+      { ":ref": 0 },
+      "Test intros etc."
+    ],
+    [
+      { ":ref": 0 },
+      "Test intros etc."
+    ],
+    [
+      { ":ref": 0 },
+      "Test intros etc."
+    ],
+    [
+      { ":ref": 0 },
+      "Test intros etc."
+    ],
+    [
+      { ":ref": 0 },
+      "Test intros etc."
+    ],
+    [
+      { ":ref": 0 },
+      "Test intros etc."
+    ],
+    [
+      { ":ref": 0 },
+      "Test intros etc."
+    ],
+    [
+      { ":ref": 0 },
+      "Test intros etc."
+    ],
+    [
+      { ":ref": 0 },
+      "Test intros etc."
+    ],
+    [
+      { ":ref": 0 },
+      "Test intros etc."
+    ],
+    [
+      { ":ref": 0 },
+      "Test intros etc."
+    ],
+    [
+      { ":ref": 0 },
       "Test intros etc."
     ]
   ],
-  "UndoLine": "Play jingle"
+  "UndoLine": "Test intros etc."
 }

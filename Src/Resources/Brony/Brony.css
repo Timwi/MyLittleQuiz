@@ -7,6 +7,26 @@ body {
     font-family: 'Celestia', 'Celestia Redux', 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
+#content #background.setup {
+    background-color: hsl(300, 100%, 20%);
+}
+
+#content #background.r1 {
+    background-color: hsl(240, 100%, 16%);
+}
+
+#content #background.r2 {
+    background-color: hsl(240, 100%, 12%);
+}
+
+#content #background.r3 {
+    background-color: hsl(240, 100%, 8%);
+}
+
+#content #background.r4 {
+    background-color: hsl(240, 100%, 0%);
+}
+
 #content #derpy {
     background-image: url(/files/MyLittleQuiz/Brony/Derpy.png);
 }

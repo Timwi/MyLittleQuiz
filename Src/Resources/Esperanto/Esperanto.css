@@ -1,0 +1,81 @@
+﻿@font-face {
+    font-family: 'Trebuchet';
+    src: url('/files/MyLittleQuiz/Esperanto/trebuc.ttf') format('truetype');
+}
+
+body {
+    font-family: 'Trebuchet', 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+/* DEBUG */
+#content #background {
+    transition: background-color ease-in-out 1s !important;
+}
+
+#content #background.setup {
+    background-color: hsl(120, 100%, 15%);
+}
+
+#content #background.r1 {
+    background-color: hsl(120, 100%, 10%);
+}
+
+#content #background.r2 {
+    background-color: hsl(240, 100%, 8%);
+}
+
+#content #background.r3 {
+    background-color: hsl(240, 100%, 4%);
+}
+
+#content #background.r4 {
+    background-color: #000;
+}
+
+#content #derpy {
+    background-image: url(/files/MyLittleQuiz/Esperanto/R1bg.png);
+}
+
+#content .muffin1 {
+    background-image: url(/files/MyLittleQuiz/Esperanto/R1a.png);
+}
+
+#content .muffin2 {
+    background-image: url(/files/MyLittleQuiz/Esperanto/R1b.png);
+}
+
+#content .muffin3 {
+    background-image: url(/files/MyLittleQuiz/Esperanto/R1c.png);
+}
+
+#content #minuette {
+    background-image: url(/files/MyLittleQuiz/Esperanto/R2a.png);
+}
+
+#content #roseluck {
+    background-image: url(/files/MyLittleQuiz/Esperanto/R2b.png);
+}
+
+#content #lyra {
+    background-image: url(/files/MyLittleQuiz/Esperanto/Lyra.png);
+}
+
+#content #bonbon {
+    background-image: url(/files/MyLittleQuiz/Esperanto/BonBon.svg);
+}
+
+#content #r4-contestants table td.correct {
+    background-image: url(/files/MyLittleQuiz/Esperanto/Horseshoe.svg);
+}
+
+#content #octavia {
+    background-image: url(/files/MyLittleQuiz/Esperanto/Octavia.png);
+}
+
+#content #trophy {
+    background-image: url(/files/MyLittleQuiz/Esperanto/Trophy.png);
+}
+
+#content #logo::after {
+    background-image: url(/files/MyLittleQuiz/Esperanto/Logo.png);
+}

@@ -10,14 +10,11 @@ namespace Trophy.MyLittleQuiz
 {
     public sealed class Setup : QuizStateBase
     {
-        public Setup(string graphicsPackage)
+        public Setup()
         {
             Contestants = new List<Contestant>(); ;
             DeletedContestants = new List<Contestant>();
-            GraphicsPackage = graphicsPackage;
         }
-
-        private Setup() { } // for Classify
 
         [ClassifyNotNull]
         public List<Contestant> Contestants { get; private set; }
@@ -26,7 +23,6 @@ namespace Trophy.MyLittleQuiz
 
         public Music? CurrentMusic { get; private set; } = null;
         public Jingle? CurrentJingle { get; private set; } = null;
-        public string GraphicsPackage { get; private set; }
 
         [ClassifyNotNull]
         public QuizData Data = new QuizData();
@@ -81,7 +77,7 @@ namespace Trophy.MyLittleQuiz
 
                 yield return Transition.Select(ConsoleKey.J, "Play jingle", EnumStrong.GetValues<Jingle>(), j => j.ToString(), j => this.ApplyToClone(th => { th.CurrentJingle = j; }));
 
-                yield return Transition.Simple(ConsoleKey.I, "Play intro", "intro", new { graphicsPackage = GraphicsPackage });
+                yield return Transition.Simple(ConsoleKey.I, "Play intro", "intro");
 
                 yield return Transition.Select(ConsoleKey.T, "Test intros etc.",
                     Ut.NewArray(
@@ -106,7 +102,7 @@ namespace Trophy.MyLittleQuiz
         }
 
         public override string JsMethod { get { return "setup"; } }
-        public override object JsParameters { get { return new { graphicsPackage = GraphicsPackage }; } }
+        public override object JsParameters { get { return null; } }
         public override string JsMusic { get { return CurrentMusic?.ToString(); } }
         public override string JsJingle { get { return CurrentJingle?.ToString(); } }
     }

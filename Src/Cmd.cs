@@ -6,7 +6,7 @@ namespace Trophy.MyLittleQuiz
     sealed class Cmd : QuizCmdStart
     {
         [IsPositional, DocumentationLiteral("Specifies the graphics package. Default is Brony.")]
-        public string GraphicsPackage = "Brony";
+        public GraphicsPackage GraphicsPackage = GraphicsPackage.Brony;
 
         public override QuizBase StartState { get { return new Quiz(GraphicsPackage); } }
     }

@@ -1,5 +1,11 @@
 ﻿namespace Trophy.MyLittleQuiz
 {
+    public enum GraphicsPackage
+    {
+        Brony,
+        Esperanto
+    }
+
     public enum Difficulty
     {
         Easy,

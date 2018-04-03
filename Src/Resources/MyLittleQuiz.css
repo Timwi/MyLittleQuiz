@@ -51,26 +51,6 @@ body {
         transition: background-color ease-in-out 12s;
     }
 
-        #content #background.setup {
-            background-color: hsl(300, 100%, 20%);
-        }
-
-        #content #background.r1 {
-            background-color: hsl(240, 100%, 16%);
-        }
-
-        #content #background.r2 {
-            background-color: hsl(240, 100%, 12%);
-        }
-
-        #content #background.r3 {
-            background-color: hsl(240, 100%, 8%);
-        }
-
-        #content #background.r4 {
-            background-color: hsl(240, 100%, 0%);
-        }
-
     #content .setup.phrase {
         width: 60vw;
         top: 50%;
@@ -515,29 +495,30 @@ body {
         margin: .5em 0;
         background: hsl(220, 60%, 33.3%);
         box-shadow: inset -.05em -.15em 0 hsl(220, 60%, 25%);
+        height: 17vh;
     }
 
         #content .r2-intro-title::before {
             content: '';
             position: absolute;
-            top: .1em;
-            left: .7em;
-            right: .8em;
-            height: .2em;
+            top: 1vh;
+            left: 7vh;
+            right: 8vh;
+            height: 2vh;
             background: hsl(220, 50%, 40%);
-            border-radius: 2em;
+            border-radius: 20vh;
             transition: background ease-in-out .7s;
         }
 
         #content .r2-intro-title::after {
             content: '';
             position: absolute;
-            top: .7em;
-            left: .2em;
-            width: .5em;
-            height: .5em;
+            top: 7vh;
+            left: 2vh;
+            width: 5vh;
+            height: 5vh;
             background: hsl(220, 50%, 50%);
-            border-radius: 2em;
+            border-radius: 20vh;
             transition: background ease-in-out .7s;
         }
 
@@ -553,10 +534,16 @@ body {
         left: -80vw;
         width: 75vw;
         transform: scale(.1);
-        text-align: right;
         transition: left ease-out 1.4s, transform ease-out 1.4s;
         transition-delay: 2.7s;
     }
+
+        #content #r2-intro-title span {
+            position: absolute;
+            top: 50%;
+            right: 8vh;
+            transform: translateY(-50%);
+        }
 
         #content #r2-intro-title.in {
             left: 0;
@@ -577,6 +564,13 @@ body {
         transition: right ease-out 1.4s, transform ease-out 1.4s;
         transition-delay: 4.4s;
     }
+
+        #content #r2-intro-subtitle span {
+            position: absolute;
+            top: 50%;
+            left: 12vh;
+            transform: translateY(-50%);
+        }
 
         #content #r2-intro-subtitle.in {
             right: 0;
@@ -935,8 +929,8 @@ body {
         #content #r3-intro-title span {
             position: absolute;
             left: 59%;
-            top: 0;
-            transform: translateX(-50%);
+            top: 50%;
+            transform: translate(-50%, -50%);
             font-size: 20vh;
             line-height: 1;
             white-space: nowrap;

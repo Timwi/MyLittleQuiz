@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.0"
+   width="260"
+   height="260"
+   id="svg2"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="R1b.svg"
+   inkscape:export-filename="D:\c\MyLittleQuiz\Src\Resources\Esperanto\R1b.png"
+   inkscape:export-xdpi="180"
+   inkscape:export-ydpi="180">
+  <metadata
+     id="metadata3029">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="640"
+     inkscape:window-height="480"
+     id="namedview3027"
+     showgrid="false"
+     inkscape:zoom="1.863851"
+     inkscape:cx="24.48139"
+     inkscape:cy="110.49472"
+     inkscape:current-layer="svg2" />
+  <defs
+     id="defs4">
+    <linearGradient
+       id="linearGradient2760">
+      <stop
+         style="stop-color:#008600;stop-opacity:1"
+         offset="0"
+         id="stop2762" />
+      <stop
+         style="stop-color:#00be00;stop-opacity:1"
+         offset="1"
+         id="stop2764" />
+    </linearGradient>
+    <linearGradient
+       x1="-72.777122"
+       y1="446.85532"
+       x2="267.06284"
+       y2="446.85532"
+       id="linearGradient2766"
+       xlink:href="#linearGradient2760"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-6.7977731,-15.077165)" />
+  </defs>
+  <g
+     transform="translate(-11.106857,-5.8115449)"
+     id="layer1">
+    <path
+       d="M 97.142865,286.44063 136.5931,409.49215 265.81284,408.98655 160.97469,484.53096 201.38664,607.27 97.142861,530.90749 -7.1009243,607.26999 33.311036,484.53096 -71.527119,408.98654 57.692623,409.49215 97.142865,286.44063 z"
+       transform="matrix(0.735534,0,0,0.735433,69.65498,-192.8206)"
+       style="fill:url(#linearGradient2766);fill-opacity:1;fill-rule:evenodd;stroke:#007f00;stroke-width:2.54934263;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       id="path1872"
+       inkscape:connector-curvature="0" />
+  </g>
+</svg>
