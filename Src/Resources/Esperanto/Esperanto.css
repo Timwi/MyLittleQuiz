@@ -33,43 +33,49 @@ body {
 }
 
 #content #derpy {
-    background-image: url(/files/MyLittleQuiz/Esperanto/R1bg.png);
+    background-image: url(/files/MyLittleQuiz/Esperanto/R1bg.svg);
 }
 
 #content .muffin1 {
-    background-image: url(/files/MyLittleQuiz/Esperanto/R1a.png);
+    background-image: url(/files/MyLittleQuiz/Esperanto/R1a.svg);
 }
 
 #content .muffin2 {
-    background-image: url(/files/MyLittleQuiz/Esperanto/R1b.png);
+    background-image: url(/files/MyLittleQuiz/Esperanto/R1b.svg);
 }
 
 #content .muffin3 {
-    background-image: url(/files/MyLittleQuiz/Esperanto/R1c.png);
+    background-image: url(/files/MyLittleQuiz/Esperanto/R1c.svg);
 }
 
 #content #minuette {
-    background-image: url(/files/MyLittleQuiz/Esperanto/R2a.png);
+    background-image: url(/files/MyLittleQuiz/Esperanto/R2a.svg);
 }
+    #content #minuette.in {
+        left: -5vw;
+    }
 
 #content #roseluck {
-    background-image: url(/files/MyLittleQuiz/Esperanto/R2b.png);
+    background-image: url(/files/MyLittleQuiz/Esperanto/R2b.svg);
 }
 
 #content #lyra {
-    background-image: url(/files/MyLittleQuiz/Esperanto/Lyra.png);
+    background-image: url(/files/MyLittleQuiz/Esperanto/R3a.svg);
 }
+    #content #lyra.in {
+        left: -5vw !important;
+    }
 
 #content #bonbon {
-    background-image: url(/files/MyLittleQuiz/Esperanto/BonBon.svg);
+    background-image: url(/files/MyLittleQuiz/Esperanto/R3b.svg);
 }
 
 #content #r4-contestants table td.correct {
-    background-image: url(/files/MyLittleQuiz/Esperanto/Horseshoe.svg);
+    background-image: url(/files/MyLittleQuiz/Esperanto/R1b.svg);
 }
 
 #content #octavia {
-    background-image: url(/files/MyLittleQuiz/Esperanto/Octavia.png);
+    background-image: url(/files/MyLittleQuiz/Esperanto/R4.svg);
 }
 
 #content #trophy {

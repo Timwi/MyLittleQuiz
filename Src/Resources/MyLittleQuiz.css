@@ -1261,6 +1261,7 @@ body {
     #content .r4-intro span {
         white-space: nowrap;
         padding: 0 .4em;
+        text-shadow: 0 0 5vh rgba(0, 0, 0, .7);
     }
 
     #content #octavia {

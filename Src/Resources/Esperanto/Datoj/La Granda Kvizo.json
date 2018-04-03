@@ -291,11 +291,90 @@
     "DeletedContestants": []
   },
   "GraphicsPackage": "Esperanto",
-  "redo": [],
-  "undo": [
+  "redo": [
     [
       { ":ref": 0 },
-      null
+      "Test intros etc."
+    ],
+    [
+      { ":ref": 0 },
+      "Test intros etc."
+    ],
+    [
+      { ":ref": 0 },
+      "Test intros etc."
+    ],
+    [
+      { ":ref": 0 },
+      "Test intros etc."
+    ],
+    [
+      { ":ref": 0 },
+      "Test intros etc."
+    ],
+    [
+      { ":ref": 0 },
+      "Test intros etc."
+    ],
+    [
+      { ":ref": 0 },
+      "Test intros etc."
+    ],
+    [
+      { ":ref": 0 },
+      "Test intros etc."
+    ],
+    [
+      { ":ref": 0 },
+      "Test intros etc."
+    ],
+    [
+      { ":ref": 0 },
+      "Test intros etc."
+    ],
+    [
+      { ":ref": 0 },
+      "Test intros etc."
+    ],
+    [
+      { ":ref": 0 },
+      "Test intros etc."
+    ],
+    [
+      { ":ref": 0 },
+      "Test intros etc."
+    ],
+    [
+      { ":ref": 0 },
+      "Test intros etc."
+    ],
+    [
+      { ":ref": 0 },
+      "Test intros etc."
+    ],
+    [
+      { ":ref": 0 },
+      "Test intros etc."
+    ],
+    [
+      { ":ref": 0 },
+      "Test intros etc."
+    ],
+    [
+      { ":ref": 0 },
+      "Test intros etc."
+    ],
+    [
+      { ":ref": 0 },
+      "Test intros etc."
+    ],
+    [
+      { ":ref": 0 },
+      "Test intros etc."
+    ],
+    [
+      { ":ref": 0 },
+      "Test intros etc."
     ],
     [
       { ":ref": 0 },
@@ -438,5 +517,5 @@
       "Test intros etc."
     ]
   ],
-  "UndoLine": "Test intros etc."
+  "undo": []
 }

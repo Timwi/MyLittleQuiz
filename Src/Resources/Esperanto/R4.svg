@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 -3.336 912 453.336">
+<defs>
+<linearGradient id="lg">
+<stop offset="0"   style="stop-color:hsl(240, 33%, 20%);stop-opacity:1;" />
+<stop offset="0.2" style="stop-color:hsl(240, 15%, 47%);stop-opacity:1;" />
+<stop offset="0.3" style="stop-color:hsl(240, 17%, 60%);stop-opacity:1;" />
+<stop offset="0.9" style="stop-color:hsl(240, 50%, 13%);stop-opacity:1;" />
+<stop offset="1"   style="stop-color:hsl(240, 33%, 20%);stop-opacity:1;" />
+</linearGradient>
+<linearGradient xlink:href="#lg" id="lqh" x1="0" y1="0" x2=".1" y2="1" />
+</defs>
+<path style="fill:url(#lqh)" d="M 137.92000000000002,0 187.92000000000002,0 300.42,225 187.92000000000002,450 137.92000000000002,450 25.420000000000016,225 z" />
+<line x1="25.420000000000016" y1="225" x2="137.92000000000002" y2="0" stroke="hsl(240, 25%, 73%)" stroke-width="3.336" />
+<line x1="137.92000000000002" y1="0" x2="187.92000000000002" y2="0" stroke="hsl(240, 16%, 40%)" stroke-width="3.336" />
+<line x1="187.92000000000002" y1="0" x2="300.42" y2="225" stroke="hsl(240, 25%, 27%)" stroke-width="3.336" />
+<line x1="300.42" y1="225" x2="187.92000000000002" y2="450" stroke="hsl(240, 50%, 13%)" stroke-width="3.336" />
+<line x1="187.92000000000002" y1="450" x2="137.92000000000002" y2="450" stroke="hsl(240, 50%, 13%)" stroke-width="3.336" />
+<line x1="137.92000000000002" y1="450" x2="25.420000000000016" y2="225" stroke="hsl(240, 20%, 33%)" stroke-width="3.336" />
+</svg>
