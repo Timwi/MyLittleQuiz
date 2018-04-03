@@ -156,28 +156,40 @@ $(function ()
             clearScreen('setup');
             div = $('<div class="setup phrase away">').appendTo(content).addClassDelay('in');
 
-            var msgs = [
-                'The administrator pony is setting stuff up...',
-                'Ponying something up...',
-                'Now I’m awoken and I’m setting something up!',
-                'Isn’t it great to be set up?',
-                'Fillies and Gentlecolts! Setup in progress!',
-                'While I’m setting this up, will you read my fanfic?',
-                'Silly foals with silly dreams, together while I set this up...',
-                'Pegasus, fly! Fly far while I set this up here...',
-                'Setting up the Magic of Friendship...',
-                'Dear Princess Celestia, I’m setting this up.',
-                'Take me to the place where everything’s set up',
-                'Let’s get this party set up!',
-                'I can set this up in 10 seconds flat...',
-                'It needs... about 20% more setup.',
-                'Until I’ve set this up, join the herd!',
-                'I watch it for the setup.',
-                'Can you do that? Can you set it up twice?',
-                'What fun is there in ever setting it up?',
-                'Human beings fascinate me, setting up the way they do...',
-                'Don’t set up at night.'
-            ];
+            var msgs;
+            switch (p.graphicsPackage)
+            {
+                case 'Brony':
+                    msgs = [
+                        'The administrator pony is setting stuff up...',
+                        'Ponying something up...',
+                        'Now I’m awoken and I’m setting something up!',
+                        'Isn’t it great to be set up?',
+                        'Fillies and Gentlecolts! Setup in progress!',
+                        'While I’m setting this up, will you read my fanfic?',
+                        'Silly foals with silly dreams, together while I set this up...',
+                        'Pegasus, fly! Fly far while I set this up here...',
+                        'Setting up the Magic of Friendship...',
+                        'Dear Princess Celestia, I’m setting this up.',
+                        'Take me to the place where everything’s set up',
+                        'Let’s get this party set up!',
+                        'I can set this up in 10 seconds flat...',
+                        'It needs... about 20% more setup.',
+                        'Until I’ve set this up, join the herd!',
+                        'I watch it for the setup.',
+                        'Can you do that? Can you set it up twice?',
+                        'What fun is there in ever setting it up?',
+                        'Human beings fascinate me, setting up the way they do...',
+                        'Don’t set up at night.'
+                    ];
+                    break;
+
+                case 'Esperanto':
+                    msgs = [
+                        'Atendu dum\u00a0la preparado'
+                    ];
+                    break;
+            }
             var msg = msgs[Math.floor(Math.random() * msgs.length)];
             div.html(msg);
             findBestValue(100, function (fs)
