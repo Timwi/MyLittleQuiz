@@ -23,8 +23,8 @@ namespace Trophy.MyLittleQuiz
                     GraphicsPackage = GraphicsPackage,
 
                     PreloadableImages =
-                        GraphicsPackage == GraphicsPackage.Brony ? new[] { "BonBon.svg", "Derpy.png", "Horseshoe.svg", "Logo.png", "Lyra.png", "Minuette.png", "Muffin1_sm.png", "Muffin2_sm.png", "Muffin3_sm.png", "Octavia.png", "Roseluck.png", "SweetieBelle.png", "Trophy.png" } :
-                        GraphicsPackage == GraphicsPackage.Esperanto ? new[] { "BonBon.svg", "Derpy.png", "Horseshoe.svg", "Logo.png", "Lyra.png", "Minuette.png", "Muffin1_sm.png", "Muffin2_sm.png", "Muffin3_sm.png", "Octavia.png", "Roseluck.png", "SweetieBelle.png", "Trophy.png" } :
+                        GraphicsPackage == GraphicsPackage.Brony ? new[] { "BonBon.svg", "Derpy.png", "Horseshoe.svg", "Logo.png", "Lyra.png", "Minuette.png", "Muffin1_sm.png", "Muffin2_sm.png", "Muffin3_sm.png", "Octavia.png", "Roseluck.png", "Trophy.png" } :
+                        GraphicsPackage == GraphicsPackage.Esperanto ? new[] { "R1bg.svg", "R1a.svg", "R1b.svg", "R1c.svg", "R2a.svg", "R2b.svg", "R3a.svg", "R3b.svg", "R4.svg", "Logo.png", "Trophy.png" } :
                         new string[0],
 
                     PreloadableJingles = new[] { "Round1CorrectAnswer", "Round1WrongAnswer", "Present", "Tada", "Swoosh", "PresentSet", "Round3CorrectAnswer", "Round3WrongAnswer", "Round1Start", "Round2Start", "Round3Start", "Round4Start", "WinnerAndOutro" },
