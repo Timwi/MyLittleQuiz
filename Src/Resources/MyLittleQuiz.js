@@ -182,7 +182,7 @@ $(function ()
 
                 case 'Esperanto':
                     msgs = [
-                        'Atendu dum\u00a0la preparado'
+                        'LA GRANDA KVIZO<br>okazos baldaŭ!'
                     ];
                     break;
             }
