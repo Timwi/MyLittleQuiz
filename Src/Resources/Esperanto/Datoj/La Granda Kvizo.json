@@ -474,6 +474,42 @@
             "Answer": "La 90-a Naskiĝtago / Vespermanĝo por Unu",
             "HostHint": null,
             "QuestionText": "En kiu komediaĵo okazas la nomoj Sir Toby, Admiral von Schneider, Mr. Pomeroy kaj Mr. Winterbottom?"
+          },
+          {
+            ":type": "SimpleQuestion",
+            "Answer": "180 gradoj",
+            "HostHint": null,
+            "QuestionText": "Kiom egalas la sumo de la anguloj en ebena triangulo?"
+          },
+          {
+            ":type": "SimpleQuestion",
+            "Answer": "Verda",
+            "HostHint": null,
+            "QuestionText": "Kiu koloro rezultas, se oni miksas bluan kaj flavan pentrofarbojn?"
+          },
+          {
+            ":type": "SimpleQuestion",
+            "Answer": "krampoj",
+            "HostHint": null,
+            "QuestionText": "Kiel nomiĝas ĉi tiu interpunkcia signo:&nbsp;(&nbsp;)?"
+          },
+          {
+            ":type": "SimpleQuestion",
+            "Answer": "Louis Braille",
+            "HostHint": null,
+            "QuestionText": "Kiu inventis la oficialan blindulan skribsistemon, konsistantan el punktoj superigitaj el papero?"
+          },
+          {
+            ":type": "SimpleQuestion",
+            "Answer": "Jupitero",
+            "HostHint": null,
+            "QuestionText": "Kiu planedo estas la plej granda en nia sunsistemo?"
+          },
+          {
+            ":type": "SimpleQuestion",
+            "Answer": "Dinosaŭroj",
+            "HostHint": null,
+            "QuestionText": "Pri kia grupo de bestoj temas la filmo «The Land Before Time» («La Antaŭtempa Lando») de 1988?"
           }
         ],
         "Medium": [
