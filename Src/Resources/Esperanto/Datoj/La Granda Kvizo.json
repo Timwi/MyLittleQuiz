@@ -2,280 +2,88 @@
   ":fulltype": "Trophy.MyLittleQuiz.Quiz, MyLittleQuiz, Version=1.0.9999.9999, Culture=neutral, PublicKeyToken=null",
   "CurrentState": {
     ":fulltype": "Trophy.MyLittleQuiz.Setup, MyLittleQuiz, Version=1.0.9999.9999, Culture=neutral, PublicKeyToken=null",
-    "Contestants": [
-      {
-        "Name": "Aike Müller",
-        "Roll": ""
-      },
-      {
-        "Name": "Aike Müller",
-        "Roll": ""
-      },
-      {
-        "Name": "Amelia Werner",
-        "Roll": ""
-      },
-      {
-        "Name": "Andreas Langholf",
-        "Roll": ""
-      },
-      {
-        "Name": "Anja Burkert",
-        "Roll": ""
-      },
-      {
-        "Name": "Annelies Rudolf",
-        "Roll": ""
-      },
-      {
-        "Name": "Bart Demeyere",
-        "Roll": ""
-      },
-      {
-        "Name": "Birke Dockhorn",
-        "Roll": ""
-      },
-      {
-        "Name": "Charlotte Sauer",
-        "Roll": ""
-      },
-      {
-        "Name": "Christa Koß",
-        "Roll": ""
-      },
-      {
-        "Name": "Christina Schwarzenstein",
-        "Roll": ""
-      },
-      {
-        "Name": "Clarissa Lohr",
-        "Roll": ""
-      },
-      {
-        "Name": "Conny Burkert",
-        "Roll": ""
-      },
-      {
-        "Name": "Constanze Schlesinger",
-        "Roll": ""
-      },
-      {
-        "Name": "Danka Leyk",
-        "Roll": ""
-      },
-      {
-        "Name": "Dieter Menke",
-        "Roll": ""
-      },
-      {
-        "Name": "Eduard Werner",
-        "Roll": ""
-      },
-      {
-        "Name": "Elisabeth Kuhl-Kruse",
-        "Roll": ""
-      },
-      {
-        "Name": "Elke Albrecht",
-        "Roll": ""
-      },
-      {
-        "Name": "Esther Langholf",
-        "Roll": ""
-      },
-      {
-        "Name": "Füller Marco",
-        "Roll": ""
-      },
-      {
-        "Name": "Floreal Gabalda",
-        "Roll": ""
-      },
-      {
-        "Name": "Florence Sans",
-        "Roll": ""
-      },
-      {
-        "Name": "Franz Kruse",
-        "Roll": ""
-      },
-      {
-        "Name": "Gunter Neue",
-        "Roll": ""
-      },
-      {
-        "Name": "Hanna Menke",
-        "Roll": ""
-      },
-      {
-        "Name": "Helmut Klünder",
-        "Roll": ""
-      },
-      {
-        "Name": "Ilse Jacques",
-        "Roll": ""
-      },
-      {
-        "Name": "Ivo Vercammen",
-        "Roll": ""
-      },
-      {
-        "Name": "Jenny Danzmayr",
-        "Roll": ""
-      },
-      {
-        "Name": "Jonas Sauer",
-        "Roll": ""
-      },
-      {
-        "Name": "Julius Werner",
-        "Roll": ""
-      },
-      {
-        "Name": "Kaŝi",
-        "Roll": ""
-      },
-      {
-        "Name": "Karin Frejarö",
-        "Roll": ""
-      },
-      {
-        "Name": "Klaus-Dieter Albrecht",
-        "Roll": ""
-      },
-      {
-        "Name": "Laura Klünder",
-        "Roll": ""
-      },
-      {
-        "Name": "Liba Gabalda",
-        "Roll": ""
-      },
-      {
-        "Name": "Mara Emilia Diestel",
-        "Roll": ""
-      },
-      {
-        "Name": "Marika Frense",
-        "Roll": ""
-      },
-      {
-        "Name": "Martin Sawitzki",
-        "Roll": ""
-      },
-      {
-        "Name": "Max Burkert",
-        "Roll": ""
-      },
-      {
-        "Name": "Maya Lou Diestel",
-        "Roll": ""
-      },
-      {
-        "Name": "Michael Kruse",
-        "Roll": ""
-      },
-      {
-        "Name": "Miro Johannes Diestel",
-        "Roll": ""
-      },
-      {
-        "Name": "Nicky Janssen",
-        "Roll": ""
-      },
-      {
-        "Name": "Nina Burkert",
-        "Roll": ""
-      },
-      {
-        "Name": "Norbert Karbe",
-        "Roll": ""
-      },
-      {
-        "Name": "Paŭlo Ebermann",
-        "Roll": ""
-      },
-      {
-        "Name": "Petra Dückershoff",
-        "Roll": ""
-      },
-      {
-        "Name": "Petro Chrdle",
-        "Roll": ""
-      },
-      {
-        "Name": "Rainer Rudolf",
-        "Roll": ""
-      },
-      {
-        "Name": "Rasa Miseikyte",
-        "Roll": ""
-      },
-      {
-        "Name": "Robert Weemeyer",
-        "Roll": ""
-      },
-      {
-        "Name": "Simone Kruse-Specht",
-        "Roll": ""
-      },
-      {
-        "Name": "Stefan Burkert",
-        "Roll": ""
-      },
-      {
-        "Name": "Stephanie Eilenberger",
-        "Roll": ""
-      },
-      {
-        "Name": "Sunita Mira Diestel",
-        "Roll": ""
-      },
-      {
-        "Name": "Thomas Demeyere",
-        "Roll": ""
-      },
-      {
-        "Name": "Tomio Frejarö",
-        "Roll": ""
-      },
-      {
-        "Name": "Toninho László",
-        "Roll": ""
-      },
-      {
-        "Name": "Tony Guyot",
-        "Roll": ""
-      },
-      {
-        "Name": "Tony László",
-        "Roll": ""
-      },
-      {
-        "Name": "Ulrike Diestel",
-        "Roll": ""
-      },
-      {
-        "Name": "Volframo Diestel",
-        "Roll": ""
-      },
-      {
-        "Name": "Witali Monastyrjow",
-        "Roll": ""
-      },
-      {
-        "Name": "Yves Bellefeuille",
-        "Roll": ""
-      },
-      {
-        "Name": "Zélia Sans",
-        "Roll": ""
-      },
-      {
-        "Name": "Zohra Sans",
-        "Roll": ""
-      }
-    ],
+    "Contestants": [{"Name":"Petra Dückershoff","Roll":""},
+{"Name":"Ralf Könne","Roll":""},
+{"Name":"Martin Sawitzki","Roll":""},
+{"Name":"Robert Weemeyer","Roll":""},
+{"Name":"Gerd Jacques","Roll":""},
+{"Name":"Ivo Vercammen","Roll":""},
+{"Name":"Nicky Janssen","Roll":""},
+{"Name":"Bart Demeyere","Roll":""},
+{"Name":"Thomas Demeyere","Roll":""},
+{"Name":"Georg Weil","Roll":""},
+{"Name":"Paula Weil","Roll":""},
+{"Name":"Brigitte Kranz","Roll":""},
+{"Name":"Stefan Krieghoff","Roll":""},
+{"Name":"Christa Koß","Roll":""},
+{"Name":"Ralf Haumer","Roll":""},
+{"Name":"Zoja Haumer","Roll":""},
+{"Name":"Katharina Haumer","Roll":""},
+{"Name":"Marietta Haumer","Roll":""},
+{"Name":"Helmut Klünder","Roll":""},
+{"Name":"Christoph Frank","Roll":""},
+{"Name":"Ines Frank","Roll":""},
+{"Name":"Dieter Menke","Roll":""},
+{"Name":"Hanna Menke","Roll":""},
+{"Name":"Danka Leyk","Roll":""},
+{"Name":"Catherine Boen","Roll":""},
+{"Name":"Floreal Gabalda","Roll":""},
+{"Name":"Liba Gabalda","Roll":""},
+{"Name":"Yves Bellefeuille","Roll":""},
+{"Name":"Constanze Schlesinger","Roll":""},
+{"Name":"Volframo Diestel","Roll":""},
+{"Name":"Mara Emilia Diestel","Roll":""},
+{"Name":"Miro Johannes Diestel","Roll":""},
+{"Name":"Ulrike Diestel","Roll":""},
+{"Name":"Marika Frense","Roll":""},
+{"Name":"Dieter Frense","Roll":""},
+{"Name":"Petro Chrdle","Roll":""},
+{"Name":"Eduard Werner","Roll":""},
+{"Name":"Rasa Miseikyte","Roll":""},
+{"Name":"Julius Werner","Roll":""},
+{"Name":"Tobias Menzel","Roll":""},
+{"Name":"Christiane Menzel","Roll":""},
+{"Name":"Lea Menzel","Roll":""},
+{"Name":"Dieter Wilke","Roll":""},
+{"Name":"Elena Wilke","Roll":""},
+{"Name":"Tony László","Roll":""},
+{"Name":"Toninho László","Roll":""},
+{"Name":"Esther Langholf","Roll":""},
+{"Name":"Andreas Langholf","Roll":""},
+{"Name":"Ilse Jacques","Roll":""},
+{"Name":"Anna Dupechaud","Roll":""},
+{"Name":"Andrea Grumbach","Roll":""},
+{"Name":"Paŭlo Ebermann","Roll":""},
+{"Name":"Jessica Grasso","Roll":""},
+{"Name":"Norbert Karbe","Roll":""},
+{"Name":"Christiane Karbe","Roll":""},
+{"Name":"Laura Klünder","Roll":""},
+{"Name":"Jenny Danzmayr","Roll":""},
+{"Name":"Franz Kruse","Roll":""},
+{"Name":"Elisabeth Kuhl-Kruse","Roll":""},
+{"Name":"Witali Monastyrjow","Roll":""},
+{"Name":"Annelies Rudolf","Roll":""},
+{"Name":"Klaus-Dieter Albrecht","Roll":""},
+{"Name":"Elke Albrecht","Roll":""},
+{"Name":"Rainer Rudolf","Roll":""},
+{"Name":"Füller Marco","Roll":""},
+{"Name":"Gunter Neue","Roll":""},
+{"Name":"Florence Sans","Roll":""},
+{"Name":"Zohra Sans","Roll":""},
+{"Name":"Zélia Sans","Roll":""},
+{"Name":"Tony Guyot","Roll":""},
+{"Name":"Aike Müller","Roll":""},
+{"Name":"Birke Dockhorn","Roll":""},
+{"Name":"Tomio Frejarö","Roll":""},
+{"Name":"Karin Frejarö","Roll":""},
+{"Name":"Christina Schwarzenstein","Roll":""},
+{"Name":"Bettina Büchner","Roll":""},
+{"Name":"Stefan Burkert","Roll":""},
+{"Name":"Conny Burkert","Roll":""},
+{"Name":"Clarissa Lohr","Roll":""},
+{"Name":"Kaŝi","Roll":""},
+{"Name":"Michael Kruse","Roll":""},
+{"Name":"Simone Kruse-Specht","Roll":""}],
     "CurrentJingle": null,
     "CurrentMusic": null,
     "Data": {
