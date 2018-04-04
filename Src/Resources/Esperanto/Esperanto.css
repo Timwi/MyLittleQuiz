@@ -7,11 +7,6 @@ body {
     font-family: 'Trebuchet', 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
-/* DEBUG */
-#content #background {
-    transition: background-color ease-in-out 1s !important;
-}
-
 #content #background.setup {
     background-color: hsl(120, 100%, 15%);
 }
