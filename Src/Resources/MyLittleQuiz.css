@@ -649,7 +649,7 @@ body {
 
     #content #r2-cats .r2-cat {
         color: white;
-        padding: .1em 1em .5em 1em;
+        padding: .2em 1em .2em 1em;
         margin: .5em 0;
         background: hsl(220, 60%, 33.3%);
         box-shadow: inset -.05em -.15em 0 hsl(220, 60%, 25%);
@@ -710,10 +710,10 @@ body {
 
             #content #r2-cats .r2-cat .useds .used {
                 display: inline-block;
-                margin-left: .5em;
-                width: .7em;
-                height: .7em;
-                border-radius: .7em;
+                margin-left: .35em;
+                width: .6em;
+                height: .6em;
+                border-radius: .6em;
                 background: hsl(220, 50%, 70%);
                 transition: background ease-in-out .7s;
             }
@@ -1151,6 +1151,7 @@ body {
             #content #qa.r4 .qa .text {
                 padding: 5vh;
                 transform: scale(1.01);
+                text-shadow: 0 0 5vh rgba(0, 0, 0, .7);
             }
 
             #content #qa.r4 .qa.question .decor {
@@ -1292,7 +1293,13 @@ body {
         background-repeat: no-repeat;
         background-size: contain;
         background-position: 50% 50%;
+        opacity: 1;
+        transition: opacity linear 3s;
+        transition-delay: 21s;
     }
+        #content #trophy.in {
+            opacity: 0;
+        }
 
     #content #winner-name {
         left: 10vw;
@@ -1302,10 +1309,17 @@ body {
         text-align: center;
         background: hsla(274, 100%, 8%, .8);
         border-radius: 10vh;
-        padding: 3vh 5vw 8vh;
+        padding: 4vh 5vw 4vh;
         text-shadow: 1vh 1vh 1vh rgba(0, 0, 0, .5);
         line-height: 1;
+        opacity: 1;
+        transition: opacity linear 3s;
+        transition-delay: 21s;
     }
+
+        #content #winner-name.in {
+            opacity: 0;
+        }
 
         #content #winner-name .inner {
             transform-origin: left center;
@@ -1317,6 +1331,7 @@ body {
 
     #content #background.congratulations {
         background-color: hsl(274, 100%, 18%);
+        background-color: #00186F;
         transition: background-color ease-in-out 1s;
     }
 
@@ -1359,7 +1374,6 @@ body {
     left: 0;
     bottom: 0;
     right: 0;
-    background-color: #00186F;
 }
 
     #content #logo::after {

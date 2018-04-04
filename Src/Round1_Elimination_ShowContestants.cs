@@ -37,7 +37,10 @@ namespace Trophy.MyLittleQuiz
 
                 yield return Transition.Simple(ConsoleKey.R, "Select contestant at random", () =>
                 {
-                    var choosableContestants = Data.Contestants.SelectIndexWhere(c => c.IsStillInGame).ToArray();
+                    // Prefer contestant with no answers
+                    var choosableContestants = Data.Contestants.SelectIndexWhere(c => c.IsStillInGame && c.NumCorrect == 0 && c.NumWrong == 0).ToArray();
+                    if (choosableContestants.Length == 0)
+                        choosableContestants = Data.Contestants.SelectIndexWhere(c => c.IsStillInGame).ToArray();
                     var index = choosableContestants[Rnd.Next(choosableContestants.Length)];
                     return new Round1_Elimination_ShowContestants(Data.SelectContestant(index));
                 });

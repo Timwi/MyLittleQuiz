@@ -30,7 +30,8 @@ $(function ()
         }
 
         $('.away.out').remove();
-        $('#intro').removeClass('visible')[0].pause();
+        if ($('#intro').length)
+            $('#intro').removeClass('visible')[0].pause();
         var consider = $('.away');
         if (except)
             consider = consider.not(except);
@@ -636,7 +637,8 @@ $(function ()
 
             var bestFontSize = null;
             var bestTr = null;
-            for (var cols = 1; cols <= 4; cols++)
+            var numCols = Math.max(3, Math.floor(Math.sqrt(p.remaining.length/4)));
+            for (var cols = 1; cols <= numCols; cols++)
             {
                 var tr = $('<tr>').appendTo(table);
                 var itemsPerCol = Math.ceil(p.remaining.length / cols);
@@ -807,8 +809,8 @@ $(function ()
                     transform: 'translateX(-50%) rotate(' + (i * 360 / 10) + 'deg)'
                 });
 
-            $('<div class="congratulations away" id="trophy">').appendTo(content);
-            var winnerdiv = $('<div class="congratulations static away" id="winner-name">').appendTo(content)
+            $('<div class="congratulations away" id="trophy">').appendTo(content).addClassDelay('in');
+            var winnerdiv = $('<div class="congratulations static away" id="winner-name">').appendTo(content).addClassDelay('in')
                 .append($('<div class="inner">')
                     .append($('<span class="name">').text(p.winner)));
 
