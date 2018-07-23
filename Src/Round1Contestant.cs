@@ -56,7 +56,7 @@ namespace Trophy.MyLittleQuiz
         {
             return "{0}, Roll={1}{2}".Color(IsStillInGame ? ConsoleColor.Gray : ConsoleColor.DarkRed).Fmt(
                 Name.Color(IsStillInGame ? ConsoleColor.Yellow : ConsoleColor.Red),
-                Roll.Color(IsStillInGame ? ConsoleColor.Cyan : ConsoleColor.Red),
+                Roll?.Color(IsStillInGame ? ConsoleColor.Cyan : ConsoleColor.Red),
                 IsStillInGame ? null : IsDisqualified ? " (disqualified)" : IsOut ? " (out)" : IsThrough ? " (through)" : " (ERROR)");
         }
     }

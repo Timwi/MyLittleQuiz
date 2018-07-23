@@ -14,6 +14,7 @@ namespace Trophy.MyLittleQuiz
         public string HostHint;
         public ConsoleColoredString ToConsoleColoredString() { return (Check ? "[CHECK!] ".Color(ConsoleColor.Red) : "") + toConsoleColoredString(); }
         protected abstract ConsoleColoredString toConsoleColoredString();
+        public int Priority = 1;
 
         public ConsoleColoredString Describe(bool? answerGiven)
         {
@@ -40,7 +41,7 @@ namespace Trophy.MyLittleQuiz
         public override string AnswerFullText { get { return Answer; } }
         protected override ConsoleColoredString toConsoleColoredString()
         {
-            return "{0/Yellow} {1/Green}".Color(null).Fmt(QuestionText, Answer);
+            return (Priority < 2 ? "{0/DarkYellow} {1/DarkGreen}" : "{0/Yellow} {1/Green}").Color(null).Fmt(QuestionText, Answer);
         }
     }
 }

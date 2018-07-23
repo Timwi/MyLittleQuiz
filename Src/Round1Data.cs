@@ -94,6 +94,8 @@ namespace Trophy.MyLittleQuiz
                     difficulty = Difficulty.Medium;
                 c.CurrentDifficulty = difficulty;
                 var availableQuestionIndexes = Enumerable.Range(0, Questions[difficulty].Length).Except(QuestionsTaken[difficulty]).ToArray();
+                var maxPriority = availableQuestionIndexes.Max(ix => Questions[difficulty][ix].Priority);
+                availableQuestionIndexes = availableQuestionIndexes.Where(ix => Questions[difficulty][ix].Priority == maxPriority).ToArray();
                 c.CurrentQuestionIndex = availableQuestionIndexes[Rnd.Next(availableQuestionIndexes.Length)];
             });
         }

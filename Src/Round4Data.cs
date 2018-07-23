@@ -42,7 +42,11 @@ namespace Trophy.MyLittleQuiz
             if (available.Length == 0)
                 CurrentQuestionIndex = 0;
             else
+            {
+                var priority = available.Max(ix => Questions[ix].Priority);
+                available = available.Where(ix => Questions[ix].Priority == priority).ToArray();
                 CurrentQuestionIndex = available[Rnd.Next(0, available.Length)];
+            }
         }
 
         private Round4Data() { }    // for Classify
