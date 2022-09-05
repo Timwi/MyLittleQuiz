@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
+using RT.Serialization;
 using RT.Util;
 using RT.Util.Consoles;
 using RT.Util.ExtensionMethods;
-using RT.Util.Serialization;
 using RT.Util.Text;
 
 namespace Trophy.MyLittleQuiz

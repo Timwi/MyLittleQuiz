@@ -1,0 +1,1088 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>RT.Lingo.Base</name>
+    </assembly>
+    <members>
+        <member name="T:RT.Lingo.MemberDescriptionTr">
+            <summary>Holds the translation of a member's description.</summary>
+        </member>
+        <member name="F:RT.Lingo.MemberDescriptionTr.DisplayName">
+            <summary>How this member should be named in the property grid.</summary>
+        </member>
+        <member name="F:RT.Lingo.MemberDescriptionTr.Description">
+            <summary>How this member should be described in the description section of the property grid.</summary>
+        </member>
+        <member name="M:RT.Lingo.MemberDescriptionTr.ToString">
+            <summary>Override, for debugging purposes only.</summary>
+        </member>
+        <member name="T:RT.Lingo.MemberTr">
+            <summary>Holds the translation of a member's category and description.</summary>
+        </member>
+        <member name="F:RT.Lingo.MemberTr.Category">
+            <summary>Translation of the name of the category that this member belongs to.</summary>
+        </member>
+        <member name="F:RT.Lingo.MemberTr.DisplayName">
+            <summary>How this member should be named in the property grid.</summary>
+        </member>
+        <member name="F:RT.Lingo.MemberTr.Description">
+            <summary>How this member should be described in the description section of the property grid.</summary>
+        </member>
+        <member name="M:RT.Lingo.MemberTr.#ctor(RT.Lingo.TrString,RT.Lingo.MemberDescriptionTr)">
+            <summary>Constructor.</summary>
+        </member>
+        <member name="M:RT.Lingo.MemberTr.#ctor(RT.Lingo.TrString,RT.Lingo.TrString,RT.Lingo.TrString)">
+            <summary>Constructor.</summary>
+        </member>
+        <member name="M:RT.Lingo.MemberTr.#ctor(RT.Lingo.TrString)">
+            <summary>Constructor.</summary>
+        </member>
+        <member name="M:RT.Lingo.MemberTr.#ctor(RT.Lingo.TrString,RT.Lingo.TrString)">
+            <summary>Constructor.</summary>
+        </member>
+        <member name="M:RT.Lingo.MemberTr.ToString">
+            <summary>Override, for debugging purposes only.</summary>
+        </member>
+        <member name="T:RT.Lingo.LingoTypeDescriptionProvider`1">
+            <summary>Provides a type descriptor which supports translation of various string values using the Lingo conventions (see remarks).</summary>
+            <typeparam name="TTranslation">The type of the translation class.</typeparam>
+            <remarks>
+            Every property requiring translatable name/description/category should have a corresponding method in the same class. This method
+            should be static, named the same as the property with a "Tr" suffix, take a translation instance and return a <see cref="T:RT.Lingo.MemberTr"/>.
+            </remarks>
+        </member>
+        <member name="M:RT.Lingo.LingoTypeDescriptionProvider`1.#ctor(System.Func{`0})">
+            <summary>Constructs a type description provider using the specified translation getter.</summary>
+            <param name="getTranslation">A function that returns the currently active translation.</param>
+        </member>
+        <member name="M:RT.Lingo.LingoTypeDescriptionProvider`1.GetTypeDescriptor(System.Type,System.Object)">
+            <summary>Override; see base.</summary>
+        </member>
+        <member name="T:RT.Lingo.LingoEnumConverter`2">
+            <summary>Provides a base implementation for enum converters intended to enable enum translation. See remarks.</summary>
+            <typeparam name="TEnum">Type of the enum being translated.</typeparam>
+            <typeparam name="TTranslation">Type of a translation class which has fields named the same as enum values.</typeparam>
+            <remarks>Suggested use: define a separate Lingo string class for the enum. Inside this class, declare a nested class deriving
+            from this base class. Specify a TypeConverter on the enum in question using the said nested class.</remarks>
+        </member>
+        <member name="M:RT.Lingo.LingoEnumConverter`2.#ctor(System.Func{`1})">
+            <summary>Constructor.</summary>
+            <param name="getTranslation">A method which returns the currently active translation for this enum.</param>
+        </member>
+        <member name="M:RT.Lingo.LingoEnumConverter`2.ConvertFrom(System.ComponentModel.ITypeDescriptorContext,System.Globalization.CultureInfo,System.Object)">
+            <summary>Override; see base.</summary>
+        </member>
+        <member name="M:RT.Lingo.LingoEnumConverter`2.ConvertTo(System.ComponentModel.ITypeDescriptorContext,System.Globalization.CultureInfo,System.Object,System.Type)">
+            <summary>Override; see base.</summary>
+        </member>
+        <member name="T:RT.Lingo.Language">
+            <summary>Lists all the languages that have an ISO-639-1 two-letter code, and a selection of languages with an ISO-639-2 three-letter code.</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Afar">
+            <summary>Represents the Afar language (aa).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Abkhazian">
+            <summary>Represents the Abkhazian language (ab).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Avestan">
+            <summary>Represents the Avestan language (ae).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Afrikaans">
+            <summary>Represents the Afrikaans language (af).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Akan">
+            <summary>Represents the Akan language (ak).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Amharic">
+            <summary>Represents the Amharic language (am).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Aragonese">
+            <summary>Represents the Aragonese language (an).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Arabic">
+            <summary>Represents the Arabic language (ar).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Assamese">
+            <summary>Represents the Assamese language (as).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Avaric">
+            <summary>Represents the Avaric language (av).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Aymara">
+            <summary>Represents the Aymara language (ay).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Azerbaijani">
+            <summary>Represents the Azerbaijani language (az).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Bashkir">
+            <summary>Represents the Bashkir language (ba).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Belarusian">
+            <summary>Represents the Belarusian language (be).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Bulgarian">
+            <summary>Represents the Bulgarian language (bg).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Bihari">
+            <summary>Represents the Bihari language (bh).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Bislama">
+            <summary>Represents the Bislama language (bi).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Bambara">
+            <summary>Represents the Bambara language (bm).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Bengali">
+            <summary>Represents the Bengali language (bn).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Tibetan">
+            <summary>Represents the Tibetan language (bo).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Breton">
+            <summary>Represents the Breton language (br).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Bosnian">
+            <summary>Represents the Bosnian language (bs).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Catalan">
+            <summary>Represents the Catalan language (ca).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Chechen">
+            <summary>Represents the Chechen language (ce).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Chamorro">
+            <summary>Represents the Chamorro language (ch).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Corsican">
+            <summary>Represents the Corsican language (co).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Cree">
+            <summary>Represents the Cree language (cr).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Czech">
+            <summary>Represents the Czech language (cs).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.ChurchSlavic">
+            <summary>Represents the Church Slavic language (cu).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Chuvash">
+            <summary>Represents the Chuvash language (cv).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Welsh">
+            <summary>Represents the Welsh language (cy).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Danish">
+            <summary>Represents the Danish language (da).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.German">
+            <summary>Represents the German language (de).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Divehi">
+            <summary>Represents the Divehi language (dv).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Dzongkha">
+            <summary>Represents the Dzongkha language (dz).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Ewe">
+            <summary>Represents the Ewe language (ee).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Greek">
+            <summary>Represents the Greek language (el).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.EnglishUK">
+            <summary>Represents the English language (en), as spoken in the UK.</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.EnglishUS">
+            <summary>Represents the English language (en), as spoken in the USA.</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Esperanto">
+            <summary>Represents the Esperanto language (eo).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Spanish">
+            <summary>Represents the Spanish language (es).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Estonian">
+            <summary>Represents the Estonian language (et).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Basque">
+            <summary>Represents the Basque language (eu).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Persian">
+            <summary>Represents the Persian language (fa).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Fulah">
+            <summary>Represents the Fulah language (ff).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Finnish">
+            <summary>Represents the Finnish language (fi).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Fijian">
+            <summary>Represents the Fijian language (fj).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Faroese">
+            <summary>Represents the Faroese language (fo).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.French">
+            <summary>Represents the French language (fr).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.WesternFrisian">
+            <summary>Represents the Western Frisian language (fy).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Irish">
+            <summary>Represents the Irish language (ga).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.ScottishGaelic">
+            <summary>Represents the Scottish Gaelic language (gd).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Galician">
+            <summary>Represents the Galician language (gl).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Guaraní">
+            <summary>Represents the Guaraní language (gn).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Gujarati">
+            <summary>Represents the Gujarati language (gu).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Manx">
+            <summary>Represents the Manx language (gv).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Hausa">
+            <summary>Represents the Hausa language (ha).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Hebrew">
+            <summary>Represents the Hebrew language (he).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Hindi">
+            <summary>Represents the Hindi language (hi).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.HiriMotu">
+            <summary>Represents the Hiri Motu language (ho).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Croatian">
+            <summary>Represents the Croatian language (hr).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Haitian">
+            <summary>Represents the Haitian language (ht).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Hungarian">
+            <summary>Represents the Hungarian language (hu).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Armenian">
+            <summary>Represents the Armenian language (hy).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Herero">
+            <summary>Represents the Herero language (hz).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Interlingua">
+            <summary>Represents the Interlingua (International Auxiliary Language Association) language (ia).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Indonesian">
+            <summary>Represents the Indonesian language (id).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Interlingue">
+            <summary>Represents the Interlingue language (ie).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Igbo">
+            <summary>Represents the Igbo language (ig).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.SichuanYi">
+            <summary>Represents the Sichuan Yi language (ii).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Inupiaq">
+            <summary>Represents the Inupiaq language (ik).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Ido">
+            <summary>Represents the Ido language (io).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Icelandic">
+            <summary>Represents the Icelandic language (is).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Italian">
+            <summary>Represents the Italian language (it).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Inuktitut">
+            <summary>Represents the Inuktitut language (iu).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Japanese">
+            <summary>Represents the Japanese language (ja).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Javanese">
+            <summary>Represents the Javanese language (jv).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Georgian">
+            <summary>Represents the Georgian language (ka).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Kongo">
+            <summary>Represents the Kongo language (kg).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Kikuyu">
+            <summary>Represents the Kikuyu language (ki).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Kwanyama">
+            <summary>Represents the Kwanyama language (kj).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Kazakh">
+            <summary>Represents the Kazakh language (kk).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Kalaallisut">
+            <summary>Represents the Kalaallisut language (kl).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Khmer">
+            <summary>Represents the Khmer language (km).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Kannada">
+            <summary>Represents the Kannada language (kn).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Korean">
+            <summary>Represents the Korean language (ko).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Kanuri">
+            <summary>Represents the Kanuri language (kr).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.KashmiriDevanagari">
+            <summary>Represents the Kashmiri language (ks), written in Devanagari.</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.KashmiriArabic">
+            <summary>Represents the Kashmiri language (ks), written in Arabic.</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.KurdishLatin">
+            <summary>Represents the Kurdish language (ku), written in Latin.</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.KurdishArabic">
+            <summary>Represents the Kurdish language (ku), written in Arabic.</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Komi">
+            <summary>Represents the Komi language (kv).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Cornish">
+            <summary>Represents the Cornish language (kw).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Kirghiz">
+            <summary>Represents the Kirghiz language (ky).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Latin">
+            <summary>Represents the Latin language (la).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Luxembourgish">
+            <summary>Represents the Luxembourgish language (lb).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Ganda">
+            <summary>Represents the Ganda language (lg).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Limburgish">
+            <summary>Represents the Limburgish language (li).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Lingala">
+            <summary>Represents the Lingala language (ln).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Lao">
+            <summary>Represents the Lao language (lo).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Lithuanian">
+            <summary>Represents the Lithuanian language (lt).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.LubaKatanga">
+            <summary>Represents the Lithuanian language (lt).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Latvian">
+            <summary>Represents the Latvian language (lv).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Malagasy">
+            <summary>Represents the Malagasy language (mg).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Marshallese">
+            <summary>Represents the Marshallese language (mh).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Māori">
+            <summary>Represents the Māori language (mi).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Macedonian">
+            <summary>Represents the Macedonian language (mk).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Malayalam">
+            <summary>Represents the Malayalam language (ml).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Mongolian">
+            <summary>Represents the Mongolian language (mn).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Marathi">
+            <summary>Represents the Marathi language (mr).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Malay">
+            <summary>Represents the Malay language (ms).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Maltese">
+            <summary>Represents the Maltese language (mt).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Burmese">
+            <summary>Represents the Burmese language (my).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Nauru">
+            <summary>Represents the Nauru language (na).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.NorwegianBokmål">
+            <summary>Represents the Norwegian Bokmål language (nb).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.NorthNdebele">
+            <summary>Represents the North Ndebele language (nd).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Nepali">
+            <summary>Represents the Nepali language (ne).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Ndonga">
+            <summary>Represents the Ndonga language (ng).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Dutch">
+            <summary>Represents the Dutch language (nl).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.NorwegianNynorsk">
+            <summary>Represents the Norwegian Nynorsk language (nn).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.SouthNdebele">
+            <summary>Represents the South Ndebele language (nr).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Navajo">
+            <summary>Represents the Navajo language (nv).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Chichewa">
+            <summary>Represents the Chichewa language (ny).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Occitan">
+            <summary>Represents the Occitan language (oc).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Ojibwa">
+            <summary>Represents the Ojibwa language (oj).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Oromo">
+            <summary>Represents the Oromo language (om).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Oriya">
+            <summary>Represents the Oriya language (or).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Ossetian">
+            <summary>Represents the Ossetian language (os).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.PanjabiDevanagari">
+            <summary>Represents the Panjabi language (pa), written in Devanagari.</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.PanjabiArabic">
+            <summary>Represents the Panjabi language (pa), written in Arabic.</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Pāli">
+            <summary>Represents the Pāli language (pi).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Polish">
+            <summary>Represents the Polish language (pl).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Pashto">
+            <summary>Represents the Pashto language (ps).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Portuguese">
+            <summary>Represents the Portuguese variety of the Portuguese language (pt).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.BrazilianPortuguese">
+            <summary>Represents the Brazilian variety of the Portuguese language (pt).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Quechua">
+            <summary>Represents the Quechua language (qu).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.RaetoRomance">
+            <summary>Represents the Raeto-Romance language (rm).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Kirundi">
+            <summary>Represents the Kirundi language (rn).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Romanian">
+            <summary>Represents the Romanian language (ro).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Russian">
+            <summary>Represents the Russian language (ru).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Kinyarwanda">
+            <summary>Represents the Kinyarwanda language (rw).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Sanskrit">
+            <summary>Represents the Sanskrit language (sa).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Sardinian">
+            <summary>Represents the Sardinian language (sc).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.SindhiDevanagari">
+            <summary>Represents the Sindhi language (sd), written in Devanagari.</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.SindhiArabic">
+            <summary>Represents the Sindhi language (sd), written in Arabic.</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.NorthernSami">
+            <summary>Represents the Northern Sami language (se).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Sango">
+            <summary>Represents the Sango language (sg).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Sinhala">
+            <summary>Represents the Sinhala language (si).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Slovak">
+            <summary>Represents the Slovak language (sk).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Slovenian">
+            <summary>Represents the Slovenian language (sl).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Samoan">
+            <summary>Represents the Samoan language (sm).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Shona">
+            <summary>Represents the Shona language (sn).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Somali">
+            <summary>Represents the Somali language (so).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Albanian">
+            <summary>Represents the Albanian language (sq).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Serbian">
+            <summary>Represents the Serbian language (sr).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Swati">
+            <summary>Represents the Swati language (ss).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.SouthernSotho">
+            <summary>Represents the Southern Sotho language (st).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Sundanese">
+            <summary>Represents the Sundanese language (su).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Swedish">
+            <summary>Represents the Swedish language (sv).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Swahili">
+            <summary>Represents the Swahili language (sw).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Tamil">
+            <summary>Represents the Tamil language (ta).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Telugu">
+            <summary>Represents the Telugu language (te).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.TajikCyrillic">
+            <summary>Represents the Tajik language (tg), written in Cyrillic.</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.TajikArabic">
+            <summary>Represents the Tajik language (tg), written in Arabic.</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Thai">
+            <summary>Represents the Thai language (th).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Tigrinya">
+            <summary>Represents the Tigrinya language (ti).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.TurkmenLatin">
+            <summary>Represents the Turkmen language (tk), written in Latin.</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.TurkmenCyrillic">
+            <summary>Represents the Turkmen language (tk), written in Cyrillic.</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Tagalog">
+            <summary>Represents the Tagalog language (tl).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Tswana">
+            <summary>Represents the Tswana language (tn).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Tonga">
+            <summary>Represents the Tonga language (to).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Turkish">
+            <summary>Represents the Turkish language (tr).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Tsonga">
+            <summary>Represents the Tsonga language (ts).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.TatarCyrillic">
+            <summary>Represents the Tatar language (tt), written in Cyrillic.</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.TatarLatin">
+            <summary>Represents the Tatar language (tt), written in Latin.</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.TatarArabic">
+            <summary>Represents the Tatar language (tt), written in Arabic.</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Twi">
+            <summary>Represents the Twi language (tw).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Tahitian">
+            <summary>Represents the Tahitian language (ty).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.UighurLatin">
+            <summary>Represents the Uighur language (ug), written in Latin.</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.UighurArabic">
+            <summary>Represents the Uighur language (ug), written in Arabic.</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Ukrainian">
+            <summary>Represents the Ukrainian language (uk).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Urdu">
+            <summary>Represents the Urdu language (ur).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.UzbekLatin">
+            <summary>Represents the Uzbek language (uz), written in Latin.</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.UzbekCyrillic">
+            <summary>Represents the Uzbek language (uz), written in Cyrillic.</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.UzbekArabic">
+            <summary>Represents the Uzbek language (uz), written in Arabic.</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Venda">
+            <summary>Represents the Venda language (ve).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Vietnamese">
+            <summary>Represents the Vietnamese language (vi).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Volapük">
+            <summary>Represents the Volapük language (vo).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Walloon">
+            <summary>Represents the Walloon language (wa).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Wolof">
+            <summary>Represents the Wolof language (wo).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Xhosa">
+            <summary>Represents the Xhosa language (xh).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Yiddish">
+            <summary>Represents the Yiddish language (yi).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Yoruba">
+            <summary>Represents the Yoruba language (yo).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Zhuang">
+            <summary>Represents the Zhuang language (za).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.ChineseTraditional">
+            <summary>Represents the Chinese language (zh), written with traditional characters.</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.ChineseSimplified">
+            <summary>Represents the Chinese language (zh), written with simplified characters.</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Zulu">
+            <summary>Represents the Zulu language (zu).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Klingon">
+            <summary>Represents the Klingon language (tlh).</summary>
+        </member>
+        <member name="F:RT.Lingo.Language.Lojban">
+            <summary>Represents the Lojban language (jbo).</summary>
+        </member>
+        <member name="T:RT.Lingo.LanguageMethods">
+            <summary>
+            Extension methods for the <see cref="T:RT.Lingo.Language"/> enum.
+            </summary>
+        </member>
+        <member name="M:RT.Lingo.LanguageMethods.GetNumberSystem(RT.Lingo.Language)">
+            <summary>Gets the number system associated with the specified language.</summary>
+        </member>
+        <member name="M:RT.Lingo.LanguageMethods.GetNativeName(RT.Lingo.Language)">
+            <summary>Gets the native name of the specified language.</summary>
+        </member>
+        <member name="M:RT.Lingo.LanguageMethods.GetEnglishName(RT.Lingo.Language)">
+            <summary>Gets the English name of the specified language.</summary>
+        </member>
+        <member name="M:RT.Lingo.LanguageMethods.GetIsoLanguageCode(RT.Lingo.Language)">
+            <summary>Gets the ISO language code of the specified language.</summary>
+        </member>
+        <member name="T:RT.Lingo.LingoNotesAttribute">
+            <summary>Specifies notes to the translator, detailing the purpose, context, or format of a translatable string.</summary>
+        </member>
+        <member name="M:RT.Lingo.LingoNotesAttribute.#ctor(System.String)">
+            <summary>
+                Constructor for a <see cref="T:RT.Lingo.LingoNotesAttribute"/> attribute.</summary>
+            <param name="notes">
+                Specifies notes to the translator, detailing the purpose, context, or format of a translatable string.</param>
+        </member>
+        <member name="P:RT.Lingo.LingoNotesAttribute.Notes">
+            <summary>
+                Gets the associated notes to the translator, detailing the purpose, context, or format of a translatable
+                string.</summary>
+        </member>
+        <member name="T:RT.Lingo.LingoInGroupAttribute">
+            <summary>Specifies that a translatable string is in a particular group.</summary>
+        </member>
+        <member name="M:RT.Lingo.LingoInGroupAttribute.#ctor(System.Object)">
+            <summary>
+                Constructor for a <see cref="T:RT.Lingo.LingoInGroupAttribute"/> attribute.</summary>
+            <param name="group">
+                Specifies that a translatable string is in a particular group.</param>
+        </member>
+        <member name="P:RT.Lingo.LingoInGroupAttribute.Group">
+            <summary>Gets the group a translatable string is in.</summary>
+        </member>
+        <member name="T:RT.Lingo.LingoStringClassAttribute">
+            <summary>Specifies that a class is a class containing translatable strings.</summary>
+        </member>
+        <member name="T:RT.Lingo.LingoIgnoreAttribute">
+            <summary>
+                Marks a field in a translation class as one that does not represent a translatable string or a set of such
+                strings.</summary>
+        </member>
+        <member name="T:RT.Lingo.LingoGroupAttribute">
+            <summary>
+                Specifies information about a group of translatable strings. Use this on a field in an enum type which enumerates
+                the available groups of strings.</summary>
+        </member>
+        <member name="M:RT.Lingo.LingoGroupAttribute.#ctor(System.String,System.String)">
+            <summary>
+                Constructor.</summary>
+            <param name="groupName">
+                Specifies a short name for the group, to be used in the listbox in the translation window.</param>
+            <param name="description">
+                Specifies a long description for the group, to be displayed above the list of string codes while the group is
+                selected.</param>
+        </member>
+        <member name="P:RT.Lingo.LingoGroupAttribute.GroupName">
+            <summary>Specifies a short name for the group, to be used in the listbox in the translation window.</summary>
+        </member>
+        <member name="P:RT.Lingo.LingoGroupAttribute.Description">
+            <summary>
+                Specifies a long description for the group, to be displayed above the list of string codes while the group is
+                selected.</summary>
+        </member>
+        <member name="T:RT.Lingo.LingoAutoGeneratedAttribute">
+            <summary>
+                Code that automatically generates Lingo-compatible class declarations can add this attribute to indicate fields of
+                string classes that were generated automatically. <c>Lingo.TranslationFileGenerator.TranslateControl</c> generates
+                this, for example.</summary>
+        </member>
+        <member name="M:RT.Lingo.LingoAutoGeneratedAttribute.#ctor">
+            <summary>Constructor.</summary>
+        </member>
+        <member name="T:RT.Lingo.LanguageInfoAttribute">
+            <summary>Provides information about a language. Used on the values in the <see cref="T:RT.Lingo.Language"/> enum.</summary>
+        </member>
+        <member name="M:RT.Lingo.LanguageInfoAttribute.#ctor(System.String,System.String,System.String,System.Type)">
+            <summary>
+                Constructor.</summary>
+            <param name="languageCode">
+                Specifies the ISO-639 language code of the language.</param>
+            <param name="englishName">
+                Specifies the English name of the language.</param>
+            <param name="nativeName">
+                Specifies the native name of the language.</param>
+            <param name="numberSystem">
+                Specifies the number system of the language.</param>
+        </member>
+        <member name="P:RT.Lingo.LanguageInfoAttribute.LanguageCode">
+            <summary>Specifies the ISO-639 language code of the language.</summary>
+        </member>
+        <member name="P:RT.Lingo.LanguageInfoAttribute.EnglishName">
+            <summary>Specifies the English name of the language.</summary>
+        </member>
+        <member name="P:RT.Lingo.LanguageInfoAttribute.NativeName">
+            <summary>Specifies the native name of the language.</summary>
+        </member>
+        <member name="P:RT.Lingo.LanguageInfoAttribute.NumberSystem">
+            <summary>Specifies the number system of the language.</summary>
+        </member>
+        <member name="T:RT.Lingo.NumberSystem">
+            <summary>Abstract class to represent a number system.</summary>
+        </member>
+        <member name="P:RT.Lingo.NumberSystem.NumStrings">
+            <summary>Returns the number of strings required by this number system.</summary>
+        </member>
+        <member name="M:RT.Lingo.NumberSystem.GetString(System.Int32)">
+            <summary>Determines which string (numbered from 0) should be used for the number <paramref name="n"/>.</summary>
+        </member>
+        <member name="M:RT.Lingo.NumberSystem.GetString(System.Double)">
+            <summary>Determines which string (numbered from 0) should be used for the fractional number <paramref name="n"/>.</summary>
+        </member>
+        <member name="M:RT.Lingo.NumberSystem.GetDescription(System.Int32)">
+            <summary>Gets a short textual representation of the <paramref name="n"/>th string (e.g. sglr, plrl).</summary>
+        </member>
+        <member name="T:RT.Lingo.OneStringNumberSystem">
+            <summary>Number system with only one string for all numbers (e.g. Japanese, Korean, Vietnamese, Turkish).</summary>
+        </member>
+        <member name="P:RT.Lingo.OneStringNumberSystem.NumStrings">
+            <summary>Returns the number of strings required by this number system.</summary>
+        </member>
+        <member name="M:RT.Lingo.OneStringNumberSystem.GetString(System.Int32)">
+            <summary>Determines which string (numbered from 0) should be used for the number <paramref name="n"/>.</summary>
+        </member>
+        <member name="M:RT.Lingo.OneStringNumberSystem.GetDescription(System.Int32)">
+            <summary>Gets a short textual representation of the <paramref name="n"/>th string (e.g. sglr, plrl).</summary>
+        </member>
+        <member name="T:RT.Lingo.Singular1PluralNumberSystem">
+            <summary>Number system with a string for 1 and another for all other numbers (e.g. Danish, Dutch, English, Faroese, German, Norwegian, Swedish, Estonian, Finnish, Greek, Hebrew, Italian, Portuguese, Spanish, Esperanto).</summary>
+        </member>
+        <member name="P:RT.Lingo.Singular1PluralNumberSystem.NumStrings">
+            <summary>Returns the number of strings required by this number system.</summary>
+        </member>
+        <member name="M:RT.Lingo.Singular1PluralNumberSystem.GetString(System.Int32)">
+            <summary>Determines which string (numbered from 0) should be used for the number <paramref name="n"/>.</summary>
+        </member>
+        <member name="M:RT.Lingo.Singular1PluralNumberSystem.GetDescription(System.Int32)">
+            <summary>Gets a short textual representation of the <paramref name="n"/>th string (e.g. sglr, plrl).</summary>
+        </member>
+        <member name="T:RT.Lingo.Singular01PluralNumberSystem">
+            <summary>Number system with a string for 0 and 1 and another for all other numbers (e.g. French, Brazilian Portuguese).</summary>
+        </member>
+        <member name="P:RT.Lingo.Singular01PluralNumberSystem.NumStrings">
+            <summary>Returns the number of strings required by this number system.</summary>
+        </member>
+        <member name="M:RT.Lingo.Singular01PluralNumberSystem.GetString(System.Int32)">
+            <summary>Determines which string (numbered from 0) should be used for the number <paramref name="n"/>.</summary>
+        </member>
+        <member name="M:RT.Lingo.Singular01PluralNumberSystem.GetDescription(System.Int32)">
+            <summary>Gets a short textual representation of the <paramref name="n"/>th string (e.g. sglr, plrl).</summary>
+        </member>
+        <member name="T:RT.Lingo.LatvianNumberSystem">
+            <summary>Number system for Latvian: one string for numbers ending in 1 but not 11; one for everything else but 0; and one for 0.</summary>
+        </member>
+        <member name="P:RT.Lingo.LatvianNumberSystem.NumStrings">
+            <summary>Returns the number of strings required by this number system.</summary>
+        </member>
+        <member name="M:RT.Lingo.LatvianNumberSystem.GetString(System.Int32)">
+            <summary>Determines which string (numbered from 0) should be used for the number <paramref name="n"/>.</summary>
+        </member>
+        <member name="M:RT.Lingo.LatvianNumberSystem.GetDescription(System.Int32)">
+            <summary>Gets a short textual representation of the <paramref name="n"/>th string (e.g. sglr, plrl).</summary>
+        </member>
+        <member name="T:RT.Lingo.IrishNumberSystem">
+            <summary>Number system for Irish: one string for numbers ending in 1-6, one for numbers ending in 7-9, one for numbers ending in 0.</summary>
+        </member>
+        <member name="P:RT.Lingo.IrishNumberSystem.NumStrings">
+            <summary>Returns the number of strings required by this number system.</summary>
+        </member>
+        <member name="M:RT.Lingo.IrishNumberSystem.GetString(System.Int32)">
+            <summary>Determines which string (numbered from 0) should be used for the number <paramref name="n"/>.</summary>
+        </member>
+        <member name="M:RT.Lingo.IrishNumberSystem.GetDescription(System.Int32)">
+            <summary>Gets a short textual representation of the <paramref name="n"/>th string (e.g. sglr, plrl).</summary>
+        </member>
+        <member name="T:RT.Lingo.RomanianNumberSystem">
+            <summary>Number system for Romanian: one string for 1; one for 0 and for all numbers ending in something between 01 and 19; and one for all other numbers.</summary>
+        </member>
+        <member name="P:RT.Lingo.RomanianNumberSystem.NumStrings">
+            <summary>Returns the number of strings required by this number system.</summary>
+        </member>
+        <member name="M:RT.Lingo.RomanianNumberSystem.GetString(System.Int32)">
+            <summary>Determines which string (numbered from 0) should be used for the number <paramref name="n"/>.</summary>
+        </member>
+        <member name="M:RT.Lingo.RomanianNumberSystem.GetDescription(System.Int32)">
+            <summary>Gets a short textual representation of the <paramref name="n"/>th string (e.g. sglr, plrl).</summary>
+        </member>
+        <member name="T:RT.Lingo.LithuanianNumberSystem">
+            <summary>Number system for Lithuanian: one string for numbers ending in 1 but not 11; one for numbers ending in 2-9 but not 12-19; and one for all other numbers.</summary>
+        </member>
+        <member name="P:RT.Lingo.LithuanianNumberSystem.NumStrings">
+            <summary>Returns the number of strings required by this number system.</summary>
+        </member>
+        <member name="M:RT.Lingo.LithuanianNumberSystem.GetString(System.Int32)">
+            <summary>Determines which string (numbered from 0) should be used for the number <paramref name="n"/>.</summary>
+        </member>
+        <member name="M:RT.Lingo.LithuanianNumberSystem.GetDescription(System.Int32)">
+            <summary>Gets a short textual representation of the <paramref name="n"/>th string (e.g. sglr, plrl).</summary>
+        </member>
+        <member name="T:RT.Lingo.SlavicNumberSystem1">
+            <summary>One string for numbers ending in 1 but not 11; one for numbers ending in 2-4 but not 12-14; and one for all other numbers (e.g. Croatian, Serbian, Russian, Ukrainian).</summary>
+        </member>
+        <member name="P:RT.Lingo.SlavicNumberSystem1.NumStrings">
+            <summary>Returns the number of strings required by this number system.</summary>
+        </member>
+        <member name="M:RT.Lingo.SlavicNumberSystem1.GetString(System.Int32)">
+            <summary>Determines which string (numbered from 0) should be used for the number <paramref name="n"/>.</summary>
+        </member>
+        <member name="M:RT.Lingo.SlavicNumberSystem1.GetString(System.Double)">
+            <summary>Determines which string (numbered from 0) should be used for the fractional number <paramref name="n"/>.</summary>
+        </member>
+        <member name="M:RT.Lingo.SlavicNumberSystem1.GetDescription(System.Int32)">
+            <summary>Gets a short textual representation of the <paramref name="n"/>th string (e.g. sglr, plrl).</summary>
+        </member>
+        <member name="T:RT.Lingo.SlavicNumberSystem2">
+            <summary>One string for 1, one for 2-4, and one for all other numbers (e.g. Slovak, Czech).</summary>
+        </member>
+        <member name="P:RT.Lingo.SlavicNumberSystem2.NumStrings">
+            <summary>Returns the number of strings required by this number system.</summary>
+        </member>
+        <member name="M:RT.Lingo.SlavicNumberSystem2.GetString(System.Int32)">
+            <summary>Determines which string (numbered from 0) should be used for the number <paramref name="n"/>.</summary>
+        </member>
+        <member name="M:RT.Lingo.SlavicNumberSystem2.GetDescription(System.Int32)">
+            <summary>Gets a short textual representation of the <paramref name="n"/>th string (e.g. sglr, plrl).</summary>
+        </member>
+        <member name="T:RT.Lingo.PolishNumberSystem">
+            <summary>Number system for Polish: one string for 1; one for numbers ending in 2-4 but not 12-14; and one for all other numbers.</summary>
+        </member>
+        <member name="P:RT.Lingo.PolishNumberSystem.NumStrings">
+            <summary>Returns the number of strings required by this number system.</summary>
+        </member>
+        <member name="M:RT.Lingo.PolishNumberSystem.GetString(System.Int32)">
+            <summary>Determines which string (numbered from 0) should be used for the number <paramref name="n"/>.</summary>
+        </member>
+        <member name="M:RT.Lingo.PolishNumberSystem.GetDescription(System.Int32)">
+            <summary>Gets a short textual representation of the <paramref name="n"/>th string (e.g. sglr, plrl).</summary>
+        </member>
+        <member name="T:RT.Lingo.SlovenianNumberSystem">
+            <summary>Number system for Slovenian: one string for 1; one for 2; one for 3 and 4; and one for all other numbers.</summary>
+        </member>
+        <member name="P:RT.Lingo.SlovenianNumberSystem.NumStrings">
+            <summary>Returns the number of strings required by this number system.</summary>
+        </member>
+        <member name="M:RT.Lingo.SlovenianNumberSystem.GetString(System.Int32)">
+            <summary>Determines which string (numbered from 0) should be used for the number <paramref name="n"/>.</summary>
+        </member>
+        <member name="M:RT.Lingo.SlovenianNumberSystem.GetDescription(System.Int32)">
+            <summary>Gets a short textual representation of the <paramref name="n"/>th string (e.g. sglr, plrl).</summary>
+        </member>
+        <member name="T:RT.Lingo.TagalogNumberSystem">
+            <summary>Number system for Tagalog (Filipino): one string for numbers ending in 4, 6, or 9; one for all other numbers.</summary>
+        </member>
+        <member name="P:RT.Lingo.TagalogNumberSystem.NumStrings">
+            <summary>Returns the number of strings required by this number system.</summary>
+        </member>
+        <member name="M:RT.Lingo.TagalogNumberSystem.GetString(System.Int32)">
+            <summary>Determines which string (numbered from 0) should be used for the number <paramref name="n"/>.</summary>
+        </member>
+        <member name="M:RT.Lingo.TagalogNumberSystem.GetDescription(System.Int32)">
+            <summary>Gets a short textual representation of the <paramref name="n"/>th string (e.g. sglr, plrl).</summary>
+        </member>
+        <member name="T:RT.Lingo.TranslatableException`1">
+            <summary>
+            Provides a means for an application to throw exceptions containing translatable messages without the need to pass a <see cref="T:RT.Lingo.TranslationBase"/>-derived object to all methods that could throw exceptions.
+            </summary>
+            <typeparam name="TTranslation">The type containing the translatable strings.</typeparam>
+        </member>
+        <member name="M:RT.Lingo.TranslatableException`1.#ctor(System.Func{`0,System.String})">
+            <summary>Constructor.</summary>
+            <param name="getMessage">A function which returns the exception message given a <typeparamref name="TTranslation"/> object. 
+            This would usually be of the form "tr => tr.FieldName" or "tr => tr.FieldName.Fmt(parameters)".</param>
+        </member>
+        <member name="M:RT.Lingo.TranslatableException`1.#ctor(System.Func{`0,System.String},System.Exception)">
+            <summary>Constructor.</summary>
+            <param name="getMessage">A function which returns the exception message given a <typeparamref name="TTranslation"/> object. 
+            This would usually be of the form "tr => tr.FieldName" or "tr => tr.FieldName.Fmt(parameters)".</param>
+            <param name="inner">Inner exception.</param>
+        </member>
+        <member name="M:RT.Lingo.TranslatableException`1.GetMessage(`0)">
+            <summary>Returns the translated exception message.</summary>
+            <param name="tr">Translation object containing the translations for all messages.</param>
+        </member>
+        <member name="T:RT.Lingo.TranslationBase">
+            <summary>Abstract base class to represent translations of a piece of software.</summary>
+        </member>
+        <member name="F:RT.Lingo.TranslationBase.Language">
+            <summary>Language of this translation.</summary>
+        </member>
+        <member name="M:RT.Lingo.TranslationBase.#ctor(RT.Lingo.Language)">
+            <summary>Constructor.</summary>
+        </member>
+        <member name="T:RT.Lingo.TrString">
+            <summary>Represents a translatable string.</summary>
+        </member>
+        <member name="F:RT.Lingo.TrString.Translation">
+            <summary>Contains the current translation of this string, or for the original language, the current original text.</summary>
+        </member>
+        <member name="F:RT.Lingo.TrString.Old">
+            <summary>Contains the original text this string was last translated from, or for the original language, null.</summary>
+        </member>
+        <member name="M:RT.Lingo.TrString.#ctor">
+            <summary>Default constructor (required for Classify).</summary>
+        </member>
+        <member name="M:RT.Lingo.TrString.#ctor(System.String)">
+            <summary>Constructs a new translatable string given the specified translation.</summary>
+        </member>
+        <member name="M:RT.Lingo.TrString.op_Implicit(System.String)~RT.Lingo.TrString">
+            <summary>Implicit cast from string to TrString.</summary>
+        </member>
+        <member name="M:RT.Lingo.TrString.op_Implicit(RT.Lingo.TrString)~System.String">
+            <summary>Implicit cast from TrString to string.</summary>
+        </member>
+        <member name="M:RT.Lingo.TrString.Fmt(System.Object[])">
+            <summary>Formats a string using <see cref="M:System.String.Format(System.String,System.Object[])"/>.</summary>
+        </member>
+        <member name="M:RT.Lingo.TrString.FmtEnumerable(System.Object[])">
+            <summary>Formats a string using <see cref="M:RT.Util.ExtensionMethods.ConsoleExtensions.FmtEnumerable(System.String,System.Object[])"/>.</summary>
+        </member>
+        <member name="M:RT.Lingo.TrString.ToString">
+            <summary>
+                Returns the translation.</summary>
+            <returns>
+                The translation.</returns>
+        </member>
+        <member name="M:RT.Lingo.TrString.Color(System.Nullable{System.ConsoleColor},System.Nullable{System.ConsoleColor})">
+            <summary>
+                Returns the translation in the specified console color.</summary>
+            <param name="foreground">
+                The foreground color in which to color the translation, or <c>null</c> to use the console’s default foreground color.</param>
+            <param name="background">
+                The background color in which to color the translation, or <c>null</c> to use the console’s default background color.</param>
+            <returns>
+                A potentially colourful string.</returns>
+        </member>
+        <member name="T:RT.Lingo.TrStringNum">
+            <summary>
+                Represents a translatable string into which numbers are interpolated, requiring grammatical morphology according
+                to a language's <see cref="T:RT.Lingo.NumberSystem"/>.</summary>
+        </member>
+        <member name="F:RT.Lingo.TrStringNum.IsNumber">
+            <summary>Specifies which of the interpolated objects are integers.</summary>
+        </member>
+        <member name="F:RT.Lingo.TrStringNum.Translations">
+            <summary>Contains the current translation of this string, or for the original language, the current original text.</summary>
+        </member>
+        <member name="F:RT.Lingo.TrStringNum.Old">
+            <summary>Contains the original text this string was last translated from. Null for the original language.</summary>
+        </member>
+        <member name="M:RT.Lingo.TrStringNum.#ctor">
+            <summary>Default constructor (required for Classify).</summary>
+        </member>
+        <member name="M:RT.Lingo.TrStringNum.#ctor(System.String[],System.Boolean[])">
+            <summary>
+                Constructs a new translatable string with the specified translations.</summary>
+            <param name="translations">
+                Specifies the translations for this string. The number of elements is expected to be equal to the number of
+                strings as defined by your native language's NumberSystem, multiplied by the number of elements in <paramref
+                name="isNumber"/> that are true.</param>
+            <param name="isNumber">
+                Specifies which of the interpolated variables are integers.</param>
+            <example>
+                <para>
+                    The following example code demonstrates how to instantiate a string that interpolates both a string (file
+                    name) and an integer (number of bytes) correctly.</para>
+                <code>
+                    TrStringNum MyString = new TrStringNum(
+                        new[] { "The file {0} contains {1} byte.", "The file {0} contains {1} bytes." },
+                        new[] { false, true }
+                    );</code></example>
+        </member>
+        <member name="M:RT.Lingo.TrStringNum.#ctor(System.String[])">
+            <summary>
+                Constructs a new translatable string with one interpolated integer and no other interpolated arguments, and
+                the specified translations.</summary>
+        </member>
+        <member name="M:RT.Lingo.TrStringNum.Fmt(RT.Lingo.TranslationBase,System.Object[])">
+            <summary>
+                Selects the correct string and interpolates the specified arguments.</summary>
+            <param name="tr">
+                Current translation. Its language’s number system will be used to interpolate the translation.</param>
+            <param name="args">
+                Arguments to be interpolated into the translation.</param>
+        </member>
+        <member name="M:RT.Lingo.TrStringNum.Fmt(RT.Lingo.Language,System.Object[])">
+            <summary>
+                Selects the correct string and interpolates the specified arguments.</summary>
+            <param name="lang">
+                Current translation’s language. Its number system will be used to interpolate the translation.</param>
+            <param name="args">
+                Arguments to be interpolated into the translation.</param>
+        </member>
+        <member name="M:RT.Lingo.TrStringNum.Fmt(RT.Lingo.NumberSystem,System.Object[])">
+            <summary>
+                Selects the correct string and interpolates the specified arguments.</summary>
+            <param name="ns">
+                Number system to use to interpolate the translation.</param>
+            <param name="args">
+                Arguments to be interpolated into the translation.</param>
+        </member>
+    </members>
+</doc>

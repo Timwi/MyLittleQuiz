@@ -1,10 +1,8 @@
 ﻿using System;
-using RT.Util.ExtensionMethods;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using RT.Util.Consoles;
-using RT.Util.Dialogs;
+using RT.Util.ExtensionMethods;
+using RT.Util.Forms;
 
 namespace Trophy.MyLittleQuiz
 {

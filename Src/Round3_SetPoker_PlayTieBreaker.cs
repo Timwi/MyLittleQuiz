@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using RT.Util.Consoles;
 using RT.Util.ExtensionMethods;
+using RT.Util.ExtensionMethods.Obsolete;
 using RT.Util.Text;
 
 namespace Trophy.MyLittleQuiz

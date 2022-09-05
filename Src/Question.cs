@@ -1,7 +1,7 @@
 ﻿using System;
+using RT.Serialization;
 using RT.Util.Consoles;
 using RT.Util.ExtensionMethods;
-using RT.Util.Serialization;
 
 namespace Trophy.MyLittleQuiz
 {
